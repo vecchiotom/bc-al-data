@@ -1,0 +1,16 @@
+[project]
+name = "bc-al-data"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "datasketch>=2.0.0",
+    "lsprotocol>=2025.0.0",
+    "orjson>=3.12.0",
+    "pydantic>=2.13.5",
+    "pygls>=2.1.1",
+    "pyyaml>=6.0.3",
+    "rich>=15.0.0",
+    "typer>=0.27.2",
+]
