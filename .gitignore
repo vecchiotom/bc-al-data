@@ -1,0 +1,7 @@
+.cache/
+.venv/
+__pycache__/
+*.pyc
+vendor/*/node_modules/
+vendor/*/bin/
+vendor/*/obj/
