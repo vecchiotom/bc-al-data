@@ -172,3 +172,108 @@ def object_level_g6(obj_text: str, kind: str, obj_id, name: str, repo: str, path
 
 
 MEMBER_GENERATORS = [g1_fim, g2_sig2body, g3_explain, g5_error_fix]
+
+
+# ---------------- G3 model paraphrase (grounded) ----------------
+_G3_SYS = ("You are an expert Microsoft Dynamics 365 Business Central AL developer. "
+           "Explain the AL procedure for another developer: what it does, inputs/outputs, "
+           "notable BC-specific behavior (events, IsHandled, temporary records, SetRange/SetFilter). "
+           "2-4 sentences, precise, no markdown headers, do not restate the code line by line.")
+
+
+def g3_paraphrase(cand: dict, llm_chat) -> dict:
+    """Replace the deterministic template answer with a grounded model explanation.
+    The verified facts stay in the prompt so the model cannot invent the call list."""
+    facts = cand["messages"][1]["content"]
+    member = cand["meta"]["member"]
+    prompt = f"Verified facts: {facts}\n\n(these facts are correct — expand them into prose)"
+    user_msg = cand["messages"][0]["content"]
+    out = llm_chat([{"role": "system", "content": _G3_SYS},
+                    {"role": "user", "content": user_msg + "\n\n" + prompt}], reasoning="low", max_tokens=350)
+    new = dict(cand)
+    new["messages"] = [cand["messages"][0], {"role": "assistant", "content": out.strip()}]
+    new["meta"] = {**cand["meta"], "template": False, "grounded_facts": facts}
+    return new
+
+
+# ---------------- G4: doc-QA from the devitpro markdown ----------------
+import re as _re
+
+
+def g4_docqa(md_path, md_text: str) -> Iterator[dict]:
+    # split on H2/H3 headings; a section becomes (question=heading, answer=body)
+    for m in _re.finditer(r'^(#{2,3})\s+(.+?)\s*$', md_text, _re.M):
+        start = m.end()
+        nxt = _re.search(r'^#{1,3}\s', md_text[start:], _re.M)
+        body = md_text[start: start + (nxt.start() if nxt else len(md_text))].strip()
+        heading = m.group(2).strip()
+        if len(body) < 120 or len(body) > 4000 or "```" not in body and len(body) < 200:
+            continue
+        if _re.search(r'\b(deprecated|removed|obsolete)\b', heading, _re.I):
+            continue
+        q = heading if heading.endswith("?") else f"In Business Central AL, {heading[0].lower()}{heading[1:]} — explain."
+        yield {"gen": "g4_docqa",
+               "messages": [{"role": "user", "content": q},
+                            {"role": "assistant", "content": body}],
+               "target_al": None,
+               "meta": {"repo": "MicrosoftDocs/dynamics365smb-devitpro-pb",
+                        "path": str(md_path), "heading": heading}}
+
+
+# ---------------- G7: hard negatives from the current model ----------------
+def g7_probe_prompts(rec: dict) -> list[dict] | None:
+    """Prompts to sample the CURRENT model on; keep completions that FAIL compile."""
+    outs = list(g1_fim(rec)) + list(g2_sig2body(rec))
+    return [{"probe_of": c["gen"], "messages": [c["messages"][0]],
+             "gold": c["target_al"], "meta": c["meta"]} for c in outs] or None
+
+
+def g7_from_rollout(probe: dict, completion: str, compile_result) -> dict | None:
+    """probe + a NON-compiling model completion + the gold correction -> preference pair."""
+    if compile_result.clean:
+        return None
+    err_codes = sorted({c for s, c, _ in compile_result.diagnostics if s == "error"})
+    klass = _classify_hallucination(err_codes, completion)
+    return {"gen": "g7_hard_negative", "hallucination_class": klass,
+            "messages": [probe["messages"][0], {"role": "assistant", "content": _FENCE.format(probe["gold"])}],
+            "target_al": probe["gold"], "rejected_al": completion,
+            "meta": {**probe["meta"], "error_codes": err_codes, "probe_of": probe["probe_of"]}}
+
+
+_HALLUCINATION_CODES = {
+    "AL0132": "METHOD", "AL0399": "METHOD", "AL0118": "OBJECT", "AL0128": "PARAMETER",
+    "AL0137": "TRIGGER", "AL0134": "PARAMETER", "AL0185": "METHOD", "AL0432": "METHOD",
+}
+
+
+def _classify_hallucination(err_codes: list[str], completion: str) -> str:
+    for c in err_codes:
+        if c in _HALLUCINATION_CODES:
+            return _HALLUCINATION_CODES[c]
+    return "OTHER"
+
+
+# ---------------- G8: warning -> clean (needs the Stage-2 analyzer profile) ----------------
+def g8_warning_clean(rec: dict, analyzer_hits: list[tuple[str, str]], fixed_text: str | None) -> Iterator[dict]:
+    """rec is a member that compiles clean but trips analyzer rule(s).
+    `fixed_text` = the same member after ALCops apply_fix (or None -> review-only variant)."""
+    rules = sorted({c for _, c in analyzer_hits})
+    if not rules:
+        return
+    good = f"{rec['signature']}\n{rec['body']}"
+    if fixed_text and fixed_text.strip() != good.strip():
+        yield {"gen": "g8_warning_clean", "rules": rules,
+               "messages": [{"role": "user",
+                             "content": f"Improve this AL to satisfy the analyzers "
+                                        f"({', '.join(rules)}). Keep behavior identical.\n\n{_FENCE.format(good)}"},
+                            {"role": "assistant", "content": _FENCE.format(fixed_text.strip())}],
+               "target_al": fixed_text.strip(), "rejected_al": good,
+               "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"]}}
+    # review-only: list the smells (always available)
+    yield {"gen": "g8_review", "rules": rules,
+           "messages": [{"role": "user", "content": f"Review this AL for code smells.\n\n{_FENCE.format(good)}"},
+                        {"role": "assistant",
+                         "content": "Analyzer findings: " + "; ".join(rules)
+                                    + ".\nThe code compiles but violates the rules above."}],
+           "target_al": None,
+           "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"], "review_only": True}}

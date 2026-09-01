@@ -1,12 +1,13 @@
 [project]
 name = "bc-al-data"
 version = "0.1.0"
-description = "Add your description here"
+description = "Business Central AL fine-tuning data pipeline"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "datasketch>=2.0.0",
     "lsprotocol>=2025.0.0",
+    "openai>=3.6.0",
     "orjson>=3.12.0",
     "pydantic>=2.13.5",
     "pygls>=2.1.1",
@@ -16,3 +17,16 @@ dependencies = [
     "tree-sitter-al>=4.0.1",
     "typer>=0.27.2",
 ]
+
+[project.scripts]
+bcaldata = "bcaldata.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bcaldata"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+package = true
