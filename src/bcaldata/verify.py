@@ -48,7 +48,9 @@ def _shared_alpackages() -> Path:
     for app in root.rglob("*.app"):
         if "bcaldata verify" in app.name.lower():
             continue
-        (_SHARED_ALP / app.name).write_bytes(app.read_bytes()) if not (_SHARED_ALP / app.name).exists() else None
+        link = _SHARED_ALP / app.name
+        if not link.exists():
+            link.symlink_to(app)          # symlink, not copy — the AL compiler reads through it
     return _SHARED_ALP
 
 

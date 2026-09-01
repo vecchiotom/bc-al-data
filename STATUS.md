@@ -17,6 +17,11 @@ Python env via `uv` (3.13). `source env.sh` before any tool.
 | AL-MCP | ⚠️ server runs; also live in the dsh harness (`al-mcp`, 16 tools, `mcp-status` = connected). stdio client TBD | `al launchmcpserver --transport stdio` |
 | pwsh + BCContainerHelper | ✅ pwsh 7.6.5 (needs `DOTNET_ROOT`), BcContainerHelper 6.1.16 | `DOTNET_ROOT=~/.dotnet pwsh` |
 | GPU training stack | ❌ not installed (local training deferred to cloud — see plan) | — |
+| **Corpus pipeline** | ✅ scripts complete (`./run_pipeline.sh`, `uv run bcaldata <stage>`) — see PIPELINE.md | not yet run end-to-end |
+| tree-sitter-al parser | ✅ `src/bcaldata/alparse.py` — 0 parse errors over 19k BCApps members | |
+| compile gate | ✅ `src/bcaldata/compile_gate.py` (port of BC-Bench compile-proxy) — real BCApps app compiles clean; G5 mutation → `AL0132`/`AL0111` confirmed | slow per-candidate (see PIPELINE gaps) |
+| vLLM G3 paraphrase | ✅ grounded explanation via local Qwen3.8-27B (`reasoning=low`), ~3-6s/call, quality high | |
+| BCApps corpus | ✅ `releases/28.0` pinned (matches BC 28.0 symbol cache), MIT | 4519 .al on release branch |
 
 ## Data artifacts produced
 

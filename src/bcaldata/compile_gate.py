@@ -56,7 +56,7 @@ def seed_alpackages(app_dir: Path, version: str, *, build_from_source: list[str]
     for app in root.rglob("*.app"):
         if any(s in app.name.lower() for s in shadow):
             continue
-        shutil.copy2(app, alp / app.name)
+        (alp / app.name).symlink_to(app)     # symlink, not copy
         n += 1
     return n
 

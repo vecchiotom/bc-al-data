@@ -52,3 +52,13 @@ content-addressed; re-running only redoes changed inputs.
 - `tools/alsp.py` (LSP client for precise hover/definition signatures) not written;
   `build_corpus` uses tree-sitter only. Retrieval index for inference-time not built.
 - G7 rollout throughput depends on vLLM; batch it on the training GPU, not locally.
+- **Verify throughput**: each `al compile` is ~15-45s cold (JIT + 350 symbol
+  packages + 7 analyzer DLLs). At 100k+ candidates that is the pipeline
+  bottleneck. Mitigations for the production run (not yet wired):
+  1. keep ONE `al launchlspserver` resident and use `publishDiagnostics` per
+     candidate file (needs `tools/alsp.py`) — ~50-100x faster;
+  2. or batch candidates into a few multi-file projects, compile once, map
+     diagnostics back by file;
+  3. Stage-4 cache (content-hash, already implemented) makes re-runs free.
+  The current `verify.py` spawns `al compile` per candidate — correct but slow;
+  fine for a first <20k-candidate corpus, replace before scaling.
