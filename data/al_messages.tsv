@@ -1,0 +1,919 @@
+AL0000	None	
+AL0100	ERR_InvalidMultilineComment	Unterminated multiline comment
+AL0101	ERR_InvalidDecimalLiteral	Constant value '{0}' is outside the range for a Decimal
+AL0102	ERR_InvalidInt64Literal	Constant value '{0}' is outside the range for a BigInteger
+AL0103	ERR_InvalidInt32Literal	Constant value '{0}' is outside the range for an Integer
+AL0104	ERR_SyntaxError	Syntax error, '{0}' expected
+AL0105	ERR_IdentifierExpectedKW	Syntax error, identifier expected; '{1}' is a keyword
+AL0106	ERR_ForStatementToOrDownToExpected	Syntax error, 'TO' or 'DOWNTO' expected
+AL0107	ERR_IdentifierExpected	Syntax error, identifier expected. Provide a valid name (letters, digits, and underscores only).
+AL0108	ERR_IndexersMustHaveAtLeastOneValue	Indexers must have at least one value. Provide an index value inside the brackets (e.g., [1] or [i]).
+AL0109	ERR_UnexpectedToken	Unexpected token encountered. Check syntax for missing operators, keywords, or delimiters.
+AL0110	ERR_OrphanedElseStatement	Orphaned ELSE statement. This is most likely because of an unnecessary semicolon placed just before the ELSE keyword
+AL0111	ERR_SemicolonExpected	Semicolon expected. Add a semicolon (;) to terminate the statement.
+AL0112	ERR_InvalidAttribute	{0} is not a valid attribute. Check the attribute name and supported attributes for this context.
+AL0113	ERR_AtLeastOneDimension	At least one dimension must be specified for the array declaration (e.g., [10] or [5,5]).
+AL0114	ERR_IntegerLiteralExpected	Syntax error, integer literal expected. Provide a numeric value (e.g., 0, 1, 42).
+AL0115	ERR_ObjectTypeExpected	Object type expected. Valid types include: Table, Page, Report, Codeunit, Query, XmlPort, etc.
+AL0116	ERR_InvalidPropertyOptionValue	Invalid value for '{0}'. Allowed values are '{1}'
+AL0117	ERR_IllegalStatement	Illegal statement. Only assignment and method invocation can be used as a statement.
+AL0118	ERR_NameNotInContext	The name '{0}' does not exist in the current context.
+AL0119	ERR_DuplicateParamName	The parameter name '{0}' is already defined.
+AL0120	ERR_LocalIllegallyOverrides	A local or parameter named '{0}' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
+AL0121	ERR_DuplicateVariableName	The variable name '{0}' is already defined.
+AL0122	ERR_NoImplicitConversion	Cannot implicitly convert type '{0}' to '{1}'. Use an explicit conversion or change the type.
+AL0123	ERR_DuplicateReturnValueName	The return value name '{0}' is already defined.
+AL0124	ERR_PropertyInfoNotAvailable	The property '{0}' cannot be used in this context. Verify the property is available for the current object type.
+AL0125	ERR_MethodNameExpected	Method name expected after invocation operator '()'.
+AL0126	ERR_BadArgCount	No overload for method '{0}' takes {1} arguments. Candidates: {2}
+AL0127	ERR_NonInvocableMemberCalled	Member '{0}' cannot be used like a method. Remove the parentheses or call a valid method.
+AL0128	ERR_LanguageIdExpected	Language identifier expected (e.g., 'ENU', 'DEU', or an LCID).
+AL0129	ERR_AssgLvalueExpected	The left-hand side of an assignment must be a variable or field
+AL0130	ERR_RefLvalueExpected	A 'var' argument must be an assignable variable (field, variable, or parameter), not a constant or expression.
+AL0131	ERR_CharAllowedFormatIsWrong	The property CharAllowed must be specified in pairs of characters. The first character in the pair must be equal to or less than the second.
+AL0132	ERR_NoSuchMember	'{0}' does not contain a definition for '{1}'
+AL0133	ERR_BadArgType	Argument {0}: cannot convert from '{1}' to '{2}'
+AL0134	ERR_UnknownType	'{0}' is not recognized as a valid type. Verify the type name is correct and the required dependencies are referenced.
+AL0135	ERR_NoCorrespondingArgument	There is no argument given that corresponds to the required formal parameter '{0}' of '{1}'
+AL0136	ERR_ForLoopVariableMustBeNumeric	The loop variable in a 'for' statement must be a numeric type
+AL0137	ERR_NoBreak	No enclosing loop out of which to break. The 'break' statement can only be used inside a for, while, or repeat loop.
+AL0138	ERR_ArrayNotValidForCase	The case expression cannot be an array. Use a simple type (Integer, Text, Option, etc.) for case expressions.
+AL0139	ERR_ExitValueNotAllowed	Since '{0}' doesn't have a return value, EXIT cannot be called with a value
+AL0140	ERR_ExpressionNotValidForWith	The expression is not valid for the WITH statement. Use a record variable or table reference.
+AL0142	ERR_TemporaryMustBeTable	Only variables of type record can be marked as TEMPORARY
+AL0143	ERR_BadIndexLHS	Cannot apply indexing with [] to an expression of type '{0}'
+AL0144	ERR_BadIndexCount	Wrong number of indices inside []; expected {0}
+AL0145	ERR_ArrayNotValidForAssign	Direct assignment is not valid for arrays. Use array indexing to assign individual elements or a loop to copy elements.
+AL0146	ERR_ArrayIsTooBig	The maximum number of array elements is {0}. Actual number is {1}
+AL0147	ERR_ArrayDimensionMustBePositiveNumber	An array dimension must be a positive number. Use a positive integer value for the array size (e.g., [10]).
+AL0148	ERR_InvalidTableFilter	The table filter is not valid. Ensure the filter follows the format: Field=CONST(value) or Field=FILTER(expression).
+AL0149	ERR_ElseWithoutIf	There is an 'ELSE' statement without an 'IF' in property {0}
+AL0150	ERR_InvalidConstExpression	Invalid CONST expression. A valid integer or an identifier is expected
+AL0151	ERR_LeftMustBeOption	Expression must be an Option type. Use '::' to access option members (e.g., MyOption::Value).
+AL0152	ERR_DuplicateOption	The value '{0}' is used more than once
+AL0153	ERR_PropertyCannotBeBlank	The property '{0}' cannot be blank. Provide a value for this required property.
+AL0154	ERR_FieldLengthTooBig	The maximum length for a field of type '{0}' is {1}
+AL0155	ERR_DuplicateMemberName	A member of type {0} with name '{1}' is already defined in {2} '{3}' by the extension '{4}'.
+AL0156	ERR_InvalidFieldType	'{0}' is not a valid field type. Use basic types (Text, Integer, Decimal, etc.) or reference custom types (Record, Enum, etc.).
+AL0157	ERR_InvalidVariableType	'{0}' is not a valid variable type. Use basic types (Text, Integer, Decimal, etc.) or reference custom types (Record, Enum, etc.).
+AL0158	ERR_InvalidParameterType	'{0}' is not a valid parameter type. Use basic types (Text, Integer, Decimal, etc.) or reference custom types (Record, Enum, etc.).
+AL0159	ERR_InvalidReturnType	'{0}' is not a valid return type. Use basic types (Text, Integer, Decimal, etc.) or reference custom types (Record, Enum, etc.).
+AL0160	ERR_InvalidLanguageId	'{0}' is not a valid language identifier. Use a standard language code (e.g., 'ENU', 'DEU') or LCID.
+AL0161	ERR_BadAccess	'{0}' is inaccessible due to its protection level
+AL0162	ERR_UnknownTrigger	'{0}' is not a valid trigger for this object type. Check the object documentation for supported triggers.
+AL0163	ERR_InvalidTriggerSignature	Wrong signature. Correct signature for '{0}' is '{1}'
+AL0164	ERR_DuplicateTrigger	The trigger '{0}' is already defined
+AL0165	ERR_TriggersCannotBeCalledDirectly	Triggers cannot be called directly. Triggers are automatically invoked by the system in response to events.
+AL0166	ERR_BadArgMember	Argument {0}: must be a member (field, property, or variable), not an expression or constant.
+AL0167	ERR_MissingAssociatedPropertyMultipleValues	The {0} '{1}' can only be used if the property '{2}' is set with any of the values of: '{3}'
+AL0168	ERR_MissingAssociatedProperty	The {0} '{1}' can only be used if the property '{2}' is set
+AL0169	ERR_InvalidOptionValue	The option value '{0}' is not valid. Check the enum definition for valid values.
+AL0170	ERR_EqualExpected	An '=' is expected for property {0}. Use the format: PropertyName = Value;
+AL0171	ERR_InvalidPropertyValue	The property value '{0}' on property '{1}' is not valid.
+AL0172	ERR_AmbigUnaryOp	Operator '{0}' is ambiguous on an operand of type '{1}'
+AL0173	ERR_BadUnaryOp	Operator '{0}' cannot be applied to an operand of type '{1}'
+AL0174	ERR_AmbigBinaryOps	Operator '{0}' is ambiguous on operands of type '{1}' and '{2}'
+AL0175	ERR_BadBinaryOps	Operator '{0}' cannot be applied to operands of type '{1}' and '{2}'
+AL0176	ERR_InvalidCalculationFormulaMethod	Expected one of the calculation formula methods (Average,Count,Exist,Min,Max,Lookup,Sum)
+AL0177	ERR_InvalidApplicationObjectIdentifier	Invalid application object identifier. A number or an application object name is expected
+AL0178	ERR_ExpectedFilterKeywordOrIdentifier	A 'FILTER' keyword or an identifier is expected in the filter expression. Use FILTER(...) or a field name.
+AL0179	ERR_ExpectedIdentifierOrMemberAccess	An identifier or a member access expression is expected (e.g., 'FieldName' or 'Record.FieldName').
+AL0180	ERR_ExpectedFilterKeyword	A 'FILTER' keyword is expected in this context. Use FILTER(...) to specify filter conditions.
+AL0181	ERR_InvalidFilterExpression	Invalid filter expression. Check the syntax and ensure all field names and operators are correct.
+AL0182	ERR_ExpectedIdentifierOrLiteral	An identifier or a literal is expected as the value of a filter expression
+AL0183	ERR_UnexpectedCharacter	Unexpected character '{0}'. Remove the invalid character or check if a special character needs escaping.
+AL0184	ERR_InvalidPropertyExpression	The expression '{0}' is not valid. Verify that all referenced fields exist and syntax is correct.
+AL0185	ERR_MissingApplicationObject	{0} '{1}' is missing
+AL0186	ERR_MissingTypeReference	Reference '{0}' in application object '{1}' does not exist
+AL0187	ERR_AttributeAllowedOnlyOn	Attribute '{0}' is valid only for {1}.
+AL0189	ERR_MutuallyExclusiveAttributes	Attribute '{0}' cannot be specified, because '{1}' is already specified
+AL0190	ERR_InvalidTimeLiteral	Constant value '{0}' is outside the range for a Time
+AL0191	ERR_InvalidDateLiteral	Constant value '{0}' is outside the range for a Date. The syntax for defining Date format is yyyymmddD, where D is a mandatory letter. For example, 20180325D, read as the 25th of March, 2018.
+AL0192	ERR_ReturnValueMustBeUsed	The return value must be used for the method '{0}'
+AL0193	ERR_BadArgTypeMustBeSameAsFirstArgument	Argument {0}: cannot convert from '{1}' to the type of Argument 1 '{2}'
+AL0195	ERR_InvalidPermissionValue	Invalid permission kind. Expected: '{0}'
+AL0196	ERR_AmbigCall	The call is ambiguous between the method '{0}' defined in {1} '{2}' by the extension '{3}' and the method '{4}' defined in {5} '{6}' by the extension '{7}'.
+AL0197	ERR_AppObjDuplicateName	An application object of type '{0}' with name '{1}' is already declared by the extension '{2}'
+AL0198	ERR_ExpectedApplicationObjectKeyword	Expected one of the application object keywords ({0})
+AL0199	ERR_InvalidSumIndexKeyType	The type of the sum index field '{0}' must be numeric (Decimal, BigInteger, Integer, or Duration)
+AL0200	WRN_PropertyIsObsolete	Property '{0}' is obsolete and will be removed in a future version. Update your code to use the recommended alternative.
+AL0201	ERR_FlowFieldMustBeBoolean	The {0} FlowField is not a Boolean field. If a FlowField CalcFormula starts with 'Exist', then the FlowField must be a Boolean type field.
+AL0202	ERR_FlowFieldMustBeInteger	The {0} FlowField is not an Integer field. If a FlowField CalcFormula starts with 'Count', then the FlowField must be an Integer type field.
+AL0203	ERR_SumAverageOnlySupportedForNumericFields	Cannot calculate Sum or Average for the field {0} because it is not a numeric field (Decimal, BigInteger, Integer, or Duration data type).
+AL0204	ERR_FieldTypeMismatch	Field type {0} is not convertible to field type {1}.
+AL0206	ERR_DuplicateFieldId	A field with ID {0} is already defined in {1} '{2}' by the extension '{3}'
+AL0207	ERR_ExpressionMustBeTextType	The expression must be of Text type. Convert the expression or use a Text variable.
+AL0208	ERR_ExpressionMustBeBooleanType	The expression must be of Boolean type. Use a comparison or boolean expression.
+AL0210	ERR_DuplicateControlId	A control with ID = {0} is already defined
+AL0211	ERR_InvalidAreaKind	Unknown area type '{0}'
+AL0212	ERR_DuplicateAreaKind	An area of type '{0}' is already defined
+AL0213	ERR_AreaOnlyValidOnPageOfType	An area of type '{0}' is only valid on pages of type(s) '{1}'
+AL0214	ERR_FactBoxesNotAllowedOnParts	An area of type 'FactBoxes' is not valid on Part type pages
+AL0215	ERR_PartsCannotContainParts	A Part type page cannot contain other parts. Part pages (List Part, Card Part) can only contain fields and actions.
+AL0216	ERR_FactBoxesCanOnlyContainParts	Only parts are valid in an area of type 'FactBoxes'
+AL0217	ERR_OnlyGroupsAndPartsAreValidInRoleCenters	Only parts and groups are valid in an area of type 'RoleCenter'
+AL0218	ERR_ExpectedIntLiteral	An integer literal value is expected for property {0}
+AL0219	ERR_ExpectedStringLiteral	Syntax error, string literal expected. Enclose the text in single quotes (e.g., 'text').
+AL0220	ERR_ExpectedBooleanLiteral	Syntax error, boolean literal expected. Use 'true' or 'false'.
+AL0221	ERR_ValueOutsideValidRange	The value '{0}' is not valid. The valid range is {1}..{2}
+AL0222	ERR_InvalidSymbolId	The ID '{0}' is not valid. ID's must be greater than zero
+AL0223	ERR_MissingAssociatedPropertySingleValue	The {0} '{1}' can only be used if the property '{2}' is set to '{3}'
+AL0224	ERR_ExpressionExpected	Expression expected. Provide a valid expression (variable, constant, calculation, or method call).
+AL0227	ERR_DuplicateKeyId	A key with ID {0} is already defined
+AL0228	ERR_DuplicateFieldGroupId	A field group with ID {0} is already defined
+AL0229	ERR_InvalidExtendedDataTypeRatio	The data type on the {0} field is not valid because the ExtendedDatatype property is set to Ratio. Valid data types are Integer, BigInteger and Decimal.
+AL0230	ERR_RequiresTextualExtendedDataType	The data type on the {0} field is not valid because the ExtendedDatatype property is set to PhoneNo, URL or Email. Valid data types are Code and Text.
+AL0231	ERR_DuplicateMemberId	A member with ID '{0}' is already defined in {1} '{2}' by the extension '{3}'.
+AL0232	ERR_PropertyValueMustBePositive	The property value on field '{0}' must be positive or zero.
+AL0234	ERR_DuplicateActionId	An action with ID = {0} is already defined
+AL0235	WRN_EmptyConstIsObsolete	The expression CONST() on the option value '{0}' is obsolete. Use CONST(" ") to refer to the empty option value.
+AL0236	ERR_EmptyConstIsNotSupported	An empty CONST() expression is not allowed on field '{0}' of type '{1}'.
+AL0238	ERR_BadAttributeArgCount	No overload for attribute '{0}' expects {1} arguments
+AL0239	ERR_DuplicateAttribute	Attribute {0} is specified multiple times
+AL0240	ERR_ParameterTypeDoesNotMatchAttribute	The signature of procedure '{0}' does not match the signature required by attribute '{1}': parameter {2} is expected to be of type '{3}' but found type '{4}'. The expected signature is: {5}.
+AL0241	ERR_ParameterCountDoesNotMatchAttribute	The signature of procedure '{0}' does not match the signature required by attribute '{1}'. The expected signature is: {2}.
+AL0242	ERR_InvalidAttributeArgumentSyntax	Invalid attribute argument syntax: '{0}'
+AL0243	ERR_BadAttributeCodeunitSubtype	Attribute {0} can only be used within a codeunit of subtype {1}.
+AL0244	ERR_ReturnValueTypeDoesNotMatchAttribute	The signature of procedure '{0}' does not match the signature required by attribute '{1}': return value is expected to be of type '{2}' but found type '{3}'. The expected signature is: {4}.
+AL0245	ERR_VisibilityDoesNotMatchAttribute	The signature of procedure '{0}' does not match the signature required by attribute '{1}': procedure cannot be local.
+AL0246	ERR_NonCustomizableProperty	The property '{0}' cannot be customized. This property is read-only in the current context.
+AL0247	ERR_ExtensionTargetNotFound	The target {0} '{1}' for the extension object is not found
+AL0250	ERR_RequiresMediaExtendedDataType	The data type on the {0} field is not valid because the ExtendedDatatype property is set to Person. Valid data types are Media and MediaSet.
+AL0251	WRN_PermissionObjectIsMissing	Application object '{0}' is missing. Verify the object exists and is included in the project dependencies.
+AL0252	ERR_ExpectedAscendingOrDescendingKeyword	Expected 'Ascending' or 'Descending' value.
+AL0254	WRN_SortingFieldShouldBePartOfKey	Sorting field '{0}' should be part of the keys for table '{1}'. Add the field to a key definition to improve performance.
+AL0255	ERR_RequiresApplicationObjectRunObject	Property '{0}' requires an application object reference for the 'RunObject' property.
+AL0256	ERR_FlowFieldCannotBePartOfKeys	The flowfield '{0}' cannot be part of the keys for table '{1}'.
+AL0257	ERR_InvalidDateTimeLiteral	Constant value '{0}' is outside the range for a DateTime data type, only 0 is valid.
+AL0259	ERR_SqlIndexOnPKMustBeIdentical	A SQLIndex defined for the primary key must contain the same fields as the key for table '{0}'.
+AL0260	ERR_PrimaryKeyAppendedToSecondaryKey	The key '{0}' on table '{1}' cannot start with the fields defined for the primary key. The server will append these to any alternate key.
+AL0261	ERR_DuplicateListMember	The identifier '{0}' can only be specified in the list once.
+AL0262	ERR_ClusteredKeyCanAppearOnce	The clustered key '{0}' has already been defined for table '{1}'.
+AL0263	ERR_PrimaryKeyMustBeEnabled	The primary key '{0}' on table '{1}' (the first one in the key list) must be enabled.
+AL0264	ERR_AppObjDuplicateId	An application object of type '{0}' with ID '{1}' is already declared by the extension '{2}'
+AL0267	ERR_ActionsAreNotAllowedOnThisControlType	Actions are not allowed on the control type.
+AL0268	ERR_GroupingOfActionsNotAllowed	Grouping of actions is not allowed
+AL0269	WRN_ERR_PagePartMustBePart	The referenced page '{0}' should be a list part or a card part.
+AL0270	ERR_ControlNotFound	The control '{0}' is not found in the target '{1}'
+AL0271	ERR_ActionNotFound	The action '{0}' is not found in the target '{1}'
+AL0272	ERR_AnchorMustBeGroupType	The anchoring symbol '{0}' must be a grouping symbol.
+AL0273	WRN_ERR_ReuseOfAreaName	The name '{0}' is an Area type. Using an Area type name will limit extensibility as dependent extension won't be able to reference it.
+AL0274	ERR_AnchorCannotBeArea	The anchoring symbol '{0}' cannot be an area. Use a field, group, or action as the anchor target.
+AL0275	ERR_AmbigSymbolReference	'{0}' is an ambiguous reference between '{1}' defined by the extension '{2}' and '{3}' defined by the extension '{4}'.
+AL0276	ERR_ExpectedTimeLiteral	A Time literal value is expected for property {0}
+AL0277	ERR_ExpectedDateLiteral	A Date literal value is expected for property {0}
+AL0278	ERR_ExpectedDateTimeLiteral	A DateTime literal value is expected for property {0}
+AL0279	ERR_TableKeyTooManyFields	The key '{0}' on table '{1}' contains too many fields.
+AL0280	ERR_EventNotFound	The event '{0}' is not found in the target '{1}'
+AL0281	ERR_MemberNotAnEvent	Object member '{0}' is not an event.
+AL0282	ERR_EventUnmatchedParameter	The member referenced by event subscriber '{0}' parameter '{1}' is not found.
+AL0283	ERR_EventReturnNotValid	The event '{0}' must not have a return value.
+AL0284	ERR_EventSubscriberParameterTypeMismatch	The type of the parameter '{1}' on the event subscriber '{0}' does not match the expected type '{2}'.
+AL0285	ERR_EventPublisherIncludeSenderWithParameterSender	The event '{0}' must not have a parameter name 'sender' when it specifies to include sender.
+AL0286	ERR_EventPublisherCannotContainCode	The event '{0}' can't contain code.
+AL0287	ERR_EventPublisherCannotContainVariables	The event '{0}' can't contain local variables.
+AL0288	ERR_EventParameterByVarIsNotAllowed	Parameter '{0}' is only allowed to be 'var' if the publisher parameter is 'var'.
+AL0290	ERR_EventElementNameShouldBeEmpty	Element name is not allowed for the event '{0}' and must be empty.
+AL0291	ERR_EventTriggerEventPageMissingSourceTable	Event trigger '{0}' can only be used if the page specifies the 'SourceTable' property.
+AL0292	ERR_ExpectedFieldFilterOrConstKeyword	'FIELD', 'CONST' or 'FILTER' keyword is expected.
+AL0293	ERR_PropertyValueNotAValidOptionValue	Property value {0} is not in the field's OptionMembers.
+AL0294	ERR_PropertyTypeFieldTypeMismatch	The type of property value {0} does not match the field’s type.
+AL0295	ERR_FieldNotFound	The field '{0}' is not found in the target '{1}'
+AL0296	ERR_SymbolCannotBeUsedInThisContext	The application object or method '{0}' has scope '{1}' and cannot be used for '{2}' development.
+AL0297	ERR_ApplicationObjectIdentifierOutOfBounds	The application object identifier '{0}' is not valid. It must be within the allowed ranges '{1}'.
+AL0298	ERR_InvalidStyleExpressionPropertyValue	The data type of the expression assigned to the 'StyleExpr' property is not valid. Valid data types are Boolean, Text, or Code.
+AL0299	WRN_ERR_MemberNameOnlyAllowedForTriggers	Member name '{0}' is only allowed on triggers.
+AL0300	ERR_PropertyUsedAsMethod	The property '{0}' is used as a method
+AL0301	ERR_ListCannotEndWithSeparator	A list must end with a member; not a separator {0}.
+AL0302	ERR_UseBeforeDeclaration	Cannot use '{0}' in {1} '{2}' before it is declared.
+AL0303	ERR_AttributeNotOnAValidSymbol	Attributes can only be defined on variables and methods.
+AL0304	ERR_IdentifierTooLong	Length of the identifier '{0}' cannot exceed {1} characters
+AL0305	ERR_ObjectIdentifierTooLong	The length of the application object identifier '{0}' cannot exceed {1} characters.
+AL0306	ERR_FieldListCannotBeEmpty	A field list has to contain at least one field
+AL0307	ERR_SourceTableUnreachable	Property value cannot be validated because the source table is unreachable.
+AL0308	ERR_PrimaryKeyMustHaveMaintainSqlIndexEnabled	The primary key '{0}' on table '{1}' (the first one in the key list) must have the MaintainSqlIndex property set to true.
+AL0309	ERR_TableTooManyKeys	Table '{0}' contains too many keys.
+AL0310	ERR_ObjectRequired	An instance is required for the non-static member '{0}'
+AL0311	ERR_ObjectProhibited	Member '{0}' cannot be accessed with an instance reference; qualify it with '{1}' instead
+AL0313	ERR_AttributeOnlyAllowedIn	Attribute {0} can only be used within {1}.
+AL0314	ERR_PropertyOnlyValidInControlOfType	The property '{0}' is only valid in controls of type '{1}'
+AL0315	ERR_ControlNotInGroup	Control '{0}' does not exist in group '{1}'
+AL0316	ERR_ExpressionMustBeIntegerType	The expression must be of Integer type. Convert the expression or use an Integer variable.
+AL0317	ERR_DuplicateProperty	A property with the same name has already been declared.
+AL0318	ERR_InvalidRunObjectPropertyValue	The value assigned to the 'RunObject' property is not valid. Valid object types are codeunit, page, xmlport, report, and query.
+AL0319	ERR_MissingTargetsForMove	At least one target has to be specified for the move.
+AL0320	ERR_PageMustSpecifySourceTable	The referenced page '{0}' must specify a 'SourceTable'.
+AL0321	ERR_InvalidInDatasetDatatype	Variable {0} cannot be included in the data set. Only simple types and record fields are allowed in report datasets.
+AL0322	ERR_InvalidInClientExpression	{0} is not valid for client expressions. Client expressions can only use simple data types and field references.
+AL0323	ERR_InvalidSystemPartKind	The value assigned to the SystemPart type is not valid. Valid values are {0}.
+AL0324	ERR_LanguageSpecifiedMoreThanOnce	The language {0} must only be specified one time.
+AL0325	ERR_FieldTypeCannotBeUsedInKey	The field '{0}' in the table '{1}' cannot be included in a key because its type is '{2}'
+AL0326	ERR_InvalidColumnType	'{0}' is not a valid column type
+AL0327	ERR_MissingDocument	Missing file '{0}'.
+AL0329	ERR_WordMergeDataItemMustBeTopLevel	The {0} property must reference a top-level DataItem.
+AL0331	ERR_TopLevelDataItemCannotHaveLinkProperty	The property 'DataItemLink' cannot be set on a top-level DataItem.
+AL0332	ERR_InvalidControlType	The control {0} must be of type {1}. Change the control type or use a different control.
+AL0333	ERR_InvalidFieldAccessSyntax	The syntax for accessing fields is not valid. Specify target field with 'tableName.fieldName' syntax.
+AL0334	ERR_ExtensionCannotBeDeclared	The extension object '{0}' cannot be declared. Another extension for target '{1}' or the target itself is already declared in this module.
+AL0335	ERR_AttributesMustBeNestedInsideElements	Attributes must be specified before elements inside of an element.
+AL0336	ERR_ThereMustBeOneRootNode	There must be exactly one root node and it has to be an element.
+AL0337	ERR_MissingTableElement	None of the specified parent table elements has the name {0}.
+AL0338	ERR_EventTriggerEventPageMissingSourceTableButFilled	Event trigger '{0}' can only be used if the page specifies 'SourceTable'. Table '{1}' is missing.
+AL0340	ERR_InvalidRoleCenterPage	Page '{0}' should be of type 'RoleCenter'.
+AL0341	ERR_MissingObjectProperty	'{0}' property is missing.
+AL0342	ERR_UnionsAreNotSupportedInQueries	You cannot combine two DataItems at the same level because unions are not supported.
+AL0343	ERR_QueriesMustHaveTopLevelDataItem	Queries must define a top-level DataItem.
+AL0344	ERR_DataItemLinkMustBeSetForNestedDataItems	The property 'DataItemLink' must be set for nested data items. Specify how this data item relates to its parent data item.
+AL0345	ERR_QueryElementSourceMustBeFieldOnTable	The source of a Column or Filter must be a field defined on the table referenced by its parent DataItem
+AL0346	ERR_DateMethodsIncompatibleWithQueryColumnType	The methods '{0}' can only be used on Columns that have a Date or DateTime type
+AL0347	ERR_AggregationMethodsIncompatibleWithQueryColumnType	The methods '{0}' can only be used on Columns that have a Decimal, BigInteger, Integer, or Duration type
+AL0349	ERR_MissingColumnReference	Column '{0}' does not exist in application object '{1}'
+AL0350	ERR_DuplicateColumnReference	The column '{0}' cannot be used multiple times when defining the order of the resulting dataset
+AL0351	ERR_DataItemLinkMustReferenceFieldOnAncestorDataItem	The property 'DataItemLink' can only reference fields on ancestor data items.
+AL0352	ERR_QueriesMustDefineAtLeastOneColumn	Queries must define at least one Column.
+AL0353	ERR_QueryColumnsMustDefineSourceExpressionOrCountMethod	A Column must have a valid data source or have the 'Method' property set to 'Count'
+AL0354	ERR_CannotMoveRelativeToItself	Cannot move element '{0}' relative to itself in page '{1}'.
+AL0355	ERR_CannotMoveMultipleTimes	Cannot move the {0} '{1}' multiple times inside of a single move operation.
+AL0356	ERR_CannotModifyMultipleTimes	Cannot modify the {0} '{1}' multiple times. Remove duplicate modifications or consolidate changes.
+AL0357	ERR_CannotAddMultipleTimes	Cannot add {0} '{1}' with the same name multiple times.
+AL0358	ERR_CannotMoveOrModifyInTheSameExtensionYouAdded	Cannot move or modify the {0} '{1}' in the same '{2}' that you added.
+AL0359	ERR_InvalidXmlName	The XML node name is not valid. {0} XML names must start with a letter and contain only letters, digits, and underscores.
+AL0360	ERR_TextLiteralNotProperlyTerminated	Text literal was not properly terminated. Use the character ' to terminate the literal.
+AL0361	ERR_IdentifierNotProperlyTerminated	Identifier was not properly terminated. Use the character " to terminate the identifier.
+AL0362	ERR_PathMustBeRelative	The path must be relative to the project root. Remove any absolute path prefixes (e.g., 'C:\' or '/').
+AL0363	ERR_PathSeperatorIsNotValidOnCurrentOs	The directory separator used in this property value is not compatible with the current operating system.
+AL0364	ERR_OptionReferencedAsMember	Option members must be accessed with '::' (e.g., MyEnum::Value). Update the syntax to use the scope operator.
+AL0365	ERR_PropertyValuesAreMutuallyExclusive	The property '{0}' cannot be set if the property '{1}' is set to '{2}'
+AL0366	ERR_TableHasToHaveAtLeastOneNormalField	A table has to have at least one Normal field.
+AL0367	ERR_ArrayMustHaveAtLeastOneDimension	An array must have at least one dimension.
+AL0368	ERR_ArrayTooManyDimensions	The maximum number of array dimensions is {0}.
+AL0369	ERR_ConstOutOfRange	Constant value '{0}' cannot be converted to a '{1}'.
+AL0370	ERR_DivByZero	Division by constant zero.
+AL0371	ERR_CheckedOverflow	The operation overflows at compile time.
+AL0372	ERR_ConstantStringTooLong	The length of the String constant exceeds the current memory limit.
+AL0373	ERR_XmlNameMustBeSpecified	The XML name cannot be empty. Provide a valid XML node name.
+AL0374	WRN_DeprecatedIdSyntax	The use of a unique ID has been deprecated and the ID can be removed.
+AL0375	ERR_OptionCannotContainComma	Option members cannot contain comma. Use a different separator or rename the option member.
+AL0376	ERR_ControlTypeNotAllowedInParent	A control of type '{0}' is not allowed in a parent control of type '{1}'
+AL0377	ERR_InvalidAttributeValueForVariableType	'{0}' is not a valid value for the '{1}' attribute on variables of type '{2}'
+AL0378	ERR_RoleCenterShouldNotHaveTriggers	A page of type Role Center cannot have triggers. Remove all trigger implementations from this page.
+AL0379	ERR_NameIsNotValidClsIdentifier	The name '{0}' cannot be used as an identifier because it does not comply with the Common Language Specification
+AL0380	ERR_CannotMoveSymbolsBetweenAreas	Cannot move symbol '{0}' from '{1}' area to '{2}' area.
+AL0381	ERR_DuplicatedKeyFields	The keys '{0}' and '{1}' have an identical list of fields.
+AL0382	ERR_AmbiguosOptionAccess	The option value '{0}' is defined more than once on field '{1}'.
+AL0383	ERR_UndefinedOptionValue	The option value '{0}' is not defined on field '{1}'.
+AL0384	ERR_DuplicateColumnOrLabelName	The name of all the columns and all the labels defined in a report must be unique.
+AL0385	ERR_IncludeCaptionCannotBeSetForNonField	IncludeCaption can be set to true only if the source of the column is a named field.
+AL0386	ERR_MissingPackageDependency	A required package dependency could not be found. Make sure that you have downloaded all the referenced packages and their dependencies.
+AL0387	ERR_DuplicateNamespacePrefix	Namespace '{0}' is already specified.
+AL0388	ERR_DateFormulaSignMissing	The date formula '{0}' must include plus (+) or minus (-).
+AL0389	ERR_DateFormulaNumberOutOfRange	The date formula '{0}' contains a number that is too large. The number must be in the range {1} - {2}.
+AL0390	ERR_DateFormulaShouldIncludeQuantor	The date formula '{0}' must include a time unit. Time units can be: D,WD,W,M,Q, or Y. C specifies the current time unit based on date and can be used as a prefix to any of the time units.
+AL0391	ERR_DateFormulaShouldIncludeANumber	The date formula '{0}' must include a number.
+AL0392	ERR_DateFormulaValueTooLong	The input cannot be longer than {0} characters. Reduce the length of the date formula.
+AL0393	ERR_PermissionDuplicatedObject	Application object {0} is already referenced
+AL0395	ERR_CannotHaveAddSymbolsOnPageCustomizationLayout	You can only specify Move and Modify actions in the layout section of a page customization.
+AL0396	ERR_CannotHaveMethodsOnPageCustomization	Procedures and triggers are not allowed on page customizations.
+AL0397	ERR_ColumnNameFormatClash	The name '{0}' clashes with '{1}' column's format column name.
+AL0398	ERR_ConstantValueNotAValidOptionValue	Constant value '{0}' is outside of the valid ordinal range for this {1} type
+AL0399	ERR_CannotHaveVariablesOnPageCustomization	Global variables are not allowed on page customizations.
+AL0401	ERR_MultiplePageCustomizationsSpecifiedPerProfilePerTargetPage	Multiple page customizations have been specified for the same page {0} within the same profile.
+AL0402	ERR_DuplicateCaseStatement	Expression {0} cannot be specified more than once in a 'case' statement.
+AL0403	ERR_ModifyContainsNoChange	To modify '{0}' you must add at least one property or trigger.
+AL0404	ERR_PropertyInvalidOnTableExtension	Property '{0}' is not allowed on a table extension.
+AL0405	ERR_ExpectedOptionValue	An option value is expected. Use '::' to access option members (e.g., MyEnum::Value).
+AL0406	ERR_InvalidTypeForSomething	The type for {0} is not valid. Expected {1}, but found {2}.
+AL0407	ERR_GenericTypeArgumentCountMismatch	The generic '{0}' type expects {1} type arguments.
+AL0408	ERR_InvalidTypeArgument	The type '{0}' cannot be used as a type argument in this context.
+AL0409	ERR_TypeIsNotGeneric	The '{0}' type is not a generic type.
+AL0410	ERR_NoRequestPage	The report '{0}' doesn't contain a Request Page.
+AL0411	ERR_DuplicateLabelProperty	{0} can be specified only once.
+AL0412	ERR_NotAllowedSyntax	Member '{0}' could not be declared in an object of type '{1}'.
+AL0413	ERR_MethodBodyNotAllowed	Procedure '{0}' cannot have a body.
+AL0414	ERR_MethodBodyMustBeSpecified	Procedure '{0}' must declare a body.
+AL0415	ERR_AccessibilityModifierNotAllowed	Keyword 'local' cannot be specified for procedure '{0}'
+AL0416	ERR_ReturnValueNotAllowed	Method '{0}' cannot have a return value.
+AL0417	ERR_ControlAddInNotFound	Control add-in '{0}' not found
+AL0418	ERR_ControlAddWrongLinkFormat	The format of resource '{0}' is not valid. Resources in the control add-in should either be relative to the project root, or reference external files using the HTTP or HTTPS protocol.
+AL0419	ERR_EventSubscriberMissingParameter	The event subscriber '{0}' is missing a parameter of type '{1}'.
+AL0420	ERR_VarParameterNotAllowed	Parameter '{0}' cannot be 'var'.
+AL0421	ERR_ForEachExpressionMustBeEnumerable	A ‘foreach’ statement can only be used with an expression of an enumerable type.
+AL0422	ERR_InvalidApiVersionId	Constant value {0} is not a valid value for APIVersion. Valid values are 'beta' or of type 'vX.Y' where X and Y represent positive integers.
+AL0423	ERR_PropertyCanBeUsedOnlyOnKeysWithFieldsFromTheSameTable	The property '{0}' can only be set if the specified fields are from the same table.
+AL0424	WRN_ObsoleteMultilanguageSyntax	The multilanguage syntax should not be used because the app uses translation files (the "features" property of the app.json includes "TranslationFile"). Update the translation files and use the label syntax instead.
+AL0425	ERR_InvalidCodeunitSubtypeForTrigger	The '{0}' trigger can only be used on codeunits that have the Subtype property set to '{1}'.
+AL0426	ERR_DuplicateApiVersionId	The APIVersion {0} is specified multiple times.
+AL0427	ERR_CalcFormulaConversionError	Field {0} cannot be converted to type {1}.
+AL0428	ERR_CannotSpecifyPropertiesAtTheSameTime	Cannot specify {0} and {1} property at the same time. Use only the {1} property.
+AL0429	ERR_RepeaterCanOnlyBeAddedToPagesThatHaveASourceTable	A repeater control can only be added to pages that have a source table.
+AL0430	ERR_ParameterTypeNotSerializable	The parameter '{0}' has a type which is not serializable and therefore cannot be used in the given context.
+AL0432	WRN_ObsoleteStatePending	{0} '{1}' is marked for removal. {2}
+AL0433	ERR_ObsoleteStateObsolete	{0} '{1}' is removed. {2}
+AL0434	ERR_ExpectedNumericLiteral	Syntax error, numeric literal expected
+AL0435	ERR_ExpectedLiteral	Syntax error, literal expected
+AL0436	ERR_PropertyValueCannotBeEmpty	The value of the property '{0}' cannot be empty.
+AL0437	ERR_EmptyListMember	The value of the '{0}' property cannot include empty members.
+AL0438	ERR_ValueTypeDoesNotMatchFieldType	The type of value {0} does not match the field’s type.
+AL0439	ERR_InvalidLabelProperty	The label's property is not valid. Possible properties are: {0}.
+AL0440	ERR_MethodAlreadyExists	The {0} '{1}' already defines a method called '{2}' with the same parameter types in '{3}'.
+AL0441	ERR_EventTriggerPageParameterMissingSourceTable	Parameter {0} is only available when the page specifies a 'SourceTable'.
+AL0442	ERR_EventTriggerPageParameterMissingSourceTableButFilled	Parameter {0} is only available when the page specifies a 'SourceTable'. Table '{1}' is missing.
+AL0443	ERR_InvalidSystemObject	The system object provided is not one of the valid system objects.
+AL0444	ERR_MalformedReportLayout	Malformed {0} report layout at location '{1}'. The issue is: '{2}'.
+AL0445	ERR_FileInUse	The file '{0}' is opened in another application. Close the application to be able to compile.
+AL0447	ERR_PropertyValueCannotBeUsedInThisContext	The value '{0}' for the property '{1}' cannot be used for '{2}' development.
+AL0448	ERR_MemberNotAllowedInContext	Member is not allowed in this context.
+AL0449	ERR_DuplicateDotNetTypeAlias	The alias '{0}' is already declared
+AL0450	ERR_ObsoleteFieldCannotBeUsedInKey	Field '{0}' is removed and cannot be used in an active key.
+AL0451	ERR_DotNetAssemblyCouldNotBeFound	An assembly named '{0}' could not be found in the assembly probing paths '{1}'
+AL0452	ERR_DotNetTypeCouldNotBeFound	The type '{0}' could not be found in assembly '{1}'
+AL0453	ERR_ExperimentalFeatureDisabled	This feature is under development. It can be enabled by using the '{0}' feature flag.
+AL0454	ERR_ExtensionTargetTypeCannotBeExtended	The {0} {1} of type {2} cannot be extended
+AL0455	ERR_InvalidOptionOrdinalValue	Option ordinal value '{0}' is not valid. Valid values are -1 and positive integers
+AL0456	ERR_InvalidNumberOfOptionOrdinalValues	The number of option ordinal values is not valid. There must be as many option ordinal values as there are option members
+AL0457	WRN_IncorrectLabelSyntax	The label syntax is not correct. Move the '{0}' to its designated attribute.
+AL0458	ERR_InvalidAttributeForVariableType	'{0}' is not a valid attribute on variables of type '{1}'
+AL0459	ERR_AttributeCanOnlyBeSpecifiedOnGlobalVariables	The attribute '{0}' is only allowed on global variables
+AL0460	ERR_ClientSideEventsAreSupportedOnlyOnPages	Client-side events are supported only on pages and page extensions.
+AL0461	ERR_InvalidDotNetEventPublisher	'{0}' is not a valid event publisher
+AL0462	ERR_UnknownDotNetEvent	The publisher '{0}' does not have any public events named '{1}'
+AL0463	ERR_EventParameterByVarMismatch	Parameter '{0}' must be 'var' if and only if the publisher parameter is 'var'.
+AL0464	ERR_CouldNotDetermineDefaultPrimaryKey	Could not determine a suitable default primary key for table '{0}'. Specify a primary key for the table.
+AL0465	ERR_ExternalResourceNotAllowed	The property '{0}' does not accept references to external files.
+AL0466	ERR_FileIsReadonly	Cannot access file '{0}'. The file is most likely read-only.
+AL0467	WRN_FileIsReadonly	Cannot access file '{0}'. The file is most likely read-only.
+AL0468	WRN_ERR_FieldNameIdentifierTooLong	Length of the table field name '{0}' must not exceed {1} characters. Longer field names are prone to cause SQL errors.
+AL0470	ERR_HeadlinePartMustUsedInRoleCenter	The referenced page '{0}' of PageType 'HeadlinePart' is only allowed inside pages of PageType 'RoleCenter'.
+AL0471	ERR_WrongLinkFormat	The format of link '{0}' is not valid. It should be using the HTTP or HTTPS protocol.
+AL0472	WRN_TranslationItemSourceStringMismatch	The source of the translation item does not match the label value. Ignoring the translation item.
+AL0473	WRN_TranslationItemTranslatedStringTooLong	The translated string of the translation item is too long. Trimming the translated string.
+AL0474	ERR_AttributeCanOnlyBeSpecifiedOnLocalVariables	The attribute '{0}' is only allowed on local variables
+AL0475	ERR_AttributeCannotBeUsedOnVariablesOfArrayType	The attribute '{0}' cannot be used on variables of array type.
+AL0476	ERR_TriggerMissingAssociatedProperty	The trigger '{0}' can only be used if the property '{1}' of '{2}' is set
+AL0477	ERR_TriggerMissingAssociatedPropertySingleValue	The trigger '{0}' can only be used if the property '{1}' of '{2}' is set to '{3}'
+AL0478	ERR_TriggerMissingAssociatedPropertyMultipleValues	The trigger '{0}' can only be used if the property '{1}' of '{2}' is set with any of the values of :'{3}'
+AL0479	WRN_DuplicateTranslationItemForSameId	There must be only one translation item for each ID.
+AL0480	ERR_AttributesCannotHaveNestedElements	Attributes cannot have nested elements.
+AL0481	WRN_ERR_FieldImageOnlyOnFieldInCueGroup	The property Image can only be used on fields that are contained in a CueGroup control.
+AL0482	WRN_ImageNotValid	The image {0} is not valid in this context. Verify the image name is correct and supported for this control type.
+AL0483	WRN_ImageOnNestedActionGroupInSectionsArea	The property Image cannot be used on nested Action Groups inside the 'Sections' area.
+AL0484	ERR_InvalidAlphaNumeric	The property '{0}' must be alphanumeric.
+AL0485	ERR_MissingMandatoryPropertyObjectOfTypeAPI	The property '{0}' is mandatory for objects of type API.
+AL0486	WRN_ERR_DuplicateMemberName	A member of type {0} with name '{1}' is already defined in {2} '{3}' by the extension '{4}'.
+AL0487	ERR_FieldWithInvalidFieldClassAsIndexField	The field '{0}' is not of field class 'Normal' and thus cannot be part of the {1} list.
+AL0488	ERR_InvalidControlAddInNameCharacter	ControlAddIn name must not contain characters {0}.
+AL0489	ERR_PropertyExpressionKindIsNotValidExpectedConstOrFilter	The property expression is not valid. A CONST or FILTER expression is expected.
+AL0490	ERR_PropertyExpressionKindIsNotValidExpectedConstOrFieldOrFilter	The property expression is not valid. A CONST, FIELD, or FILTER expression is expected.
+AL0491	ERR_PropertyExpressionKindIsNotValidExpectedAllExpressionKind	The property expression is not valid. One of the following expressions is expected : CONST,FIELD,FILTER,FIELD(FILTER(Identifier)),FIELD(UPPERLIMIT(Identifier)),or FIELD(UPPERLIMIT(FILTER(Identifier))).
+AL0492	ERR_ActionAreaShouldOnlyRunListPages	The RunObject property value of actions defined in the '{0}' area must only reference pages of type 'List'.
+AL0493	WRN_ERR_ActionAreaShouldOnlyRunListPages	The RunObject property value of actions defined in the '{0}' area must only reference pages of type 'List'.
+AL0494	ERR_ActionAreaShouldOnlyContainGroups	The action area '{0}' can only directly contain groups.
+AL0495	ERR_DuplicateMemberIdFromHash	A member with ID '{0}' is already defined. Change the member name to generate a new ID.
+AL0496	ERR_AttributeContext	Attributes cannot be defined in this context.
+AL0498	ERR_AttributeCanOnlyBeUsedOnProceduresWithAttribute	The attribute '{0}' can only be used on procedures that have the attribute '{1}'.
+AL0499	ERR_MissingHandlerFunction	The handler function {0} was not found. Make sure the procedure is defined and has a handler attribute.
+AL0500	ERR_HandlerFunctionsListShouldNotHaveSpaces	The HandlerFunctions attribute only accepts a string representing a comma separated list of procedure names without spaces.
+AL0501	ERR_TestCodeunitsEventSubscribersMustHaveManualBinding	Eventsubscribers in test codeunits must use manual binding. Set the property EventSubscriberInstance to Manual.
+AL0502	ERR_LinkTableValueMustReferenceTableElement	The LinkTable property must reference a table element node of the current XMLPort.
+AL0503	ERR_AmbigMemberReference	Reference '{0}' in application object '{1}' is ambiguous.
+AL0504	ERR_EnumNotExtensible	The enum '{0}' is not extensible
+AL0505	ERR_ApiPageShouldHaveDelayedInsert	Pages of type API must have the 'DelayedInsert' property set to true. From runtime 7.2, 'DelayedInsert' can be set to false if the 'Editable' property or the 'InsertAllowed' property is set to false.
+AL0506	ERR_AreaShouldOnlyContainGroups	The area '{0}' can only directly contain groups.
+AL0509	WRN_ConstantValueNotAValidOptionValue	Constant value '{0}' is outside of the valid ordinal range for this option type
+AL0510	ERR_DotNetTypeIsNotControlAddIn	The .NET type '{0}' is not a valid control add-in.
+AL0511	ERR_DotNetTypeDeclarationDoesNotContainIsControlAddInProperty	The property 'IsControlAddIn' must be set on the .NET type '{0}' if the type represents a .NET control add-in.
+AL0512	ERR_MissingSupportedLocalesManifestProperty	The manifest should define the 'supportedLocales' manifest property in order to use a placeholder in the '{0}' property.
+AL0513	ERR_FieldGroupNotFound	The FieldGroup '{0}' is not found in the target '{1}'
+AL0514	ERR_DuplicateLegacyEnumId	The symbol file is not valid. An enum with ID '{0}' is already defined with a different name in module '{1}'.
+AL0515	ERR_DuplicateLegacyEnumName	The symbol file is not valid. An enum with name '{0}' is already defined with a different ID in module '{1}'.
+AL0516	ERR_DuplicateLegacyEnumValuesDiffer	The symbol file is not valid. An enum with ID '{0}' and name '{1}' is already defined in module '{2}', but with different values (OptionString).
+AL0517	ERR_InvalidHelpLinkProperty	The link '{0}' specified in the HelpLink property must either contain one placeholder with value 0 for the user locale, or no placeholders.
+AL0518	ERR_DuplicateHandlerMethodName	A method with name '{0}' possessing one Handler attribute is already defined in this test codeunit.
+AL0519	ERR_InvalidValueInContext	'{0}' is not valid value in this context.
+AL0520	WRN_ObsoleteStateObsolete	{0} '{1}' is removed. {2}
+AL0521	ERR_PrimaryKeyMustNotHaveUnique	The primary key '{0}' on table '{1}' (the first one in the key list) must not have the Unique property set.
+AL0522	ERR_PropertyValueNotAValidEnumValue	Property value {0} is not in the values for enum '{1}'.
+AL0523	WRN_ERR_MethodAlreadyExists	The {0} '{1}' already defines a method called '{2}' with the same parameter types in '{3}'.
+AL0524	WRN_ERR_MethodAlreadyDeclaredInBase	The base type already defines a method called '{0}' with the same parameter types.
+AL0525	ERR_SystemTableCannotBeExtended	The system or virtual table '{0}' cannot be extended.
+AL0526	ERR_ApiPageCouldOnlyBePartOfAnotherApiPage	The referenced page '{0}' of type 'API' is only allowed inside pages of PageType 'API'.
+AL0527	ERR_SqlTimestampFieldCannotBePartOfKeys	The SQL timestamp field '{0}' cannot be part of the keys for table '{1}'.
+AL0528	ERR_ApiPageFieldsShouldHaveAlphaNumericName	The name of field controls in pages of the type API must be alphanumeric.
+AL0529	ERR_ApiQueryColumnsShouldHaveAlphaNumericName	The name of columns in queries of the type API must be alphanumeric.
+AL0530	ERR_TypeLengthTooBig	The maximum length for the type '{0}' is {1}
+AL0531	ERR_ApiPageAndSubpagePropertyMismatch	The page '{1}' of type 'API' and its subpage '{2}' of type 'API' in the control '{0}' of type 'Part' must have the same value of property '{3}'.
+AL0532	ERR_ApiPagePartAndSubpagePropertyMismatch	The page '{1}' of type 'API' and its control '{0}' of type 'Part' must have the same value of property '{2}'.
+AL0533	ERR_ViewNotFound	The view '{0}' is not found in the target '{1}'
+AL0534	WRN_ERR_KeyNameIdentifierTooLong	Length of the table key name '{0}' must not exceed {1} characters. Longer key names are prone to cause SQL errors.
+AL0535	ERR_ApiPagePartMustBePartOrApi	The referenced page '{0}' must be a List part, a Card part, or an API page.
+AL0536	ERR_AddChangeNotSupportedForViews	Adding new controls in a view is not allowed.
+AL0537	ERR_ViewsOnlySupportedOnPagesOfType	Declaring views is only supported on pages of type {0}.
+AL0538	ERR_ViewsOrderByOnlySupportOneDirection	Views only support setting one sorting direction on table fields.
+AL0539	ERR_DuplicateTableFieldReference	The field '{0}' cannot be used multiple times when defining the order of the page view.
+AL0540	ERR_InvalidViewName	The view name '{0}' is not valid.
+AL0541	ERR_ViewsBooleanExpressionsShouldNotUseVariables	The use of the variable '{0}' in the property value of '{1}' in view '{2}' is not allowed.
+AL0542	ERR_PropertyNotAllowedOnPageWithoutSourceTable	The property {0} cannot be used on page '{1}' because this page does not have a source table.
+AL0543	ERR_ContextSentiveHelpRequiresManifestProperty	The manifest property 'contextSensitiveHelpUrl' must be set in order to use the property 'ContextSensitiveHelpPage'.
+AL0544	ERR_ContextSentiveHelpWithPlaceholder	The property 'ContextSensitiveHelpPage' cannot contain a placeholder.
+AL0545	WRN_ERR_AreaNotValidOnPageOfType	An area of type '{0}' is not valid on pages of type '{1}'
+AL0546	ERR_ViewsLayoutOnlySupportedOnContent	The control '{0}' cannot be modified in a view context because views only support modifying controls defined in the Content area.
+AL0547	WRN_ERR_EventPublisherCannotExposeGlobalVariables	The event '{0}' should not expose global variables.
+AL0548	WRN_ERR_CannotMoveSymbolsBetweenAreas	Cannot move symbol '{0}' from '{1}' area to '{2}' area.
+AL0549	ERR_CannotHaveMethodsOnPageViews	Procedures and triggers are not allowed on page views.
+AL0550	WRN_ERR_ActionAreaGroupShouldOnlyContainActions	Groups defined in the action area '{0}' should only contain actions.
+AL0551	WRN_ERR_ActionAreaShouldOnlyContainActions	The action area '{0}' can only contain actions.
+AL0552	WRN_ERR_ActionAreaShouldOnlyContainGroups	The action area '{0}' can only directly contain groups.
+AL0553	ERR_CannotAddActionsOfTypeFromPageCustomization	You cannot add actions of type '{0}' in the action area '{1}' from a page customization. You can only add actions of type '{2}'.
+AL0554	ERR_CannotHaveAddSymbolsOnPageCustomizationActions	You can only specify Move and Modify actions in the actions section of a page customization.
+AL0555	ERR_ActionAreaShouldOnlyRunObjectsOfType	The RunObject property value of actions defined in the '{0}' area must only reference objects of type {1}.
+AL0556	WRN_ERR_ActionAreaShouldOnlyRunObjectsOfType	The RunObject property value of actions defined in the '{0}' area must only reference objects of type {1}.
+AL0557	WRN_CodeunitLocalVariableShadowingTableField	The name of the codeunit local variable '{0}' is identical to a field in table '{1}' and will shadow that table field.
+AL0558	WRN_CodeunitGlobalvariableHasSameNameAsTableField	The name of the codeunit global variable '{0}' is identical to a field in table '{1}'.
+AL0559	WRN_ERR_PartsCannotContainParts	A Part type page cannot contain other parts. Part pages (List Part, Card Part) can only contain fields and actions.
+AL0560	WRN_ERR_OnlyGroupsAndPartsAreValidInRoleCenters	Only parts and groups are valid in an area of type 'RoleCenter'
+AL0561	WRN_ERR_FactBoxesCanOnlyContainParts	Only parts are valid in an area of type 'FactBoxes'
+AL0562	WRN_ERR_InvalidSystemPartKind	The value assigned to the SystemPart type is not valid. Valid values are {0}.
+AL0563	WRN_ERR_ControlTypeNotAllowedInParent	A control of type '{0}' is not allowed in a parent control of type '{1}'
+AL0564	ERR_ObjectNotExtensible	The object {0} '{1}' is not extensible
+AL0565	ERR_InvalidManifestRadCheck	Fast publishing requires a built application file to be present. The '{0}' application file contains a manifest which is not valid. Rebuild the application file before continuing with fast publishing.
+AL0566	ERR_TableUsingReservedFieldId	The field '{0}' is using an Id {1} that is reserved for system fields.
+AL0567	WRN_TableFieldShadowingSystemField	The field '{0}' is using the same name as a system-provided field and will shadow that field.
+AL0568	WRN_ERR_ActionAreaGroupShouldOnlyContainActionsOrGroups	Groups defined in the action area '{0}' should only contain actions or groups.
+AL0569	WRN_ERR_RoleCenterShouldNotHaveProcedures	A page of type Role Center cannot have procedures.
+AL0570	ERR_TranslationIdDuplication	The symbol '{0}' results in the same translation ID as one or more other symbols. Rename symbol to resolve the problem.
+AL0571	WRN_ERR_UseCaptionPropertyForProfile	The property 'Description' should only be used for internal comments. Use the property 'Caption' or 'CaptionML' in order to specify the profile caption displayed to end users.
+AL0572	ERR_GenericIOError	I/O operations on the file or folder '{0}' resulted in an exception with the Windows 32 error code '{1}'.
+AL0573	WRN_ERR_InvalidInClientExpression	{0} is not valid for client expressions. Client expressions can only use simple data types and field references.
+AL0574	ERR_ObjectNotAllowedForExtensionDevelopment	This feature is under development and cannot be used in an extension.
+AL0575	ERR_CannotReferenceElementDefinedInPageCustomization	You cannot reference the {0} '{1}' because it is defined in the page customization '{2}'.
+AL0576	ERR_InvalidProfileName	The profile name '{0}' is not valid because it contains leading or trailing spaces.
+AL0577	ERR_ViewWithLayoutChangesMustHaveSharedLayout	The view '{0}' cannot define layout changes because its property '{1}' is not set to false.
+AL0578	ERR_InvalidLabelPropertyValue	The value for the property '{0}' is not valid because its length exceeds {1} characters ({2} characters).
+AL0579	ERR_InvalidMultilanguagePropertyValue	The value for the property '{0}' for the language code '{1}' is not valid because its length exceeds {2} characters ({3} characters).
+AL0580	ERR_SynthesizedFieldCannotBeUsedInKey	The field '{0}' is used by the system and cannot be specified as a table key.
+AL0581	ERR_TypeLengthMustBePositive	The length for the type '{0}' must be positive
+AL0582	ERR_InterfaceRequiredMemberMissing	'{0}' does not implement the interface member '{1}'.
+AL0584	ERR_InterfaceMemberCantHaveVarSection	An interface member cannot have any variables.
+AL0585	ERR_InterfaceCantHaveVarSection	An interface cannot have any variables.
+AL0586	WRN_ERR_IdentifierContainsInvalidCharacters	The identifier contains characters that are not valid: {0}.
+AL0587	ERR_DuplicateInterfaceImplementationNotAllowed	'{0}' is already listed in the interface list.
+AL0588	WRN_EventSubscriberParameterEnumToOption	The type of parameter '{1}' on event subscriber '{0}' is of type 'Option', but the expected type is '{2}'. Update the subscriber type to match the publisher.
+AL0589	WRN_ERR_DuplicateColumnDataItemName	The name '{0}' is used across multiple columns and data items. This will prevent extensibility of this column or data item.
+AL0590	WRN_ERR_PropertyMustBeSetOnGroupKind	The property {0} is only supported on {1}.
+AL0591	ERR_PropertyMustBeSetOnGroupKind	The property {0} is only supported on {1}.
+AL0592	WRN_CompatibilityReason	Compatibility: {0}.
+AL0593	WRN_ERR_EventSubscriberParameterTypeLossyConversion	The type of the parameter '{0}' on the event subscriber '{1}' has a smaller capacity than the parameter type '{2}' on the publisher.
+AL0594	ERR_XmlSerializationErrorOccurred	An error occurred during XML serialization of metadata for symbol: '{0}'. Error: {1}.
+AL0595	ERR_InterfaceIsNotImplementedByObj	'{0}' does not implement {1}.
+AL0596	ERR_InterfaceIsNotImplementedByEnumValueOrDefaultImplementation	Value '{0}' does not implement interface '{1}' and there is no default implementation for the mentioned interface.
+AL0598	WRN_ERR_CannotMoveOrModifyInTheSameExtensionYouAdded	Cannot move or modify the {0} '{1}' in the same '{2}' that you added.
+AL0599	ERR_ControlAddInDuplicatedMetadataName	A control add-in with the same internal name '{0}' is already defined.
+AL0600	WRN_ERR_RelaxedOptionRelatedProperty	The property '{0}' can only be set on elements of type Option.
+AL0601	WRN_ERR_ObsoleteStateObsolete	{0} '{1}' is removed. {2}
+AL0602	WRN_ERR_BadAccess	'{0}' is inaccessible due to its protection level
+AL0603	WRN_DangerousImplicitConversion	An implicit conversion is being performed from a value of type '{0}' to a value of type '{1}'. This conversion can lead to data loss and unexpected runtime issues.
+AL0604	WRN_ERR_UseOfImplicitWith	Use of implicit 'with' will be removed in the future. Qualify with '{0}'.
+AL0605	HDN_UseOfImplicitWith	Use of implicit 'with' will be removed in the future. Qualify with '{0}'.
+AL0606	WRN_ERR_UseOfExplicitWith	The 'with' statement is deprecated and will be removed for cloud development in a future release.
+AL0607	HDN_UseOfExplicitWith	The 'with' statement is deprecated and will be removed for cloud development in a future release.
+AL0608	WRN_ERR_OrderByWithoutFields	The OrderBy property must specify at least one field on which to sort the data.
+AL0609	WRN_AddingActionCueGroup	Adding actions to CueGroups is not supported.
+AL0610	WRN_MovingActionCueGroup	Moving actions in CueGroups is not supported.
+AL0611	WRN_ModifyActionCueGroup	Modifying actions in CueGroups is not supported.
+AL0612	ERR_InterfaceMemberMustBeDeclareMethod	An interface member must be a 'procedure'.
+AL0613	WRN_ERR_InvalidTriggerSignature	Wrong signature. Correct signature for '{0}' is '{1}'
+AL0614	WRN_ERR_ReservedPropertyValue	The value '{0}' is not allowed for property '{1}'.
+AL0615	WRN_ERR_ODataKeyFieldNotReferenced	Field '{0}' is not specified as a source expression on page '{1}'. All fields specified in ODataKeyFields must be used as the source expression in a page control.
+AL0616	ERR_ReservedCodeunitInterfaceMethodSignature	Defining the contract '{0}' on interface '{1}' is not allowed because it is matching a built-in procedure for codeunits.
+AL0617	WRN_ERR_OnBeforeActionEventNotValidWithRunObject	Event trigger 'OnBeforeActionEvent' cannot be used because the action '{0}' specifies the 'RunObject' property.
+AL0619	ERR_CaptionAttributeNotServiceProcedure	The attribute '{0}' on procedure '{1}' is not allowed. Add attribute 'ServiceEnabled' to the procedure or move it into an application object of type API.
+AL0620	ERR_BadDirectivePlacement	Preprocessor directives must appear as the first non-whitespace character on a line.
+AL0621	ERR_PPDirectiveExpected	Preprocessor directive expected.
+AL0622	ERR_EndRegionDirectiveExpected	#endregion directive expected.
+AL0623	ERR_EndifDirectiveExpected	#endif directive expected.
+AL0624	ERR_UnexpectedDirective	Unexpected preprocessor directive.
+AL0625	ERR_PPDefFollowsToken	Cannot define/undefine preprocessor symbols after first token in file.
+AL0626	WRN_IdentifierOrNumericLiteralExpected	Expected identifier or numeric literal.
+AL0627	WRN_IllegalPPWarning	Expected 'disable' or 'restore' keyword.
+AL0628	WRN_IllegalPragma	Unrecognized #pragma directive.
+AL0629	ERR_InvalidPreprocExpr	Preprocessor expression is not valid.
+AL0630	ERR_IllegalEscape	Unrecognized escape sequence.
+AL0631	ERR_EndOfPPLineExpected	Single-line comment or end-of-line expected.
+AL0632	ERR_CloseParenExpected	Closing parenthesis ')' expected.
+AL0633	WRN_IllegalPPImplicitWith	Expected 'disable', 'enable' or 'restore' keyword.
+AL0634	WRN_EndOfPPLineExpected	Single-line comment or end-of-line expected.
+AL0635	WRN_ERR_EventSubscriberWithOnPremAttribute	A method with 'OnPrem' scope cannot be used as event subscriber. It will fail at runtime when the publisher has 'Cloud' scope.
+AL0636	ERR_RequiresBigTextExtendedDataType	The data type on the field '{0}' is not valid because the ExtendedDatatype property is set to RichText. Valid data types are Text, BigText and Blob.
+AL0637	ERR_NavigationMustBeOnAPIPage	The property 'NavigationPageId' must be defined on a page of pagetype 'API'
+AL0638	ERR_VariantAsReportColumn	'Variant' is not a valid column type for column '{0}' in report '{1}'
+AL0639	WRN_ERR_VariantAsReportColumn	'Variant' is not a valid column type for column '{0}' in report '{1}'
+AL0640	WRN_XMLParseError	XML comment has badly formed XML -- '{0}'
+AL0641	WRN_MissingParamTag	Parameter '{0}' has no matching param tag in the XML comment for '{1}' (but other parameters do)
+AL0642	WRN_MissingXMLComment	Missing XML comment for publicly visible type or member '{0}'
+AL0643	WRN_UnprocessedXMLComment	XML comment is not placed on a valid language element
+AL0644	WRN_UnmatchedParamTag	XML comment has a param tag for '{0}', but there is no parameter by that name
+AL0645	WRN_UnmatchedParamRefTag	XML comment on '{1}' has a paramref tag for '{0}', but there is no parameter by that name
+AL0646	WRN_DuplicateParamTag	XML comment has a duplicate param tag for '{0}'
+AL0647	WRN_ErrorOverride	{0}. See also error AL{1}.
+AL0648	ERR_OpenEndedComment	End-of-file found, '*/' expected
+AL0649	WRN_ERR_CommaInEnumValue	Comma is not supported in enum value names or in captions. Enum Value = '{0}', Property = '{1}'.
+AL0650	WRN_ERR_TranslationSourceStringTooLong	The text with a length of {0} is longer than the MaxLength of {1} which means that the text will be trimmed.
+AL0651	ERR_PermissionSetCircularReference	'{0}' cannot be contained since it causes a circular reference.
+AL0652	ERR_PermissionSetSelfReference	The permission set '{0}' cannot contain itself.
+AL0653	ERR_IdSyntaxNotAllowed	Ids are not supported as object reference.
+AL0654	ERR_PropertyWrongFileExtension	The property value contains an unexpected file extension: {0}. The expected extensions are {1}.
+AL0655	WRN_ERR_DataItemLinkMustReferenceParent	The property DataItemLinkReference can only refer to an ancestor DataItem.
+AL0656	ERR_CannotAnchorControlsAddedInTheSameExtension	The {0} '{1}' cannot be used as an anchor because it is already defined in the same '{2}'.
+AL0657	ERR_MissingMandatoryPropertyOfPartOfTypeAPI	The property {0} is mandatory for ListParts and PageParts.
+AL0658	ERR_MemberNameOnlyAllowedForTriggers	Member name '{0}' is only allowed on triggers.
+AL0659	WRN_EnumIdentifierTooLong	The length of the enum identifier '{0}' should not exceed {1} characters as it may result in runtime issues in cases where there are other enums with the same first {1} characters.
+AL0660	WRN_ERR_NonCustomizableProperty	The property '{0}' cannot be customized. This property is read-only in the current context.
+AL0662	WRN_BigIntegerNarrowingConversionInProperty	Implicit conversion from BigInteger '{0}' to {1} '{2}' in property expression may overflow at runtime. Consider changing the target field type to BigInteger.
+AL0663	WRN_BigIntegerNarrowingConversionInPropertyToEnum	Implicit conversion from BigInteger '{0}' to Enum '{1}' in property expression may overflow at runtime and can lead to unexpected enum value behavior. This conversion is dangerous and may cause runtime issues. Consider changing the target field type to BigInteger.
+AL0665	ERR_ReturnTypeIsNotSupportedForVersion	'{0}' is not a valid return type in runtime version '{1}'. The supported runtime versions are: {2}
+AL0666	ERR_FeatureNotAvailable	'{0}' is not available in runtime version '{1}'. The supported runtime versions are: {2}
+AL0667	WRN_ERR_DeprecatedFeature	'{0}' is being deprecated in the versions: {1} {2}
+AL0668	ERR_FeatureNotSupportedOnCrossPlatformBuilds	This feature is not available on cross-platform builds of the AL compiler.
+AL0670	ERR_ObjectChangeNotFoundInCompilation	Fast publishing failed because the RAD file has specified a non-existing application object of type : '{0}' name: '{1}' ID: '{2}' to be added or modified. Do a full publishing before issuing a fast publishing again.
+AL0671	ERR_DeletedObjectChangeFoundInCompilation	Fast publishing failed because the RAD file has specified an existing application object of type: '{0}' name: '{1}' ID: '{2}' to be deleted. Do a full publishing before issuing a fast publishing again.
+AL0672	ERR_DataItemTableFilterOnNonNormalField	Filtering is only allowed on fields where FieldClass is set to Normal. Create a Filter column and specify the filter by using the 'ColumnFilter' property.
+AL0673	ERR_RequiredProperty	The property '{0}' is required.
+AL0674	ERR_ConditionalRequiredProperty	The property '{0}' is required when property '{1}' is set to '{2}'.
+AL0675	ERR_InterfaceIsAlreadyImplemented	An implementation for the interface '{0}' is already specified in this list.
+AL0676	ERR_ProtectedMemberNotAllowedForObject	The member '{0}' in object '{1}' cannot be declared as protected in object type '{2}'.
+AL0677	WRN_ERR_ProtectedMemberNotAllowedForObject	The member '{0}' in object '{1}' cannot be declared as protected in object type '{2}'.
+AL0678	INF_DuplicateMemberMetadataNames	The metadata name of {0} '{1}' conflicts with {2} '{3}' defined in {4} '{5}' by the extension '{6}'. Choose another name for one of them. Otherwise, this might cause runtime issues.
+AL0679	WRN_MissingObjectEntitlement	The application object '{0}' is not included in any entitlement and will therefore not be accessible in the cloud.
+AL0680	ERR_CannotAddNewTopLevelDataItem	Cannot use addBefore or addAfter on a top-level data item. The anchor {0} is a top level data item.
+AL0681	ERR_DataItemNotFound	A DataItem with name '{0}' could not be found in the target {1}.
+AL0682	ERR_DataItemOrColumnNotFound	A DataItem or Column with name '{0}' could not be found in the target {1}.
+AL0683	ERR_ObjectEntitlementFromOtherModule	The permissionset '{0}' belongs to a different module and cannot be used when defining entitlements.
+AL0684	WRN_ObjectEntitlementContainsFromOtherModule	The permissionset '{0}' contains permissionsets or permission for objects from other module. Permissions on objects from other modules will be ignored.
+AL0685	WRN_ERR_CalcFormulaTargetCannotBeLargerThanSourceField	The length '{0}' of the calculation formula's target field '{1}' is greater than the length '{2}' of the source flow field '{3}'. This could result in a runtime error. Make sure that the target field's length is less than equal to the source field length.
+AL0686	ERR_MethodAlreadyDeclaredInBase	The base type already defines a method called '{0}' with the same parameter types.
+AL0687	ERR_IncludedFieldsContainsPrimaryKeyField	The key '{0}' on table '{1}' cannot contain the fields defined for the primary key in the IncludeFields property.
+AL0688	ERR_IncludedFieldsContainsKeyField	The key '{0}' on table '{1}' cannot contain the fields defined for the key in the IncludeFields property.
+AL0689	ERR_IncludedFieldsContainsSqlIndexField	The key '{0}' on table '{1}' cannot contain the fields defined for the SqlIndex in the IncludeFields property.
+AL0690	ERR_PrimaryKeyContainsIncludedFields	The primary key '{0}' on table '{1}' (the first one in the key list) must not have the IncludedFields property set.
+AL0691	ERR_PrimaryKeyMustNotBeObsolete	The primary key '{0}' on table '{1}' cannot be obsolete. All related properties will have no effect.
+AL0692	WRN_ERR_PrimaryKeyMustNotBeObsolete	The primary key '{0}' on table '{1}' cannot be obsolete. All related properties will have no effect.
+AL0693	ERR_PrimaryKeyFieldMustNotBeObsolete	The field '{0}' which is part of the primary key of table '{1}' cannot be obsolete. All related properties will have no effect.
+AL0694	WRN_ERR_PrimaryKeyFieldMustNotBeObsolete	The field '{0}' which is part of the primary key of table '{1}' cannot be obsolete. All related properties will have no effect.
+AL0695	WRN_ERR_MethodCannotBeUsedInThisContext	The method {0} will only be available for {1} development for runtime version {2}.
+AL0696	ERR_ArgumentShouldBeFieldType	Argument {0}: The argument should be a valid Field type.
+AL0697	WRN_ERR_ArgumentShouldBeFieldType	Argument {0}: The argument should be a valid Field type.
+AL0698	ERR_InvalidCaseOfType	Type {0} cannot be used in a 'case' statement.
+AL0699	ERR_OnlySymbolsFromBaseAreAllowed	The symbol '{0}' cannot be referenced in this context. You can only reference symbols from the base object '{1}', from extension objects defined in this app with an ID lower or equal to '{2}', or from extension objects defined in dependencies.
+AL0700	WRN_ERR_DependencyOnSpecialAppExplicitlyNotAsProperty	Dependency '{0}' must be referenced in the property '{1}' rather than as an explicit dependency.
+AL0701	ERR_DependencyOnSpecialAppExplicitlyNotAsProperty	Dependency '{0}' must be referenced in the property '{1}' rather than as an explicit dependency.
+AL0702	WRN_ERR_DependencyOnSpecialAppExplicitlyAndAsProperty	Dependency '{0}' is referenced in the property '{1}' and as an explicit dependency. Remove the explicit dependency.
+AL0703	ERR_DependencyOnSpecialAppExplicitlyAndAsProperty	Dependency '{0}' is referenced in the property '{1}' and as an explicit dependency. Remove the explicit dependency.
+AL0704	ERR_EmptyDefaultExcelLayout	A layout must be specified through the 'ExcelLayout' property when the default layout type for a report is 'Excel'.
+AL0705	ERR_DuplicateLayoutName	Another layout with name '{0}' already exists.
+AL0706	ERR_LegacyLayoutProperty	The property '{0}' cannot be used while also specifying the rendering section.
+AL0707	ERR_LayoutFilenameInvalidExtension	Layouts of type '{0}' must specify a LayoutFile with one of the following extensions: {1}.
+AL0708	ERR_InvalidMimeType	MimeType values must be less than {0} characters in length.
+AL0709	ERR_FileDoesNotExist	The layout file at path '{0}' specified in layout '{1}' in {2} {3} does not exist.
+AL0710	ERR_InvalidDefaultLayout	The DefaultRenderingLayout property can only be used with layouts specified in the report's rendering section.
+AL0711	WRN_ERR_DuplicateMemberNameWithCueAction	A member of type {0} with name '{1}' is already defined in {2} '{3}' by the extension '{4}'. Duplicate member names are not allowed when defining CueActions.
+AL0712	ERR_DuplicateMemberNameWithCueAction	A member of type {0} with name '{1}' is already defined in {2} '{3}' by the extension '{4}'. Duplicate member names are not allowed when defining CueActions.
+AL0713	ERR_ControlAddInEventsShouldBeImplementedAsTriggers	Events in control add-ins should be implemented as triggers.
+AL0714	ERR_ReuseOfAreaName	The name '{0}' is an Area type. Using an Area type name will limit extensibility as dependent extension won't be able to reference it.
+AL0715	WRN_ERR_ReservedName	The {0} name '{1}' is reserved for future AL language features.
+AL0716	ERR_ReservedName	The {0} name '{1}' is reserved for future AL language features.
+AL0717	WRN_MissingCalcFormulaOnFlowField	The property 'CalcFormula' is required for the field '{0}' in {1} '{2}' because the field's property 'FieldClass' is set to 'FlowField'.
+AL0718	ERR_InvalidReportLayoutName	Report layouts must have a name.
+AL0719	INF_ArgumentShouldBeFieldType	Argument {0}: The argument should be a valid Field type. An argument of type Joker or Variant might have an underlying type that is not a valid Field type.
+AL0720	ERR_AppObjectNotFound	An application object '{0} {1}' could not be found in the current extension. Only application objects that belong to the current extensions can be used in this context.
+AL0721	ERR_DefaultRenderingLayoutMustBeSpecified	Reports that use the rendering syntax must also define the DefaultRenderingLayout property.
+AL0722	ERR_PropertyNotAllowedForActionsV2	The property '{0}' is not allowed on {1} '{2}' because the {3} '{4}' is using the ActionRef syntax or the app.json specifies the 'NoPromotedActionProperties' feature.
+AL0723	ERR_ActionTypeNotAllowedForActionRef	The {0} '{1}' cannot be used as target of the ActionRef '{2}'. ActionRefs can only target Actions.
+AL0724	ERR_AreaNotValidOnPageOfType	An area of type '{0}' is not valid on pages of type '{1}'
+AL0725	ERR_ActionTypeIsNotSupportedInArea	The action type '{0}' is not allowed in area '{1}'.
+AL0726	ERR_ExpectedIdentifierOrLiteralOrOptionAccess	An identifier, a literal, or an option access is expected as the value of a filter expression
+AL0727	WRN_ERR_MissingAssociatedProperty	The {0} '{1}' can only be used if the property '{2}' is set
+AL0728	WRN_ERR_MissingAssociatedPropertySingleValue	The {0} '{1}' can only be used if the property '{2}' is set to '{3}'
+AL0729	WRN_ERR_MissingAssociatedPropertyMultipleValues	The {0} '{1}' can only be used if the property '{2}' is set with any of the values of: '{3}'
+AL0730	ERR_InvalidSumIndexField	The field '{0}' cannot be used in a sum index
+AL0731	WRN_ERR_NameNotInContext	The name '{0}' does not exist in the current context.
+AL0732	ERR_AccessModifierNotAllowedInContext	Access modifier '{0}' is not allowed for member '{1}' in the context of object type '{2}'.
+AL0733	WRN_ERR_AccessModifierNotAllowedInContext	Access modifier '{0}' is not allowed for member '{1}' in the context of object type '{2}'.
+AL0734	ERR_PropertyValueInvalidGuid	The value '{0}' of the property '{1}' is not a valid GUID.
+AL0735	ERR_CustomActionCannotBeUsedWithPromotedActionProperties	The custom action '{0}' cannot be defined in {1} '{2}' because '{2}' uses promoted action properties. Convert the promoted properties into ActionRefs in oder to use custom actions.
+AL0736	ERR_InvalidFlowEnvironmentIdPropertyValue	The value '{0}' of the property 'FlowEnvironmentId' is not a valid. It must either be a GUID or must match the pattern 'Default-<GUID>'.
+AL0737	ERR_ActionRefOrPromotedGroupCannotBeReferenedWhenUsingPromotedActionSyntax	The {0} '{1}' cannot be referenced in {2} '{3}' because '{1}' is defined in the promoted part of the action part while '{3}' uses promoted action properties.
+AL0738	ERR_EmptyMemberName	The name of {0} '{1}' cannot be empty.
+AL0739	WRN_EmptyMemberName	The name of {0} '{1}' cannot be empty.
+AL0740	ERR_PermissionSetIncludedExcludeSamePermissionSet	The permission set '{0}' cannot be excluded and included in the same permission set.
+AL0741	ERR_PermissionSetSelfReferenceExclude	The permission set '{0}' cannot exclude itself.
+AL0742	ERR_InvalidPropertyForActionInControlOfType	The property '{0}' is not valid for action '{1}' defined in control '{2}' of type '{3}'.
+AL0743	WRN_ERR_InvalidPropertyForActionInControlOfType	The property '{0}' is not valid for action '{1}' defined in control '{2}' of type '{3}'.
+AL0744	ERR_InvalidPropertyForRequestPage	The property '{0}' is not valid for action '{1}' defined in a report request page.
+AL0745	WRN_ERR_InvalidPropertyForRequestPage	The property '{0}' is not valid for action '{1}' defined in a report request page.
+AL0746	ERR_AutoIncrementFieldCanOnlyAppearOnce	The auto-increment field '{0}' has already been defined for table '{1}'.
+AL0747	ERR_RequiresNonConstTextualType	The data type on the '{0}' control is not valid for this ExtendedDataType value. Valid data types are BigText and Text without max size.
+AL0748	WRN_PublicMethodReturnValueExposingInternalTypes	The return type '{0}' of the {1} method '{2}' has 'Internal' accessibility. The return value will not be usable outside of this module without an implicit conversion.
+AL0749	WRN_PublicMethodParameterExposingInternalTypes	The type '{1}' of the parameter '{0}' of the {2} method '{3}' has 'Internal' accessibility. The method will not be callable outside of this module without an implicit conversion.
+AL0750	ERR_CantNestEnumValues	Enum values can't be nested. Use '{0}' instead.
+AL0751	WRN_ERR_CantNestEnumValues	Enum values can't be nested. Use '{0}' instead.
+AL0752	ERR_EmptyDataitemName	The name of a dataitem cannot be empty because it can cause runtime errors.
+AL0753	WRN_ERR_EmptyDataitemName	The name of a dataitem cannot be empty because it can cause runtime errors.
+AL0754	ERR_BuiltInMemberAlreadyExists	The '{0}' already defines a built-in member called '{1}'. Choose another name for {2} '{1}', or it might cause runtime issues.
+AL0755	WRN_ERR_BuiltInMemberAlreadyExists	The '{0}' already defines a built-in member called '{1}'. Choose another name for {2} '{1}', or it might cause runtime issues.
+AL0756	WRN_DivisionByAbsWillChangeItsBehaviour	The division by Abs(integer) will change its behavior in release version 11. For more information visit the official documentation.
+AL0757	ERR_DuplicateMemberMetadataNames	The metadata name of {0} '{1}' conflicts with {2} '{3}' defined in {4} '{5}' by the extension '{6}'. Choose another name for one of them. Otherwise, this might cause runtime issues.
+AL0758	WRN_ERR_DuplicateMemberMetadataNames	The metadata name of {0} '{1}' conflicts with {2} '{3}' defined in {4} '{5}' by the extension '{6}'. Choose another name for one of them. Otherwise, this might cause runtime issues.
+AL0759	ERR_InvalidFormatRegion	The value '{0}' specified for FormatRegion cannot be parsed as a valid format culture name.
+AL0760	ERR_UnsupportedFormatRegion	The value '{0}' specified for FormatRegion is not a standard format culture name.
+AL0761	ERR_ExternalBusinessEventCategoryInvalideEnum	An incorrect value was used for the category. One of the values of the enum {0} {1} is expected which is available in platform version {2} and higher.
+AL0762	ERR_ArgumentTooLong	Length of the argument '{0}' cannot exceed {1} characters.
+AL0763	ERR_InvalidAlphanumericArgument	{0} can contain only underscores and alphanumeric characters.
+AL0764	ERR_EmptyArgument	{0} cannot be empty.
+AL0765	ERR_ExternalBusinessEventMethodArgumentType	An argument of type {0} cannot be used in an External Business Event.
+AL0766	ERR_ExternalBusinessEventDuplicateName	An External Business Event with {0} {1} and version {2} is already declared.
+AL0767	ERR_ExternalRulesetPathNotAllowed	The URL '{0}' cannot be used as the ruleset path for this project because its configuration does not permit external rulesets.
+AL0768	WRN_ERR_ConditionalRequiredProperty	The property '{0}' is required when property '{1}' is set to '{2}'.
+AL0769	WRN_ERR_RequiredProperty	The property '{0}' is required.
+AL0772	ERR_ConditionalAttribute	The attribute '{0}' can only be used in combination with attribute '{1}'.
+AL0773	WRN_ExceedsNumberOfFiles	The number of files found in '{0}' exceeds {1}. This may result in a slower compilation.
+AL0774	ERR_TryFunctionDiscardsExitValues	Try methods should not specify an explicit return value, because the value will be discarded. The actual return value depends on whether the method returns an error or not.
+AL0775	WRN_ERR_TryFunctionDiscardsExitValues	Try methods should not specify an explicit return value, because the value will be discarded. The actual return value depends on whether the method returns an error or not.
+AL0776	ERR_IdentifierIsNotAPermissionValue	The identifier '{0}' is not a valid permission value.
+AL0777	ERR_OverflowInGuidConversion	The implicit conversion will overflow when converting from a 'Guid' to a '{0}' which is shorter than the converted textual representation of a 'Guid'.
+AL0778	WRN_ERR_OverflowInGuidConversion	The implicit conversion will overflow when converting from a 'Guid' to a '{0}' which is shorter than the converted textual representation of a 'Guid'.
+AL0779	ERR_CannotModifyAllFlowfield	It is not allowed to call `ModifyAll` on a field of FieldClass='{0}'.
+AL0780	WRN_ERR_CannotModifyAllFlowfield	It is not allowed to call `ModifyAll` on a field of FieldClass='{0}'.
+AL0781	ERR_CannotFindDataItemToLink	Cannot find a reference of DataItem with name '{0}'.
+AL0782	WRN_ERR_CannotAccessForeignControlAddInFromPageExtension	A page extension is only allowed to access control add-ins defined within its own extension scope.
+AL0783	ERR_CannotAccessForeignControlAddInFromPageExtension	A page extension is only allowed to access control add-ins defined within its own extension scope.
+AL0784	ERR_ExternalBusinessEventVersionMalformed	The version number '{0}' for the argument '{1}' does not match the expected format: X.Y where X and Y represent positive integers.
+AL0785	ERR_ControlKindNotSupportedInPageCustomization	The control with name '{0}' cannot be declared in the page customization '{1}' targeting page '{2}' because controls of type '{3}' are not supported in page customizations.
+AL0786	ERR_PropertyKindNotSupportedInPageCustomization	The property '{0}' cannot be specified on the control '{1}' in the page customization '{2}' targeting page '{3}', because this property type is not supported in page customizations.
+AL0787	ERR_SourceExpressionKindNotSupportedInPageCustomization	The control with name '{0}' cannot be declared in the page customization '{1}' targeting page '{2}' because it is not using a source table field as source expression.
+AL0788	WRN_ERR_AreaOnlyValidOnPageOfType	An area of type '{0}' is only valid on pages of type(s) '{1}'
+AL0789	WRN_UsingWithoutNamespace	Using directives are ignored if a namespace is not specified.
+AL0790	WRN_DuplicateUsing	The using directive for '{0}' appeared previously in this namespace declaration.
+AL0791	ERR_NamespaceNotFound	The namespace '{0}' is unknown.
+AL0792	HDN_UnusedUsing	Unused using directive '{0}'.
+AL0793	ERR_PropertyNotAllowedForMutliSelectAction	The property '{0}' cannot be used on a multi-select action with '{1}' scope.
+AL0794	ERR_InvalidPropertyValueForActionInControlOfType	The value '{0}' for property '{1}' is not valid for action '{2}' defined in control '{3}' of type '{4}'.
+AL0795	ERR_SecretTextParametersNotAllowedOnEvents	The parameter '{0}' cannot be of type 'SecretText'.
+AL0796	WRN_SecretTextUnwrapShouldBeUsedInsideNonDebuggableMethod	The 'Unwrap' method should only be used inside a non-debuggable method otherwise the contents of the value will be viewable through the debugger.
+AL0797	ERR_ObsoleteStateMoved	{0} '{1}' is moved. {2}
+AL0798	ERR_SymbolsCanBeMovedOnlyByFirstPartyApps	Currently, the Moved(To/From) property is exclusively accessible to Microsoft and select publishers.
+AL0799	ERR_SourceTableFieldCannotBeUsedInCustomization	The field with ID '{0}' and name '{1}' cannot be used as source expression in the page customization '{2}' targeting page '{3}'.
+AL0800	ERR_CertainEDTNotAllowedOnTableField	The field '{0}' specifies ExtendedDataType '{1}'. This ExtendedDataType can only be set on a control.
+AL0801	WRN_ObsoleteStatePendingMove	{0} '{1}' is marked to be moved. {2}
+AL0802	ERR_SecretTextParametersNotAllowedOnControlAddInProcedures	The parameter '{0}' cannot be of type 'SecretText'.
+AL0803	WRN_ERR_DuplicateMethodMetadataNames	The name of {0} '{1}' conflicts with {0} '{2}' defined in {3} '{4}' by the extension '{5}'. Choose another name for one of them. Otherwise, this might cause runtime issues.
+AL0804	WRN_ERR_CannotReferenceElementDefinedInPageCustomization	You cannot reference the {0} '{1}' because it is defined in the page customization '{2}'.
+AL0805	WRN_ERR_ObjectIdWithQuotesNotSupported	The object ID '{0}' should not be surrounded with quotes.
+AL0806	ERR_ObjectIdWithQuotesNotSupported	The object ID '{0}' should not be surrounded with quotes.
+AL0807	WRN_ObjectNameShouldNotBeInteger	The integer '{0}' should not be used as the name for the object.
+AL0808	ERR_CannotSetPropertyValueInPageCustomization	You cannot set the '{0}' property to '{1}' for {2} '{3}' in the page customization '{4}'. Reason: '{5}'.
+AL0809	ERR_SecretTextCannotBeProtectedVar	The variable '{0}' is not allowed to be of type 'SecretText' because it is declared as protected.
+AL0810	ERR_InvalidSystemActionName	The name '{0}' cannot be used for a system action. The allowed names in a '{1}' page are: '{2}'.
+AL0811	ERR_InvalidSystemActionTrigger	The trigger '{0}' cannot be defined on the system action named '{1}' in a page of type '{2}'.
+AL0812	ERR_PromptOptionsAreaCanOnlyContainOptionFields	The control '{0}' cannot be declared in the 'PromptOptions' area because it is not a page field of type 'Option'.
+AL0813	ERR_DependentPropertyValueNotSupported	The property '{0}' can only be specified when the property '{1}' has a value of '{2}' if the runtime version is '{3}' or higher.
+AL0814	WRN_ERR_QueryElementSourceMustNotBeFlowFilter	The source of a column cannot be a flow filter.
+AL0815	ERR_QueryElementSourceMustNotBeFlowFilter	The source of a column cannot be a flow filter.
+AL0816	WRN_ERR_PropertyValuesAreMutuallyExclusive	The property '{0}' cannot be set if the property '{1}' is set to '{2}'
+AL0817	ERR_ControlNotValidOnAreaForPageOfType	Controls of type '{0}' are not allowed in the '{1}' area for pages of type '{2}'.
+AL0818	WRN_ERR_EventAlreadyExists	The {0} '{1}' already defines an event called '{2}' with the same parameter types in '{3}'.
+AL0819	ERR_EventAlreadyExists	The {0} '{1}' already defines an event called '{2}' with the same parameter types in '{3}'.
+AL0820	WRN_MissingApplicationObject	{0} '{1}' is missing
+AL0821	WRN_InvalidAddActionMethod	The method '{0}' is missing or does not have exactly one parameter of type {1}.
+AL0822	WRN_AmbigSymbolReference	'{0}' is an ambiguous reference between '{1}' defined by the extension '{2}' and '{3}' defined by the extension '{4}'.
+AL0823	WRN_MovedFieldCannotBeUsedInKey	Field '{0}' is marked as PendingMove and cannot be used in an active key.
+AL0824	ERR_MovedFieldCannotBeUsedInKey	Field '{0}' is moved and cannot be used in an active key.
+AL0825	ERR_FieldCannotBeMovedToBaseTable	It is not possible to move the field '{0}' ({1}) to a base table.
+AL0826	WRN_ERR_InvalidTypeArgument	The type '{0}' cannot be used as a type argument in this context.
+AL0827	ERR_FieldClassNotAllowed	Argument {0}: The argument {0} of field class {1} is not supported. Allowed field class types are '{2}'.
+AL0828	ERR_PrimaryKeyFieldCannotBeMoved	The field '{0}' with ID '{1}' can't be moved because it is part of the table's primary key.
+AL0829	ERR_SymbolsCannotBeMovedToSameApp	Symbol of kind {0} '{1}' cannot be moved to its own app.
+AL0830	WRN_ERR_TryFunctionCannotBeUsedAsImplementation	The method '{0}' is not supported as the implementation for the interface method because it is a try function.
+AL0831	ERR_TryFunctionCannotBeUsedAsImplementation	The method '{0}' is not supported as the implementation for the interface method because it is a try function.
+AL0832	ERR_ActionAreaNotValidOnControlOfType	Action area of type '{0}' is not valid in control '{1}' of type '{2}'.
+AL0833	ERR_ActionNotAllowedInContext	{0} '{1}' cannot be defined outside an action area or group on this control type.
+AL0834	ERR_MovedToPropertyIsRequiredForMovedSymbols	'MovedTo' property is required for a symbol of kind '{0}' {1} that has ObsoleteState set to Moved or PendingMove.
+AL0835	WRN_DuplicateLayoutFile	The LayoutFile '{0}' is already being used. To avoid build issues, a layout file shouldn't be updated by different layouts.
+AL0836	WRN_BaseTableFieldFromSameAppExtensionReference	The {0} '{1}' contains a reference to the field '{2}' which is defined in another object from the same app. If you are preparing to move this object to another extension in the future, this reference will be an issue.
+AL0837	WRN_ERR_TranslationIdDuplication	The symbol '{0}' results in the same translation ID as one or more other symbols. Rename symbol to resolve the problem.
+AL0838	ERR_FailedToGenerateTextDataXliffFile	The XLIFF file for text data could not be generated.
+AL0839	ERR_DuplicateTransUnitIdInTextDataXliffFile	The symbol '{0}' has same trans unit ID in Text Data XLIFF file as one or more other symbols.
+AL0840	ERR_InvalidFileExtension	The file extension '{0}' is not valid. Example of an expected value is '.app'.
+AL0841	ERR_DuplicateFileExtension	The file extension '{0}' is already defined.
+AL0842	WRN_PublicFieldExposingInternalTypes	The type '{0}' of the {1} field '{2}' has 'Internal' accessibility. The field will not be usable outside of this module without an implicit conversion.
+AL0843	ERR_PropertyUnsupportedAssociatedTypeSingleValue	The property '{0}' can only be used if the {1}'s type is '{2}'.
+AL0844	ERR_PropertyUnsupportedAssociatedTypeMultipleValues	The property '{0}' can only be used if the {1}'s type is one of these values: '{2}'.
+AL0845	WRN_ERR_DuplicateEntityNameOrEntitySetName	The {0} '{1}' is already being used. The EntityName and EntityNames property values must be unique.
+AL0846	ERR_DuplicateEntityNameOrEntitySetName	The {0} '{1}' is already being used. The EntityName and EntityNames property values must be unique.
+AL0847	ERR_ThisHaveNoSuchMember	'{0}' does not contain a definition for '{1}'
+AL0848	WRN_IdentifierIsKeywordFromVersion	'{0}' is a keyword from version '{1}'
+AL0849	ERR_CannotReferencePageCustomizationWithClearPropertiesFromProfileExtension	The page customization '{0}' cannot be referenced from the profile extension '{1}' because it uses the property '{2}'.
+AL0850	ERR_FeatureOnlyAllowedForMicrosoft	This feature is under development and is exclusively accessible to Microsoft.
+AL0851	ERR_TypeCanNotBeCast	The type '{0}' doesn't support casting.
+AL0852	ERR_InterfaceCircularReference	Interface '{0}' cannot extend interface {1} since it causes a circular reference.
+AL0853	ERR_PagePartCircularReference	'{0}' cannot be used as a part in '{1}' because it causes a circular reference.
+AL0854	ERR_UnexpectedNamespace	'{0}' is a namespace and is not valid in this context.
+AL0855	ERR_VariableNameCannotBeEmpty	The variable name cannot be empty.
+AL0856	ERR_StatementCannotStartWithParen	Statements cannot start with a parenthesis in runtime version '{0}'. The supported runtime versions are: '{1}' or greater.
+AL0857	ERR_ResourceFileTooLarge	The size of resource file '{0}' exceeds the maximum allowed size limit of '{1}' MB. File size: '{2}' MB
+AL0858	ERR_ResourceFilesTooLarge	The total size of all resource files exceeds the maximum allowed size limit of '{0}' MB. Total size: '{1}' MB.
+AL0859	ERR_ResourceFileHasInvalidExtension	The resource file {0} has a prohibited filetype.
+AL0860	ERR_ResourcePathTooLong	The path for resource file {0} is too long. The total combined length of the filename in addition to the directory structure starting from the ".resources" folder must be shorter than {0} characters.
+AL0861	ERR_TooManyResources	There are too many resources included in the app file. Only up to {0} resources can be added. Currently there are {1} resources.
+AL0862	ERR_DuplicateResourceNames	There are multiple resources with the name {0}.
+AL0863	ERR_ResourceFolderDoesNotExist	The folder '{0}' does not exist.
+AL0864	WRN_ERR_ChartPartNotSupported	The control type 'ChartPart' is not supported.
+AL0865	ERR_ChartPartNotSupported	The control type 'ChartPart' is not supported.
+AL0866	ERR_ResourceIsEmpty	The resource '{0}' is empty. Resources cannot be zero-byte files.
+AL0867	ERR_InterfaceMethodAlreadyDeclaredInExtendedInterface	The method '{0}' is already declared in the interface '{1}' in the extension '{2}' by '{3}'.
+AL0868	ERR_CannotExtendDueToDuplicateMethods	The method '{0}' from this interface is already declared in the interface '{1}' in the extension '{2}' by '{3}'. It will not be possible to invoke this method via this interface.
+AL0869	WRN_UnexpectedSymbolLocation	'{0}' '{1}' was expected to be found in app '{2}' but was instead found in app '{3}', which is propagating its dependencies to '{2}'.
+AL0870	ERR_ExpectedVerbatimLiteral	Expected verbatim string literal.
+AL0871	ERR_IllegalAtSequence	Non valid '@' sequence.
+AL0873	ERR_NoContinue	No enclosing loop within which to continue.
+AL0874	ERR_UserControlHost_ExpectsSingleUserControlWithinContent	Pages with SubType set to UserControlHost must specify exactly one control of type usercontrol in the Content Area
+AL0875	ERR_UserControlHost_ActionsNotSupported	Pages with SubType set to UserControlHost do not support actions
+AL0876	ERR_IncompatiblePropertySingleValue	The {0} '{1}' cannot be used if the property '{2}' is set to '{3}'
+AL0877	ERR_IncompatiblePropertyMultipleValues	The {0} '{1}' cannot be used if the property '{2}' is set with any of the values of: '{3}'
+AL0878	ERR_IncompatibleProperty	The {0} '{1}' cannot be used if the property '{2}' is set
+AL0879	ERR_TriggerRestrictedByAssociatedProperty	The trigger '{0}' cannot be used if the property '{1}' of '{2}' is set
+AL0880	ERR_TriggerRestrictedByAssociatedPropertySingleValue	The trigger '{0}' cannot be used if the property '{1}' of '{2}' is set to '{3}'
+AL0881	ERR_TriggerRestrictedByAssociatedPropertyMultipleValues	The trigger '{0}' cannot be used if the property '{1}' of '{2}' is set with any of the values of :'{3}'
+AL0882	ERR_UserControlHost_ExpectsSingleTextFieldWithinNavigation	Pages with SubType set to UserControlHost must specify at most one field of type Text in the Navigation Area
+AL0883	ERR_TestHttpResponseMessage_InvalidHttpStatusCode	The value '{0}' is not a valid HTTP status code.
+AL0884	ERR_TestHttpResponseMessage_NotAllowedHttpStatusCode	The value '{0}' is outside the allowed range for mocked HTTP status codes. Redirect (3**) status codes are not permitted.
+AL0885	WRN_ERR_OnlyFieldsFromBaseAreAllowed	The field '{0}' cannot be referenced in this context. You can only reference symbols from the base object '{1}' and the current extension.
+AL0886	ERR_OnlyFieldsFromBaseAreAllowed	The field '{0}' cannot be referenced in this context. You can only reference symbols from the base object '{1}' and the current extension.
+AL0887	ERR_DuplicateSqlFields	A member of type {0} named '{1}' conflicts with a similarly named member '{2}' of {3} {4}. Both will have the same database name '{3}'.
+AL0888	WRN_SecretPotentiallyExposedToBrowser	The parameter '{0}' is of the type 'SecretText' but is passed to a control add-in procedure. This will expose the value for debugging in the browser.
+AL0889	ERR_ReservedKeywordName	Cannot use reserved keyword '{0}' in this context.
+AL0890	ERR_InvalidSystemPartIdentifier	The identifier assigned to the Summary SystemPart type is not valid. Valid identifier is {0}.
+AL0891	ERR_UnsupportedExtendedDataType	The ExtendedDataType '{0}' cannot be used on pages of type {1}.
+AL0892	ERR_InvalidExtendedDataTypeFieldReference	Fields set as ExtendedDataType '{0}' cannot be referenced on {1} type pages.
+AL0893	ERR_NativeMethodCannotContainCode	The native procedure '{0}' can't contain code.
+AL0894	ERR_NativeMethodCannotContainVariables	The native procedure '{0}' can't contain local variables.
+AL0895	ERR_NativeMethodOnlyInMSRange	The native procedure '{0}' can only be declared in the system object ID range within the platform symbols app.
+AL0896	ERR_RecursiveFlowfieldNotAllowed	The field '{0}' cannot be defined because it has a calculation formula that leads to a cycle. The field '{1}' from table '{2}' is involved in the cycle.
+AL0898	ERR_AnalysisViewsOnlySupportedOnPagesOfType	Declaring analysis views is only supported on pages of type {0}.
+AL0899	ERR_AnalysisViewNotFound	The analysis view '{0}' is not found in the target '{1}'
+AL0900	ERR_DefinitionFilenameInvalidExtension	The file in DefinitionFile must end with '{0}' file extension.
+AL0901	ERR_DefinitionFileIsMalformed	The analysis view schema in '{0}' is invalid.
+AL0902	ERR_AnalysisViewTargetObjectMismatch	The value '{0}' for the property '{1}' in DefinitionFile '{2}' must match '{3}', given by the object containing the analysis view '{4}'.
+AL0903	ERR_DuplicateDefinitionFile	The DefinitionFile '{0}' is already being used. To avoid build issues, an analysis view file should only be used once in a page.
+AL0904	ERR_MissingRequiredAnalysisViewProperty	The property '{0}' must be defined in the analysis view.
+AL0906	WRN_ConfigurationDialogPublicPreview	The ConfigurationDialog page type is currently in public preview and may change in future releases.
+AL0907	ERR_ConfigurationDialogUnsupportedStartCard	The page {0} of type ConfigurationDialog must have the "Agent Setup Part" page from the System Application as the first element in its content area.
+AL0908	ERR_RequiresBigIntegerExtendedDataType	The data type on the field '{0}' is not valid because the ExtendedDatatype property is set to Task. Valid data type is BigInteger.
+AL0909	WRN_MissingAnalysisViewDependency	The analysis view definition file for '{0}' has a dependency on app '{1}' by '{2}' with version '{3}', which is missing on this project. This might result in the analysis view to ignore unresolved columns. To avoid this, make sure that the app reference is included in the dependencies of the app.json and the symbols are downloaded.
+AL0910	WRN_ERR_FlowFieldCannotBeUsedInQueryDataItemLink	The field '{0}' cannot be used in a query DataItemLink because it is a FlowField or FlowFilter.
+AL0911	ERR_FlowFieldCannotBeUsedInQueryDataItemLink	The field '{0}' cannot be used in a query DataItemLink because it is a FlowField or FlowFilter.
+AL0912	WRN_ERR_EmptySymbolName	The name of a {0} cannot be empty because it can cause runtime errors.
+AL0913	ERR_EmptySymbolName	The name of a {0} cannot be empty because it can cause runtime errors.
+AL0914	WRN_TableHasTooManyFields	Table '{0}' has {1} fields. Tables with many fields might limit the ability of other extensions to add fields, as the total number of fields across a table and all its extensions cannot exceed the maximum number of columns allowed in SQL.
+AL0915	WRN_TableExtensionHasTooManyFields	Table extension '{0}' adds {1} fields to table '{2}'. Adding many fields in a single table extension might limit the ability of other extensions to add fields, as the total number of fields across a table and all its extensions cannot exceed the maximum number of columns allowed in SQL.
+AL0916	WRN_AmbiguousBuiltInMethodCall	The call is ambiguous between the built-in methods '{0}' and '{1}'. The compiler will implicitly choose the '{0}' overload. Make the call explicit by casting the Variant argument to the desired type.
+AL0917	WRN_ExcelLayoutOrphanedSheet	The Excel layout '{0}' was automatically upgraded to multi-sheet format. The original sheet '{1}' was not removed. Consider regenerating the layout by deleting '{0}'.
+AL0918	ERR_DuplicateInterfaceId	Interface '{0}' has the same runtime ID as interface '{1}' from module '{2}'. Rename one of the interfaces or change its methods to resolve the conflict.
+AL0919	ERR_ScopeNotAllowedOnInterfaceMember	The Scope attribute is not allowed on interface members.
+AL0920	WRN_ERR_InternalMethodCannotImplementInterface	The method '{0}' cannot be used as the implementation for the interface method '{1}' because it is not public.
+AL0921	ERR_InternalMethodCannotImplementInterface	The method '{0}' cannot be used as the implementation for the interface method '{1}' because it is not public.
+AL0922	ERR_OnPremMethodCannotImplementInterface	The method '{0}' cannot be used as the implementation for the interface method '{1}' because it has 'OnPrem' scope.
+AL0923	ERR_RequiredPendingOnNonDefaultMethod	The attribute '[RequiredPending]' can only be applied to interface methods with a default implementation.
+AL0924	WRN_InterfaceRequiredPendingMemberMissing	Interface method '{0}.{1}' will become required. {2}Add an implementation now to avoid a future breaking change.
+AL0925	INF_InterfaceOptionalMemberMissing	Interface '{0}' provides a default implementation for method '{1}'. Override it to customize the behavior.
+AL0926	ERR_SectionOutOfOrder	The '{0}' section is not valid here. In a {1} object, the expected section order is: {2}. Metadata sections must appear before var declarations, triggers, and procedures.
+AL0927	ERR_ExpectedSystemObject	The '{0}' with ID {1} is not valid because it is not from the System application. Its owning application is '{2}' by '{3}'.
+AL0928	ERR_SystemObjectNotFound	Could not find the system {0} {1} with ID '{2}'. Ensure that you have downloaded the latest System symbols.
+AL0929	ERR_InvalidDefaultHeaderFooterPart	The DefaultHeaderFooterPart property can only be used with layouts that have the HeaderFooter subtype specified in the report's rendering section.
+AL0930	ERR_InvalidDefaultThemePart	The DefaultThemePart property can only be used with layouts that have the Theme subtype specified in the report's rendering section.
+AL0931	ERR_InvalidObjectReference	'{0}' is not a namespace or a valid {1} reference.
+AL0999	ERR_InternalError	Internal error: {0}
+AL1000	WRN_NoConfigNotOnCommandLine	Ignoring /noconfig option because it was specified in a response file
+AL1001	ERR_FileNotFound	Source file '{0}' could not be found
+AL1002	ERR_OpenResponseFile	Error opening response file '{0}'
+AL1003	WRN_AnalyzerCannotBeCreated	An instance of analyzer {0} cannot be created from {1} : {2}
+AL1004	WRN_NoAnalyzerInAssembly	The assembly {0} does not contain any analyzers
+AL1005	WRN_UnableToLoadAnalyzer	Unable to load Analyzer assembly {0} : {1}
+AL1006	ERR_NoMetadataFile	Metadata file '{0}' could not be found
+AL1007	ERR_NoFileSpec	Missing file specification for '{0}' option
+AL1008	ERR_SwitchNeedsString	Command-line syntax error: Missing '{0}' for '{1}' option
+AL1009	ERR_BadSwitch	Unrecognized option: '{0}'
+AL1010	ERR_SwitchNeedsNumber	Command-line syntax error: Missing `:<number>` for '{0}' option
+AL1011	WRN_FileAlreadyIncluded	Source file '{0}' specified multiple times
+AL1012	ERR_OutputWriteFailed	Could not write to output file '{0}' -- '{1}'
+AL1013	ERR_BinaryFile	'{0}' is a binary file instead of a text file
+AL1014	ERR_NoSourceFile	Source file '{0}' could not be opened -- {1}
+AL1015	ERR_CompileCanceled	Compilation canceled by user.
+AL1017	ERR_InvalidManifest	The manifest file is not valid. {0}
+AL1018	ERR_DirectoryNotFound	Directory '{0}' could not be found
+AL1019	ERR_IncompleteDependency	One or more dependencies defined in the project manifest are not valid. One or more of the required attributes: 'publisher', 'name', 'version', and 'id' are either missing or not valid.
+AL1021	ERR_UnspecifiedPackageCachePath	The package cache path has not been specified.
+AL1022	ERR_PackageFileNotFound	A package with publisher '{0}', name '{1}', and a version compatible with '{2}' could not be found in the package cache folders: {3}
+AL1023	ERR_InvalidPackageFile	The package file {0} is not valid.
+AL1024	ERR_PackageNotLoaded	A package with publisher '{0}', name '{1}', and a version compatible with '{2}' could not be loaded. {3}
+AL1025	WRN_FileDoesNotMatchAnyFormat	The file at location '{0}' does not match any definition.
+AL1026	WRN_XmlValidationErrorOccurred	A warning occurred during XML validation: '{0}'.
+AL1028	ERR_IOExceptionCaught	An IO exception has happened when trying to write to output file '{0}' -- '{1}'.
+AL1029	WRN_TranslationFileTargetLanguageInvalid	Translation file '{0}' has invalid target language '{1}'.
+AL1030	WRN_TranslationFileTargetLanguageMissing	Translation file '{0}' is missing a target language.
+AL1031	INF_SuccessfullyIncludedTranslationsForLanguages	Successfully included translations for: {0}.
+AL1032	ERR_DuplicateLanguageTranslation	Translation file '{0}' has the same target language as another translation file.
+AL1033	ERR_InvalidRuleSetInclude	An error occurred while loading the included rule set file {0} - {1}
+AL1034	ERR_HelpUrlWithMissingLocalePlaceHolders	The link '{0}' must contain a placeholder with value 0 for the user locale.
+AL1035	ERR_MissingPropertyForTranslationApp	The manifest properties 'baseHelpUrl' and 'supportedLocales' must both be specified and have values.
+AL1036	ERR_InvalidTranslationLocaleCulture	The locale '{0}' is not valid.
+AL1037	ERR_DuplicateLocale	The locale '{0}' is already defined.
+AL1038	ERR_InvalidManifestVersion	The version number '{0}' for the property '{1}' does not match the expected format: W.X.Y.Z where W, X, Y, and Z represent positive integers.
+AL1039	ERR_InvalidManifestVersion_Short	The version number '{0}' for the property '{1}' does not match the expected format: X.Y where X and Y represent positive integers.
+AL1040	ERR_InvalidManifestGuid	The guid number '{0}' does not match the expected pattern: "^[0-9a-fA-F]{{8}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{12}}$".
+AL1041	ERR_MissingRequiredManifestProperty	The property '{0}' must be defined in the manifest.
+AL1042	ERR_ManifestDependencyIdNotMatching	The id '{0}' for the package with publisher '{1}', name '{2}', and version '{3}' specified in the project manifest does not match the id '{4}' of the package with the same name, publisher, and version found in the package cache folder.
+AL1043	ERR_UnsupportedManifestRuntimeVersion	The runtime version '{0}' is not supported by the AL compiler.
+AL1044	ERR_WrongManifestPropertyType	The value for the manifest property '{0}' is not valid. Expected type: {1}.
+AL1045	ERR_PackageCacheNotFound	The package cache {0} could not be found.
+AL1046	ERR_ApplicationIdRangesAreOverlapping	The application ID ranges {0} are overlapping.
+AL1047	ERR_InvalidApplicationIdRanges	The application ID range {0} is not valid.
+AL1048	ERR_DuplicateIdRange	Both 'idRange' and 'idRanges' properties are added. You should use the 'idRanges' property and remove the 'idRange' property.
+AL1049	ERR_OutputFileNotSpecified	A project without a manifest must have the /out option specified.
+AL1050	ERR_AppFileDoesNotExist	Fast publishing requires an application file '{0}' to be build and published.
+AL1051	ERR_ManifestMismatch	Fast publishing requires that there are no manifest changes for the application '{0}'.
+AL1052	ERR_HelpUrlWithTooManyPlaceHolders	The link '{0}' can only contain one placeholder with value 0 for the user locale. No other placeholder values are allowed.
+AL1053	ERR_InvalidManifestPropertyValue	The value '{0}' is not valid for the manifest property '{1}'.
+AL1054	ERR_InvalidReferenceModule	Invalid reference module: {0}. Clear the downloaded symbols cache and re-download symbols.
+AL1055	WRN_InvalidReferenceModule	Invalid reference module: {0}. Clear the downloaded symbols cache and re-download symbols.
+AL1056	WRN_PackageNotLoaded	A package with publisher '{0}', name '{1}', and a version compatible with '{2}' could not be loaded. {3}
+AL1057	ERR_InvalidModuleSpecification	The module specification is not valid. One or more of the required attributes: 'publisher', 'name', and 'id' are either missing or not valid.
+AL1058	WRN_AppIdAndIdBothSpecified	appId and Id are both specified for a dependency property. The appId value will be ignored.
+AL1059	WRN_RequiredFeature	Feature '{0}' can only be enabled, if feature '{1}' is also enabled.
+AL1060	ERR_InvalidMaxDegreeOfParallelism	The max degree of parallelism must be -1 or positive.
+AL1061	ERR_NavAppFilesValidationError	An error occurred during file validation: '{0}'.
+AL1062	ERR_KeyVaultUrls_TooManySpecified	Too many key vault URLs specified.
+AL1063	ERR_KeyVaultUrls_TooLongUrl	Key vault URL is too long.
+AL1064	ERR_KeyVaultUrls_InvalidAzureKeyVaultUri	Key vault URL is not a valid Azure key vault URL. A valid key vault URL must use HTTPS and point to the Azure key vault domain.
+AL1065	ERR_KeyVaultUrls_PathOrQueryStringAllowed	Key vault URL should not have a path or query string.
+AL1066	ERR_DuplicatePackageDependency_AppIdPublisherName	Duplicate package dependency with application ID '{0}', publisher '{1}', and name '{2}'. Remove duplicate dependencies in the application manifest.
+AL1067	ERR_DuplicatePackageDependency_PublisherName	Duplicate package dependency with publisher '{0}', and name '{1}'. Remove duplicate dependencies in the application manifest.
+AL1068	ERR_DuplicatePackageDependency_AppIdPublisher	Duplicate package dependency with application ID '{0}', and publisher '{1}'. Remove duplicate dependencies in the application manifest.
+AL1069	ERR_DuplicatePackageDependency_AppIdName	Duplicate package dependency with application ID '{0}', and name '{1}'. Remove duplicate dependencies in the application manifest.
+AL1070	ERR_DuplicatePackageDependency_AppId	Duplicate package dependency with application ID '{0}'. Remove duplicate dependencies in the application manifest.
+AL1071	ERR_DocFileGen	Error writing to XML documentation file: {0}
+AL1072	WRN_DefineIdentifierRequired	The name for the preprocessing symbol is not valid; '{0}' is not a valid identifier.
+AL1073	ERR_ClashesWithDeclaredTrigger	The procedure with name {0} has the same name as a declared trigger.
+AL1074	ERR_DuplicateAppInsightsResource	Both 'applicationInsightsKey' and 'applicationInsightsConnectionString' are added. You should use the 'applicationInsightsConnectionString' property and remove the 'applicationInsightsKey' property.
+AL1075	ERR_BothShowMyCodeAndResourceExposurePolicyExist	Both 'ShowMyCode' and 'ResourceExposurePolicy' properties are added. You should use the 'ResourceExposurePolicy' property and remove the 'ShowMyCode' property.
+AL1076	INF_RenamedDependency	A package that satisfies the dependency on app with ID {0} with name '{1}' and publisher '{2}' was found, but the name or publisher has changed. New name '{3}' and new publisher '{4}'. Consider updating the dependency reference to the new name/publisher.
+AL1077	ERR_FailedToLoadWorkspace	An error was encountered when trying to load the workspace: {0}
+AL1078	WRN_ERR_KeyVaultUrls_InvalidAzureKeyVaultUri	Key vault URL is not a valid Azure key vault URL. A valid key vault URL must use HTTPS and point to the Azure key vault domain.
+AL1079	INF_AllowDebuggingFalseApplicableToDev	Debugging will not work for this extension because 'allowDebugging' has been set to false and 'applyToDevExtension' to true.
+AL1080	INF_IncludeSourceInSymbolFalseApplicableToDev	Source will still be visible for this extension via debugging because 'allowDebugging' has been set to true.
+AL1081	ERR_ReportLayoutUpdateFailure	Unable to update report layout '{0}' for '{1}'. Reason: {2}
+AL1082	ERR_InvalidManifestPropertyTarget	The manifest property '{0}' is only available for Target '{1}'.
+AL1083	ERR_DuplicateLanguageLCLTranslation	There are multiple .lcl translation files providing translations for the locale '{0}'
+AL1084	ERR_DuplicateLanguageXliffTranslation	There are multiple .xlf translation files providing translations for the locale '{0}' for app '{1}'
+AL1085	WRN_PackageFileLocked	The package file {0} is locked and cannot be accessed.
+AL1100	FTL_InputFileNameTooLong	File name '{0}' is empty, contains invalid characters, has a drive specification without an absolute path, or is too long
+AL1101	FTL_InvalidTarget	Target must specify one of: 'internal', 'solution', 'extension'
+AL1130	ERR_InvalidTimeoutDuration	The format of property '{0}' must be a timeout duration specified as '[d.]hh:mm:ss[.fffffff]'.
+AL1150	ERR_InvalidLink	The link in parameter '{0}' ({1}) is not valid. {2}
+AL1151	ERR_SelfReferenceDependency_NamePublisher	Cannot create a manifest for Extension "{0}" because the Name and Publisher match the current application. Remove this dependency from the application manifest.
+AL1152	ERR_SelfReferenceDependency_AppId	Dependency with ID '{0}' matches the current application ID. Remove this dependency from the application manifest.
+AL1153	ERR_InvalidReferenceModuleVersion	The referenced module '{1}' with runtime reference version '{0}' cannot be loaded by the compiler with version '{2}'.
+AL1154	ERR_ConflictingCommandLineArguments	It is not possible to specify both '{0}' and '{1}' at the same time.
+AL1155	ERR_NoFolderSpec	Missing folder specification for '{0}' option
+AL1156	WRN_CommentsInManifestNotRecommended	Comments are not recommended inside the manifest file as they can cause interoperability issues with CI/CD pipelines or other integrations.
+AL1401	WRN_PERS_MissingTypeReference	Reference '{0}' in application object '{1}' does not exist
+AL1402	WRN_PERS_MissingApplicationObject	{0} '{1}' is missing
+AL1403	WRN_PERS_AmbigSymbolReference	'{0}' is an ambiguous reference between '{1}' defined by the extension '{2}' and '{3}' defined by the extension '{4}'.
+AL1404	WRN_PERS_ActionNotFound	The action '{0}' is not found in the target '{1}'
+AL1405	WRN_PERS_ControlNotFound	The control '{0}' is not found in the target '{1}'
+AL1406	WRN_PERS_ViewNotFound	The view '{0}' is not found in the target '{1}'
+AL1407	WRN_PERS_MissingTargetsForMove	At least one target has to be specified for the move.
+AL1408	WRN_PERS_InvalidApplicationObjectIdentifier	Invalid application object identifier. A number or an application object name is expected
+AL1409	WRN_PERS_InvalidRoleCenterPage	Page '{0}' should be of type 'RoleCenter'.
+AL1410	WRN_PERS_ExtensionTargetNotFound	The target {0} '{1}' for the extension object is not found
+AL1411	WRN_PERS_MultiplePageCustomizationsSpecifiedPerProfilePerTargetPage	Multiple page customizations have been specified for the same page {0} within the same profile.
+AL1412	WRN_PERS_ObsoleteStatePending	{0} '{1}' is marked for removal. {2}
+AL1413	WRN_PERS_DuplicateMemberName	A member of type {0} with name '{1}' is already defined in {2} '{3}' by the extension '{4}'.
+AL1414	INF_PERS_CustomizationWithoutChanges	The page customization for page '{0}' does not make any modifications, so it can be removed without affecting any profiles or user personalization.
+AL1415	WRN_PERS_ObsoleteStateObsolete	{0} '{1}' is removed. {2}
+AL1416	INF_PERS_MoveSymbolChangeIgnored	The {0} '{1}' cannot be moved relatively to '{2}' because '{2}' is missing. This move is ignored.
+AL1417	INF_PERS_AddSymbolChangeLocationIgnored	The {0} '{1}' cannot be added relatively to '{2}' because '{2}' is missing. '{1}' is added at a default location instead.
+AL1418	WRN_PERS_DataItemNotFound	A DataItem with name '{0}' could not be found in the target {1}.
+AL1419	WRN_PERS_DataItemOrColumnNotFound	A DataItem or Column with name '{0}' could not be found in the target {1}.
+AL1420	WRN_PERS_ActionTypeNotAllowedForActionRef	The {0} '{1}' cannot be used as target of the ActionRef '{2}'. ActionRefs can only target Actions. Ignoring the ActionRef.
+AL1421	WRN_PERS_PromotedActionUsage	The {0} '{1}' is using the '{2}' property. This will be automatically converted to the new syntax when customizing the related page in the webclient.
+AL1422	WRN_PERS_ActionTargetNotFound	The target action '{0}' cannot be resolved in page '{1}'. Ignoring the ActionRef.
+AL1423	WRN_PERS_NoSuchMember	'{0}' does not contain a definition for '{1}'.
+AL1424	WRN_PERS_NameNotInContext	The name '{0}' does not exist in the current context.
+AL1425	WRN_PERS_SourceTableFieldCannotBeUsedInCustomization	The field with ID '{0}' and name '{1}' cannot be used as source expression in the page customization '{2}' targeting page '{3}'. Ignoring the page field.
+AL1426	WRN_PERS_NamespaceNotFound	The namespace '{0}' is unknown.
+AL1427	WRN_PERS_CannotSetPropertyValueInPageCustomization	You cannot set the '{0}' property to '{1}' for {2} '{3}' in the page customization '{4}'. Reason: '{5}'. Ignoring the property.
+AL1428	WRN_PERS_AnalysisViewNotFound	The analysis view '{0}' is not found in the target '{1}'
+AL1429	WRN_PERS_CannotMoveSymbolsBetweenAreas	Cannot move symbol '{0}' from '{1}' area to '{2}' area. This move is ignored.
+AL1430	WRN_SortingFieldFromAnotherExtensionNotInKey	Sorting on field '{0}' of table '{1}' is not backed by a key and may perform poorly on large tables. Because '{0}' is added by table extension '{2}' in another app, add a key that includes '{0}' to table extension '{2}', or remove the sort.
+AL-0002	Void	
+AL-0001	Unknown	
