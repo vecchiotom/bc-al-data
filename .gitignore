@@ -11,3 +11,5 @@ vendor/BCApps/
 vendor/Analyzers/
 vendor/mcp-server/
 vendor/npm-package/
+
+vendor/Microsoft.Dynamics.BusinessCentral.Development.Tools/

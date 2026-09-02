@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# ALCops MCP server launcher (built locally — not on nuget).
+# See vendor/mcp-server; BC DevTools DLLs symlinked under vendor/Microsoft.Dynamics.BusinessCentral.Development.Tools/
+DLL="$HOME/bc-al-data/vendor/mcp-server/src/ALCops.Mcp/bin/Release/net10.0/ALCops.Mcp.dll"
+exec "$HOME/.dotnet/dotnet" "$DLL" "$@"
