@@ -13,8 +13,9 @@ Python env via `uv` (3.13). `source env.sh` before any tool.
 | Clean compile against BC 28 BaseApp/System | ✅ | smoke: `.cache/smoke/app` |
 | ALCops analyzers (6 cops) | ✅ 123/126 rules; 3 disabled (need `Microsoft.Dynamics.Nav.Analyzers.Common` 18.0.36 — pin later) | DLLs in `$ALCOPS_DIR`, passed via `/analyzer:` |
 | Microsoft CodeCop / UICop / AppSourceCop / PTECop | ✅ ship with `al` | `$AL_COMPILER_DIR/Microsoft.Dynamics.Nav.*Cop.dll` |
-| AL-LSP | ⚠️ server starts, 24 endpoints (`documentSymbol`, `hover`, `definition`, `completion`, `publishDiagnostics`); stdio client uses **Content-Length framing** — client not yet written | `al launchlspserver <proj> --packagecachepath …` |
-| AL-MCP | ⚠️ server runs; also live in the dsh harness (`al-mcp`, 16 tools, `mcp-status` = connected). stdio client TBD | `al launchmcpserver --transport stdio` |
+| AL-LSP | ✅ client `src/bcaldata/alsp.py` (`ALLanguageServer`). **Content-Length framing**; `[AL LSP]` banner + 24-endpoint list on **stderr**. Navigation works (symbols/hover/definition/completion, ~0.3s init). **No diagnostics channel** (no `diagnosticProvider`, no `publishDiagnostics`) — `diagnostics()` delegates to a co-resident AL MCP compiler | `al launchlspserver <proj> --packagecachepath …` |
+| AL-MCP | ✅ client `src/bcaldata/mcp_client.py` (`ALMcp`). **Newline-delimited JSON** framing (not Content-Length); 16 tools. Warm `al_compile` ~1s vs ~11s cold → verify `--mode lsp` 10.4x | `al launchmcpserver --transport stdio` |
+| ALCops-MCP | ❌ not on nuget.org; `vendor/mcp-server` fails to build (missing Roslyn `Microsoft.CodeAnalysis.*` refs, 93 CS0246). Client `ALCopsMcp` written + tested-when-available; G8 `apply_fix` still blocked | — |
 | pwsh + BCContainerHelper | ✅ pwsh 7.6.5 (needs `DOTNET_ROOT`), BcContainerHelper 6.1.16 | `DOTNET_ROOT=~/.dotnet pwsh` |
 | GPU training stack | ❌ not installed (local training deferred to cloud — see plan) | — |
 | **Corpus pipeline** | ✅ scripts complete (`./run_pipeline.sh`, `uv run bcaldata <stage>`) — see PIPELINE.md | not yet run end-to-end |

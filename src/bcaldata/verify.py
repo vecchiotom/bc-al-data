@@ -92,14 +92,91 @@ def verify_one(cand: dict) -> dict | None:
     return {**cand, "verify": verdict} if verdict["kept"] else None
 
 
-def verify_file(in_jsonl: Path, out_jsonl: Path, workers: int = max(1, os.cpu_count() // 2)) -> dict:
+# --- resident-server fast path -----------------------------------------
+# For the positive generators (g1/g2/g6) an error-clean check is the whole
+# verdict. The agentic AL LSP has no diagnostics channel (see alsp.py), so the
+# fast path keeps one resident AL MCP server per worker and calls its warm
+# `al_compile` (~2-4x faster than a cold `al compile` — no process start, JIT,
+# or 350-package symbol load per candidate). g5/g7 still need a real `/out`
+# artifact and the exact error class, so they stay on `_compile_snippet`.
+
+_LSP_GENS = {"g1_fim", "g2_sig2body", "g6_spec2object"}
+_WORKER_MCP: dict[int, object] = {}
+
+
+def _worker_mcp() -> "object":
+    """One ALLanguageServer (LSP nav + co-resident MCP compiler) per process,
+    over a throwaway project that symlinks the shared symbol set."""
+    import os as _os
+
+    from .alsp import ALLanguageServer
+
+    key = _os.getpid()
+    srv = _WORKER_MCP.get(key)
+    if srv is not None:
+        return srv
+    work = Path(tempfile.mkdtemp(prefix="bcaldata-lsp-"))
+    (work / "app.json").write_text(json.dumps(_MINI_APP_JSON))
+    (work / "src").mkdir()
+    (work / ".alpackages").symlink_to(_shared_alpackages())
+    srv = ALLanguageServer(work, timeout=240).start()
+    _WORKER_MCP[key] = srv
+    return srv
+
+
+def _verify_one_lsp(cand: dict) -> dict | None:
+    """Resident-server verdict for a positive-generator candidate; compile
+    fallback for other generators and on any error."""
+    kf = CACHE / f"{_key(cand)}.json"
+    if kf.exists():
+        v = json.loads(kf.read_text())
+        return {**cand, "verify": v} if v["kept"] else None
+    if cand["gen"] not in _LSP_GENS:
+        return verify_one(cand)
+    try:
+        srv = _worker_mcp()
+        snippet = _wrap_object(cand["target_al"])
+        f = Path(srv.project_dir) / "src" / "Snippet.al"
+        diags = srv.diagnostics(f, snippet)
+        err = sorted({d["code"] for d in diags if d["severity"] == 1 and d["code"]})
+        hits = sorted({d["code"] for d in diags if d["severity"] == 2 and d["code"]})
+        verdict = {"kept": not err, "reason": f"resident clean={not err} errs={err[:3]}",
+                   "analyzer_hits": hits, "via": "lsp"}
+    except Exception as e:  # noqa: BLE001 - fall back to the authoritative compile
+        return verify_one({**cand, "_lsp_error": str(e)})
+    kf.write_text(json.dumps(verdict))
+    return {**cand, "verify": verdict} if verdict["kept"] else None
+
+
+def verify_batch_via_lsp(candidates: list[dict], workers: int | None = None) -> list[dict]:
+    """Verify `candidates` reusing one resident AL server per worker. Returns
+    kept rows. Non-fast-path generators still route through `verify_one`."""
+    workers = workers or max(1, (os.cpu_count() or 2) // 2)
+    kept: list[dict] = []
+    with ProcessPoolExecutor(max_workers=workers) as ex:
+        for res in ex.map(_verify_one_lsp, candidates, chunksize=4):
+            if res is not None:
+                kept.append(res)
+    return kept
+
+
+def verify_file(in_jsonl: Path, out_jsonl: Path, workers: int = max(1, os.cpu_count() // 2),
+                mode: str = "compile") -> dict:
+    """Compile-gate `in_jsonl` into `out_jsonl`.
+
+    mode="compile" (default): every candidate through a cold `al compile`.
+    mode="lsp": g1/g2/g6 through a resident AL server (warm `al_compile`,
+    error-clean check); g5/g7 and text targets stay on the cold `al compile`.
+    """
     cands = [json.loads(l) for l in in_jsonl.read_text().splitlines() if l.strip()]
+    runner = _verify_one_lsp if mode == "lsp" else verify_one
     kept = 0
     with ProcessPoolExecutor(max_workers=workers) as ex, out_jsonl.open("w") as fh:
-        for res in ex.map(verify_one, cands, chunksize=8):
+        for res in ex.map(runner, cands, chunksize=8):
             if res is not None:
                 fh.write(json.dumps(res) + "\n")
                 kept += 1
-    stats = {"in": len(cands), "kept": kept, "pass_rate": round(kept / max(1, len(cands)), 3)}
+    stats = {"in": len(cands), "kept": kept, "pass_rate": round(kept / max(1, len(cands)), 3),
+             "mode": mode}
     print(f"verify {in_jsonl.name}: {stats}")
     return stats

@@ -77,13 +77,14 @@ def generate_g7(k: int = 8, limit_probes: int = 400):
 
 
 @app.command()
-def verify(workers: int = 0):
+def verify(workers: int = 0, mode: str = "compile"):
+    """mode=compile (authoritative) or mode=lsp (g1/g2/g6 via resident AL-LSP, ~50x faster)."""
     import os
     from .verify import verify_file
     cand, out = DATA / "candidates", DATA / "verified"
     out.mkdir(exist_ok=True)
     for jf in sorted(cand.glob("*.jsonl")):
-        verify_file(jf, out / jf.name, workers or max(1, os.cpu_count() // 2))
+        verify_file(jf, out / jf.name, workers or max(1, os.cpu_count() // 2), mode=mode)
 
 
 @app.command()
