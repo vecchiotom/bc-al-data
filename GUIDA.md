@@ -131,9 +131,11 @@ più istruttivo di "ecco una risposta completamente diversa".
 Ogni passo si può rifare senza ripartire da capo (i risultati sono in cache).
 Il comando è sempre `uv run bcaldata <passo>` (es. `uv run bcaldata corpus`).
 
-Il passo lento è **verify**: compilare costa 15-45 secondi a esempio. Per G1, G2
-e G6 c'è una scorciatoia (se l'esempio è codice originale verbatim e la sua app
-compilava già pulita, è verificato all'istante). Il costo vero è G5 e G7.
+Il passo lento è **verify**: compilare un'app costa ~15-25 secondi. Per G1, G2 e
+G6 c'è la scorciatoia (codice verbatim + app già pulita = verificato all'istante).
+Il costo vero è G5 (una rottura per esempio, ~2200 compilazioni) e G7. G5 è
+limitato per mutazione, per file e per app (`--g5-per-*`) così nessuna app enorme
+e lenta domina il budget di compilazione.
 
 ---
 
@@ -227,19 +229,29 @@ bc-al-data/
 
 ## 7. Stato attuale (2026-09-03)
 
-**Funziona e testato:**
-- la catena di montaggio completa (comandi `uv run bcaldata ...`)
-- G1 (completa il corpo): 100% degli esempi verificati passa
-- G5 (errore→correzione): ~96% passa, e produce gli errori giusti (funzione
-  inventata, nome sconosciuto, sintassi, ecc.)
-- l'enciclopedia degli errori, le 14 mutazioni, l'auto-correttore, gli analyzer
+**La catena è girata fino in fondo, senza GPU:**
+- `sources` → BCApps `releases/28.0` (4519 file AL) + 6362 pagine di documentazione
+- `baselines` → 75 app di BCApps compilano pulite (le altre ~248 dipendono da moduli
+  che non compilano fuori da un PC Windows di sviluppo BC — vedi "Limiti noti" sotto)
+- `corpus` → 5793 procedure/funzioni, 3410 con almeno un rilievo di un analyzer
+- `generate` → G1 4302 · G2 723 · G4 4054 · G5 ~2200 · G6 89 · G8 3301 candidati
+- `verify --mode inapp` → G1/G2/G4/G6/G8 verificati al 97-100%; G5 in corso
+- `filter` + `assemble` → `data/dataset/{train,val,preference,heldout}.jsonl` + `datacard.json`
 
-**Da sistemare (dettagli in `MORNING_REPORT.md`):**
-- scaricare gli altri sorgenti (`uv run bcaldata sources`) — ora c'è solo BCApps
-- G2 e G6 perdono ~35% in verifica per un controllo troppo severo — da allentare
-- il run completo della pipeline (lungo, va lanciato quando la GPU è libera e il
-  server non serve)
-- G3 e G7 usano il modello: da lanciare quando liberi la GPU
+**Il "giudice" corretto (`verify_inapp.py`):** ogni esempio viene rimesso nel file
+della sua app vera, al posto esatto della procedura originale, e si ricompila
+**tutta l'app**. Compilare una procedura da sola non funziona: usa variabili e
+funzioni "sorelle" che da sola non vede. Se l'esempio è codice originale verbatim
+e la sua app era già pulita, è promosso all'istante senza ricompilare.
 
-**Niente di tutto questo tocca la GPU.** Il modello sul server è usato solo da
-`llm.py`, che finora non abbiamo eseguito.
+**Limiti noti (dettaglio in `PIPELINE.md`):**
+- corpus = 75 app pulite. `DotNet Aliases` (un modulo di sistema) non compila per
+  un assembly .NET assente dai simboli; tutto ciò che dipende dal System
+  Application intero cade a cascata. Le 75 app pulite sono comunque quelle "giuste"
+  (codice di prodotto, non i test).
+- G8: gli analyzer che colpiscono il corpus non hanno una correzione automatica
+  funzionante via ALCops → per ora solo la variante "recensione" (nomina i rilievi).
+- G3 e G7 usano il modello locale: da lanciare quando la GPU è libera
+  (`run_pipeline.sh` li tiene separati).
+
+**Il modello sul server è toccato solo da `llm.py` (G3/G7), non ancora eseguito.**
