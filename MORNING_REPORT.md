@@ -1,5 +1,9 @@
 # Overnight report — 2026-09-03
 
+> **Superseded by [`RUN_2026-09-04.md`](RUN_2026-09-04.md).** The "Dry-run results"
+> and "Known gaps" here are from before the first full run — G2/G6 verify loss,
+> the missing sources, and the 6-app baseline were all resolved. Kept for history.
+
 Autonomous session (coordinator + 4 subagents). No GPU used. Everything committed.
 
 ## Commits (newest first)
