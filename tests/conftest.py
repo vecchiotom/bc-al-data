@@ -9,14 +9,34 @@ import pytest
 
 SMOKE_APP = pathlib.Path.home() / "bc-al-data" / ".cache" / "smoke" / "app"
 SMOKE_FILE = SMOKE_APP / "src" / "HelloWorld.Codeunit.al"
+_FIXTURE = pathlib.Path(__file__).parent / "fixtures" / "smoke-app"
 AL_BIN = pathlib.Path(os.environ.get("AL_BIN", str(pathlib.Path.home() / ".dotnet/tools/al")))
+
+
+def _ensure_smoke_app() -> None:
+    """Materialize the runtime smoke project from the committed fixture (its
+    `.alpackages` is staged from the local BC symbol cache, never committed)."""
+    if SMOKE_FILE.exists():
+        return
+    if not _FIXTURE.exists():
+        return
+    SMOKE_APP.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(_FIXTURE, SMOKE_APP, dirs_exist_ok=True)
+    try:
+        from bcaldata.verify import _shared_alpackages
+        alp = SMOKE_APP / ".alpackages"
+        if not alp.exists():
+            alp.symlink_to(_shared_alpackages())
+    except Exception:  # noqa: BLE001 - symbol cache absent -> compile tests skip anyway
+        pass
 
 
 def _needs_toolchain() -> str | None:
     if not AL_BIN.exists():
         return f"AL compiler not found at {AL_BIN} (source env.sh)"
+    _ensure_smoke_app()
     if not SMOKE_FILE.exists():
-        return f"smoke project missing at {SMOKE_APP}"
+        return f"smoke fixture missing at {_FIXTURE}"
     if "DOTNET_ROOT" not in os.environ:
         return "DOTNET_ROOT unset (source env.sh)"
     return None

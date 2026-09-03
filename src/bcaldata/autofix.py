@@ -332,12 +332,23 @@ def _near_name(text: str, err: dict, project_dir: Path | None) -> str | None:
         return None
     bad = m.group(1)
 
+    # identifiers already in the snippet are always the strongest candidates
     pool: set[str] = set(_IDENT.findall(text)) | {q.strip('"') for q in _QUOTED.findall(text)}
+    pool.discard(bad)
+
+    # a name that resolves against a local candidate wins outright — the corpus
+    # vocab (thousands of object names) only pollutes the AL0118 "undeclared
+    # local" case, so try the local pool alone first
+    local_cand = _nearest(bad, pool)
+    if local_cand:
+        new = _rename_word(text, bad, local_cand)
+        return new if new != text else None
+
     if code == "AL0162":
         pool = set(_AL_TRIGGERS)
     elif code == "AL0134":
         pool |= set(_AL_TYPES) | _corpus_vocab()
-    else:
+    elif code in ("AL0132", "AL0295", "AL0247", "AL0503"):
         pool |= _corpus_vocab()
     if project_dir is not None:
         pool |= _lsp_completions(project_dir, err)

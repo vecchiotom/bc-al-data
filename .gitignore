@@ -24,3 +24,8 @@ data/app_baseline.json
 data/candidates_full/
 data/dryrun_*.log
 data/autofix_eval.json
+
+vendor/alcops-dist/*.nupkg
+vendor/bcapps
+vendor/alcops-dist/
+!vendor/alcops-dist/extracted/lib/net10.0/*.dll
