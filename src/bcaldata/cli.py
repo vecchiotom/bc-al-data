@@ -76,6 +76,22 @@ def generate_g7(k: int = 8, limit_probes: int = 400):
     run_g7(k, limit_probes)
 
 
+@app.command("generate-g8")
+def generate_g8(limit: int = 0):
+    """G8: analyzer warning -> clean AL pairs via ALCops MCP apply_fix + a review variant."""
+    from .generate_g8 import run_g8
+    run_g8(limit or None)
+
+
+@app.command("autofix-eval")
+def autofix_eval(n: int = 300, seed: int = 0, mutation: str = ""):
+    """Validate the G7 auto-fixer against the labelled G5 broken/clean pairs (no model)."""
+    import runpy
+    import sys
+    sys.argv = ["autofix_eval", "--n", str(n), "--seed", str(seed)] + (["--mutation", mutation] if mutation else [])
+    runpy.run_path(str(Path(__file__).resolve().parents[2] / "tools" / "autofix_eval.py"), run_name="__main__")
+
+
 @app.command()
 def verify(workers: int = 0, mode: str = "compile"):
     """mode=compile (authoritative) or mode=lsp (g1/g2/g6 via resident AL-LSP, ~50x faster)."""
