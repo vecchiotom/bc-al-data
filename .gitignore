@@ -31,3 +31,10 @@ vendor/devitpro/
 vendor/alappextensions/
 vendor/alcops-dist/
 !vendor/alcops-dist/extracted/lib/net10.0/*.dll
+.verify_bg.sh
+data/verified/
+data/filtered/
+data/dataset/*.jsonl
+data/verify*.log
+data/baselines.run.log
+data/sources.run.log
