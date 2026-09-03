@@ -243,27 +243,62 @@ def _classify_hallucination(err_codes: list[str], completion: str) -> str:
     return "OTHER"
 
 
-# ---------------- G8: warning -> clean (needs the Stage-2 analyzer profile) ----------------
-def g8_warning_clean(rec: dict, analyzer_hits: list[tuple[str, str]], fixed_text: str | None) -> Iterator[dict]:
-    """rec is a member that compiles clean but trips analyzer rule(s).
-    `fixed_text` = the same member after ALCops apply_fix (or None -> review-only variant)."""
-    rules = sorted({c for _, c in analyzer_hits})
+# ---------------- G8: analyzer warning -> clean AL ----------------
+# rec carries `analyzer_hits` (from Task A: [[code, severity, line], ...]). The fixed
+# text comes from ALCops MCP `apply_fix` (see generate_g8.fix_member); this module
+# only shapes the training rows.
+
+
+def _g8_member_al(rec: dict) -> str:
+    return f"{rec['signature']}\n{rec['body']}"
+
+
+def _g8_rules(rec: dict) -> list[str]:
+    return sorted({h[0] for h in (rec.get("analyzer_hits") or [])})
+
+
+def g8_warning_clean(rec: dict, fixed_text: str | None = None,
+                     applied_rules: list[str] | None = None) -> Iterator[dict]:
+    """SFT + preference pair: the member as written -> the analyzer-clean member.
+
+    `fixed_text` is the member text after one or more ALCops `apply_fix` passes; a
+    row is emitted only when a fix actually changed the code. Downstream `verify`
+    still compiles `target_al`."""
+    rules = _g8_rules(rec)
+    if not rules or not fixed_text:
+        return
+    good = _g8_member_al(rec)
+    if fixed_text.strip() == good.strip():
+        return
+    applied = sorted(applied_rules) if applied_rules else rules
+    yield {"gen": "g8_warning_clean", "rules": applied,
+           "messages": [{"role": "user",
+                         "content": f"Improve this AL to satisfy the analyzers "
+                                    f"({', '.join(applied)}). Keep behavior identical.\n\n{_FENCE.format(good)}"},
+                        {"role": "assistant", "content": _FENCE.format(fixed_text.strip())}],
+           "target_al": fixed_text.strip(), "rejected_al": good,
+           "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"],
+                    "object": f"{rec['object_kind']} {rec['object_name']}",
+                    "analyzer_hits": rec.get("analyzer_hits") or []}}
+
+
+def g8_review(rec: dict, message_templates: dict[str, str] | None = None) -> Iterator[dict]:
+    """Review variant: given the member, name the analyzer findings and one line
+    per rule from `al_error_map.json`'s `message_template`. Always available for a
+    member with `analyzer_hits` — no fix required."""
+    rules = _g8_rules(rec)
     if not rules:
         return
-    good = f"{rec['signature']}\n{rec['body']}"
-    if fixed_text and fixed_text.strip() != good.strip():
-        yield {"gen": "g8_warning_clean", "rules": rules,
-               "messages": [{"role": "user",
-                             "content": f"Improve this AL to satisfy the analyzers "
-                                        f"({', '.join(rules)}). Keep behavior identical.\n\n{_FENCE.format(good)}"},
-                            {"role": "assistant", "content": _FENCE.format(fixed_text.strip())}],
-               "target_al": fixed_text.strip(), "rejected_al": good,
-               "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"]}}
-    # review-only: list the smells (always available)
+    good = _g8_member_al(rec)
+    templates = message_templates or {}
+    lines = [f"- {r}: {templates[r]}" if templates.get(r) else f"- {r}" for r in rules]
+    answer = ("Analyzer findings: " + ", ".join(rules) + ".\n" + "\n".join(lines)
+              + "\nThe code compiles but violates the rules above.")
     yield {"gen": "g8_review", "rules": rules,
-           "messages": [{"role": "user", "content": f"Review this AL for code smells.\n\n{_FENCE.format(good)}"},
-                        {"role": "assistant",
-                         "content": "Analyzer findings: " + "; ".join(rules)
-                                    + ".\nThe code compiles but violates the rules above."}],
+           "messages": [{"role": "user",
+                         "content": f"Review this AL for code smells.\n\n{_FENCE.format(good)}"},
+                        {"role": "assistant", "content": answer}],
            "target_al": None,
-           "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"], "review_only": True}}
+           "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"],
+                    "object": f"{rec['object_kind']} {rec['object_name']}",
+                    "analyzer_hits": rec.get("analyzer_hits") or [], "review_only": True}}
