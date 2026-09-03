@@ -46,10 +46,15 @@ def filter_file(in_jsonl: Path, out_jsonl: Path, *, jaccard: float = 0.8) -> dic
         path = r["meta"].get("path", "")
         if path and is_contaminated(path, bl):
             drop["contam_path"] += 1; continue
-        text = (r.get("target_al") or "") + "\n" + r["messages"][-1]["content"]
         prompt_norm = _norm(r["messages"][0]["content"])
         if prompt_norm in bl_prompt_norm:
             drop["contam_prompt"] += 1; continue
+        # preference pairs (g5/g7/g8-clean) share one `target_al` across many broken
+        # variants of the same member — dedup on the prompt + rejected side instead.
+        if r.get("rejected_al"):
+            text = r["messages"][0]["content"] + "\n" + r["rejected_al"]
+        else:
+            text = (r.get("target_al") or "") + "\n" + r["messages"][-1]["content"]
         h = hashlib.sha256(_norm(text).encode()).hexdigest()
         if h in seen_exact:
             drop["exact"] += 1; continue
