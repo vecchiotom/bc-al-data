@@ -149,8 +149,8 @@ def run_g4() -> int:
 def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
     """Sample the current model on real prompts; keep non-compiling completions as hard negatives."""
     from .llm import chat
-    from .verify import _compile_snippet
     from .autofix import autofix
+    from .verify_inapp import _compile_with, _resolve_origin
     out = CAND / "g7_hard_negative.jsonl"
     n = probes = 0
     with out.open("w") as fh:
@@ -159,6 +159,11 @@ def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
             if not pp:
                 continue
             for probe in pp:
+                origin = _resolve_origin({"meta": probe["meta"], "gen": "g7_hard_negative"})
+                if origin is None:
+                    continue
+                app_dir, _, rel, version = origin
+                member, sig = probe["meta"].get("member", ""), probe["meta"].get("signature")
                 probes += 1
                 for _ in range(k):
                     try:
@@ -168,7 +173,7 @@ def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
                     al = _extract_al(comp)
                     if not al:
                         continue
-                    r = _compile_snippet(al)
+                    r = _compile_with(app_dir, rel, member, al, version, sig)
                     pair = G.g7_from_rollout(probe, al, r)
                     if pair:
                         _apply_autofix(pair, al, r, autofix)

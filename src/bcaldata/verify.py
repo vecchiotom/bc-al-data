@@ -168,7 +168,10 @@ def _verify_file_inapp(cands: list[dict], in_jsonl: Path, out_jsonl: Path, worke
 
     batched, singles = {}, []
     for c in cands:
-        if c["gen"] in ("g5_error_fix", "g7_hard_negative"):
+        # G5 is high-volume and its `chosen` is the verbatim original, so batch it
+        # per app (one seeded worktree, reused). G7 is low-volume and needs its
+        # machine-repaired `chosen` compiled too — leave it on the single path.
+        if c["gen"] == "g5_error_fix":
             origin = _resolve_origin(c)
             if origin is not None:
                 app_dir, _, _, version = origin

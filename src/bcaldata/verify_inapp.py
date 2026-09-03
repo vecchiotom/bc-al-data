@@ -192,7 +192,13 @@ def verify_one_inapp(cand: dict) -> dict | None:
         else:
             r_bad = _compile_with(app_dir, rel, member, cand["rejected_al"], version, sig)
             codes = sorted({c for s, c, _ in r_bad.diagnostics if s == "error"})
-            verdict = {"kept": not r_bad.clean, "reason": f"bad_clean={r_bad.clean}",
+            # g7's `chosen` is a machine repair of model output, not verbatim source —
+            # it must actually compile. g5's is the verbatim original (baseline-clean).
+            good_clean = True
+            if gen == "g7_hard_negative" and _norm(cand.get("target_al") or "") != _norm(on_disk or ""):
+                good_clean = _compile_with(app_dir, rel, member, cand["target_al"], version, sig).clean
+            verdict = {"kept": (not r_bad.clean) and good_clean,
+                       "reason": f"bad_clean={r_bad.clean} good_clean={good_clean}",
                        "via": "inapp", "symbol_version": version, "error_codes": codes}
 
     kf.write_text(json.dumps(verdict))
