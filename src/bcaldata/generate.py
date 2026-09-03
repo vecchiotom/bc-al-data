@@ -4,8 +4,12 @@ Deterministic generators run locally. G3 paraphrase and G7 rollouts call the
 local vLLM model (batched). Everything is append-resumable by (gen, provenance).
 """
 from __future__ import annotations
-import json, os
+import hashlib, json, os
 from pathlib import Path
+
+
+def _stable_hash(s: str) -> str:
+    return hashlib.sha1(s.encode("utf8", "replace")).hexdigest()
 
 from .build_corpus import CORPUS, BASELINE
 from . import generators as G
@@ -28,14 +32,30 @@ def _corpus_rows():
             yield r
 
 
-def run_deterministic(limit_per_gen: int | None = None) -> dict:
+def run_deterministic(limit_per_gen: int | None = None,
+                      g5_per_mutation: int | None = 600) -> dict:
+    """Deterministic generators over the corpus.
+
+    `g5_per_mutation` caps G5 candidates per mutation class (deterministic —
+    keeps the members whose id hashes lowest) so the verify compile budget stays
+    bounded; None emits every applicable mutation.
+    """
     counts = {}
     for name, fn in DETERMINISTIC.items():
         out = CAND / f"{name}.jsonl"
         n = 0
+        per_mut: dict[str, int] = {}
+        rows = list(_corpus_rows())
+        if name == "g5_error_fix" and g5_per_mutation:
+            rows.sort(key=lambda r: _stable_hash(r.get("member_text", "")))
         with out.open("w") as fh:
-            for rec in _corpus_rows():
+            for rec in rows:
                 for cand in fn(rec):
+                    if name == "g5_error_fix" and g5_per_mutation:
+                        mid = cand.get("mutation", "")
+                        if per_mut.get(mid, 0) >= g5_per_mutation:
+                            continue
+                        per_mut[mid] = per_mut.get(mid, 0) + 1
                     fh.write(json.dumps(cand) + "\n")
                     n += 1
                     if limit_per_gen and n >= limit_per_gen:
@@ -43,9 +63,19 @@ def run_deterministic(limit_per_gen: int | None = None) -> dict:
                 if limit_per_gen and n >= limit_per_gen:
                     break
         counts[name] = n
-    # object-level G6
+    # object-level G6 — restricted to files under an error-clean app so the
+    # verbatim-object verdict resolves on the instant baseline fast path.
     from .alparse import objects
+    from .build_corpus import _clean_app_dirs
     from .sources import SOURCES, VENDOR
+    clean_apps = _clean_app_dirs()
+
+    def _under_clean_app(f: Path) -> bool:
+        for anc in f.parents:
+            if (anc / "app.json").is_file():
+                return str(anc) in clean_apps
+        return False
+
     n6 = 0
     with (CAND / "g6_spec2object.jsonl").open("w") as fh:
         for s in SOURCES:
@@ -53,6 +83,8 @@ def run_deterministic(limit_per_gen: int | None = None) -> dict:
                 continue
             root = VENDOR / s.key
             for f in sorted((root / s.subdir).rglob("*.al")):
+                if not _under_clean_app(f):
+                    continue
                 try:
                     src = f.read_bytes()
                 except OSError:

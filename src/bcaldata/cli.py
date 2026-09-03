@@ -53,9 +53,9 @@ def calibrate_g5(n: int = 80, workers: int = 0):
 
 
 @app.command()
-def generate(limit_per_gen: int = 0):
+def generate(limit_per_gen: int = 0, g5_per_mutation: int = 600):
     from .generate import run_deterministic
-    run_deterministic(limit_per_gen or None)
+    run_deterministic(limit_per_gen or None, g5_per_mutation or None)
 
 
 @app.command("generate-g3")
@@ -93,13 +93,17 @@ def autofix_eval(n: int = 300, seed: int = 0, mutation: str = ""):
 
 
 @app.command()
-def verify(workers: int = 0, mode: str = "compile"):
-    """mode=compile (authoritative) or mode=lsp (g1/g2/g6 via resident AL-LSP, ~50x faster)."""
+def verify(workers: int = 0, mode: str = "compile", only: str = ""):
+    """mode=compile (authoritative), mode=lsp (resident AL-LSP), or mode=inapp
+    (compile the candidate inside its origin app). `only` = substring filter on the
+    candidate filename (e.g. --only g5)."""
     import os
     from .verify import verify_file
     cand, out = DATA / "candidates", DATA / "verified"
     out.mkdir(exist_ok=True)
     for jf in sorted(cand.glob("*.jsonl")):
+        if only and only not in jf.name:
+            continue
         verify_file(jf, out / jf.name, workers or max(1, os.cpu_count() // 2), mode=mode)
 
 
