@@ -22,6 +22,11 @@ DETERMINISTIC = {
     "g1_fim": G.g1_fim, "g2_sig2body": G.g2_sig2body, "g5_error_fix": G.g5_error_fix,
 }
 
+# G5 needs one whole-app compile per mutated member. These two apps are large and
+# slow to compile (~30-40 s each) and a broken-semicolon pair from them teaches
+# nothing a pair from a small app doesn't — they are skipped for G5 only.
+_G5_SLOW_APPS = ("Subscription Billing", "PowerBIReports")
+
 
 def _corpus_rows():
     for line in CORPUS.read_text().splitlines():
@@ -61,6 +66,8 @@ def run_deterministic(limit_per_gen: int | None = None,
                         mid = cand.get("mutation", "")
                         path = cand["meta"].get("path", "")
                         app = "/".join(path.split("/")[:5])   # .../<Area>/<App>/<sub>
+                        if any(s in path for s in _G5_SLOW_APPS):
+                            continue
                         if g5_per_mutation and per_mut.get(mid, 0) >= g5_per_mutation:
                             continue
                         if g5_per_file and per_file.get(path, 0) >= g5_per_file:
