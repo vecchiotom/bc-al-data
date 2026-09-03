@@ -1,0 +1,24 @@
+[
+  {
+    "key": "bcapps",
+    "url": "https://github.com/microsoft/BCApps",
+    "ref": "releases/28.0",
+    "spdx": "MIT",
+    "role": "mine",
+    "subdir": "src",
+    "commit": "7a21d02dc939aff9c5ee3b8f068e0017855d86e6",
+    "n_al": 4519,
+    "n_md": 0
+  },
+  {
+    "key": "devitpro",
+    "url": "https://github.com/MicrosoftDocs/dynamics365smb-devitpro-pb",
+    "ref": "main",
+    "spdx": "CC-BY-4.0",
+    "role": "docs",
+    "subdir": "dev-itpro",
+    "commit": "13cca9cdea1c5a24b7e7207da536ecc7520179b3",
+    "n_al": 0,
+    "n_md": 6362
+  }
+]

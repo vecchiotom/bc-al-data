@@ -27,5 +27,7 @@ data/autofix_eval.json
 
 vendor/alcops-dist/*.nupkg
 vendor/bcapps
+vendor/devitpro/
+vendor/alappextensions/
 vendor/alcops-dist/
 !vendor/alcops-dist/extracted/lib/net10.0/*.dll

@@ -26,7 +26,9 @@ class Source:
 
 SOURCES: list[Source] = [
     Source("bcapps", "https://github.com/microsoft/BCApps", "releases/28.0", "MIT", "mine", "src"),
-    Source("alappextensions", "https://github.com/microsoft/ALAppExtensions", "releases/28.0", "MIT", "mine", "."),
+    # ALAppExtensions ships no `releases/28.0` branch and its `main` tracks the next
+    # platform (29.x), so every app there mismatches the cached BC 28.0 symbols and
+    # baselines dirty. Excluded until a version-matched ref exists.
     Source("devitpro", "https://github.com/MicrosoftDocs/dynamics365smb-devitpro-pb", "main", "CC-BY-4.0", "docs", "dev-itpro"),
     # community ISV apps are added here after a manual license check → SPDX in ALLOWED_SPDX
 ]
@@ -53,8 +55,15 @@ def fetch(src: Source, *, force: bool = False) -> dict:
 def fetch_all(*, force: bool = False) -> None:
     for s in SOURCES:
         assert s.spdx in ALLOWED_SPDX or s.role == "docs", f"license {s.spdx} not allowed for {s.key}"
-    lock = [fetch(s, force=force) for s in SOURCES]
+    lock = []
+    for s in SOURCES:
+        try:
+            lock.append(fetch(s, force=force))
+        except subprocess.CalledProcessError as e:  # network / missing ref — record and continue
+            lock.append({**asdict(s), "commit": None, "n_al": 0, "n_md": 0,
+                         "error": (e.stderr or str(e)).strip()[:300]})
     LOCK.parent.mkdir(exist_ok=True)
     LOCK.write_text(json.dumps(lock, indent=2))
     for row in lock:
-        print(f"  {row['key']:16} {row['ref']:16} {row['commit'][:12]}  al={row['n_al']} md={row['n_md']}")
+        status = row.get("error") or f"{(row['commit'] or '')[:12]}  al={row['n_al']} md={row['n_md']}"
+        print(f"  {row['key']:16} {row['ref']:16} {status}")

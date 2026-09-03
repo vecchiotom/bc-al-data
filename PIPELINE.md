@@ -25,7 +25,7 @@ content-addressed; re-running only redoes changed inputs.
 | G1 | fill-in-the-middle procedure body | SFT | real AL, compile-verified |
 | G2 | doc-comment intent → implementation | SFT | real AL w/ doc-comment |
 | G3 | explain / review a procedure | SFT | deterministic facts (call list, record types, return) **grounded**, prose by vLLM |
-| G4 | BC-AL doc Q&A | SFT | devitpro markdown H2/H3 sections |
+| G4 | BC-AL doc Q&A | SFT | devitpro `dev-itpro/developer/` pages: one pair per method/property/trigger/type reference page, plus concept H2/H3 sections that pass the prose and heading filters |
 | G5 | broken AL → fixed AL | preference (chosen/rejected) | clean member + one localized mutation from the 14-entry `mutations.py` catalog (tree-sitter-al node replacement); kept only if the broken side fails to compile and the clean side does not |
 | G6 | NL spec → object | SFT | small self-contained enum/table |
 | G7 | hallucinated AL → compiled AL | preference | current model's own non-compiling completions on real prompts, classified METHOD/PARAMETER/OBJECT/TRIGGER |

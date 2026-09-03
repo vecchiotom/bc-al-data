@@ -87,9 +87,12 @@ def run_g3(limit: int | None = None) -> int:
 
 
 def run_g4() -> int:
+    from collections import Counter
+
     from .sources import SOURCES, VENDOR
     out = CAND / "g4_docqa.jsonl"
     n = 0
+    by_category: Counter[str] = Counter()
     with out.open("w") as fh:
         for s in SOURCES:
             if s.role != "docs":
@@ -103,7 +106,11 @@ def run_g4() -> int:
                 for cand in G.g4_docqa(md.relative_to(VENDOR / s.key), txt):
                     fh.write(json.dumps(cand) + "\n")
                     n += 1
+                    parts = cand["meta"]["path"].split("/")
+                    by_category[parts[2] if len(parts) > 3 else "(concepts)"] += 1
     print(f"g4 candidates: {n}")
+    for cat, c in by_category.most_common():
+        print(f"  developer/{cat}: {c}")
     return n
 
 

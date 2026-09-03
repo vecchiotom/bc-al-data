@@ -66,12 +66,26 @@ def _baseline() -> dict[str, dict]:
     return _BASELINE
 
 
-def _find_member_range(src: bytes, member_name: str) -> tuple[int, int] | None:
-    for obj in objects(src):
-        for m in obj.members:
-            if m.name == member_name:
-                return m.start_byte, m.end_byte
-    return None
+def _sig_key(s: str) -> str:
+    """Normalized signature up to the parameter list, so overloads compare distinctly
+    but `internal procedure`/attribute/whitespace noise does not."""
+    s = _WS.sub(" ", s or "").strip().lower()
+    s = re.sub(r"^\s*(local |internal |protected )*procedure\s+", "", s)
+    return s
+
+
+def _find_member_range(src: bytes, member_name: str,
+                       signature: str | None = None) -> tuple[int, int] | None:
+    matches = [(m.start_byte, m.end_byte, getattr(m, "signature", ""))
+               for obj in objects(src) for m in obj.members if m.name == member_name]
+    if not matches:
+        return None
+    if signature and len(matches) > 1:
+        want = _sig_key(signature)
+        for s, e, sig in matches:
+            if _sig_key(sig) == want:
+                return s, e
+    return matches[0][0], matches[0][1]
 
 
 def _key(cand: dict) -> str:
@@ -82,7 +96,7 @@ def _key(cand: dict) -> str:
 
 
 def _compile_with(app_dir: Path, file_rel: str, member_name: str, new_text: str,
-                  version: str) -> "object":
+                  version: str, signature: str | None = None) -> "object":
     """Worktree copy of `app_dir`, replace `member_name` in `file_rel` with `new_text`, compile."""
     work = Path(tempfile.mkdtemp(prefix="bcaldata-inapp-"))
     try:
@@ -96,7 +110,7 @@ def _compile_with(app_dir: Path, file_rel: str, member_name: str, new_text: str,
                 raise FileNotFoundError(file_rel)
             target = cands[0]
         src = target.read_bytes()
-        rng = _find_member_range(src, member_name)
+        rng = _find_member_range(src, member_name, signature)
         if rng is None:
             raise LookupError(f"member {member_name} not in {target.name}")
         target.write_bytes(src[:rng[0]] + new_text.encode() + src[rng[1]:])
@@ -115,6 +129,7 @@ def verify_one_inapp(cand: dict) -> dict | None:
 
     meta = cand["meta"]
     repo, rel, member = meta.get("repo", ""), meta.get("path", ""), meta.get("member", "")
+    sig = meta.get("signature")
     gen = cand["gen"]
     verdict: dict = {"kept": False, "reason": "", "via": "inapp"}
 
@@ -141,7 +156,7 @@ def verify_one_inapp(cand: dict) -> dict | None:
 
     on_disk = None
     try:
-        rng = _find_member_range((root / rel).read_bytes(), member)
+        rng = _find_member_range((root / rel).read_bytes(), member, sig)
         if rng is not None:
             on_disk = (root / rel).read_bytes()[rng[0]:rng[1]].decode("utf8", "replace")
     except OSError:
@@ -153,7 +168,7 @@ def verify_one_inapp(cand: dict) -> dict | None:
             verdict = {"kept": True, "reason": "verbatim original in baseline-clean app",
                        "via": "baseline", "symbol_version": version}
         else:
-            r = _compile_with(app_dir, rel, member, cand["target_al"], version)
+            r = _compile_with(app_dir, rel, member, cand["target_al"], version, sig)
             verdict = {"kept": r.clean, "reason": f"inapp clean={r.clean} errs={r.errors[:3]}",
                        "via": "inapp", "symbol_version": version,
                        "error_codes": sorted({c for s, c, _ in r.diagnostics if s == "error"})}
@@ -175,13 +190,97 @@ def verify_one_inapp(cand: dict) -> dict | None:
         if not app_baseline_clean:
             verdict["reason"] = "origin app baseline not clean; cannot attribute the break"
         else:
-            r_bad = _compile_with(app_dir, rel, member, cand["rejected_al"], version)
+            r_bad = _compile_with(app_dir, rel, member, cand["rejected_al"], version, sig)
             codes = sorted({c for s, c, _ in r_bad.diagnostics if s == "error"})
             verdict = {"kept": not r_bad.clean, "reason": f"bad_clean={r_bad.clean}",
                        "via": "inapp", "symbol_version": version, "error_codes": codes}
 
     kf.write_text(json.dumps(verdict))
     return {**cand, "verify": verdict} if verdict["kept"] else None
+
+
+def _resolve_origin(cand: dict) -> tuple[Path, Path, str, str] | None:
+    """(app_dir, origin_file, file_rel, symbol_version) for a candidate, or None."""
+    meta = cand["meta"]
+    root = _repo_root(meta.get("repo", ""))
+    rel, member = meta.get("path", ""), meta.get("member", "")
+    if root is None or not rel or not member:
+        return None
+    app_dir = _app_dir(root / rel)
+    if app_dir is None:
+        return None
+    base = _baseline().get(str(app_dir))
+    version = (base or {}).get("symbol_version") or symbol_version(app_dir, "28.0")
+    return app_dir, root / rel, rel, version
+
+
+def verify_g5_group(app_dir_str: str, version: str, cands: list[dict]) -> list[dict]:
+    """Verify every g5/g7 candidate that originates in one app, reusing a single
+    seeded worktree: copy + seed once, then per candidate swap the member, compile,
+    restore. A candidate is kept when the app compiled clean at baseline but does
+    NOT with `rejected_al` in place. Per-candidate verdicts are still cached by `_key`."""
+    app_dir = Path(app_dir_str)
+    base = _baseline().get(app_dir_str)
+    if not (base and base.get("error_clean")):
+        for c in cands:
+            _CACHE_WRITE(c, {"kept": False, "reason": "origin app baseline not clean", "via": "inapp"})
+        return []
+
+    pending = []
+    out: list[dict] = []
+    for c in cands:
+        kf = CACHE / f"{_key(c)}.json"
+        if kf.is_file():
+            v = json.loads(kf.read_text())
+            if v["kept"]:
+                out.append({**c, "verify": v})
+        else:
+            pending.append(c)
+    if not pending:
+        return out
+
+    work = Path(tempfile.mkdtemp(prefix="bcaldata-g5grp-"))
+    try:
+        shutil.copytree(app_dir, work, dirs_exist_ok=True, symlinks=False,
+                        ignore=shutil.ignore_patterns(".alpackages", "*.app", "_compile_out.app"))
+        seed_alpackages(work, version)
+        pin_runtime(work)
+        by_file: dict[str, list[dict]] = {}
+        for c in pending:
+            by_file.setdefault(Path(c["meta"]["path"]).name, []).append(c)
+        for fname, group in by_file.items():
+            hits = list(work.rglob(fname))
+            if not hits:
+                for c in group:
+                    _CACHE_WRITE(c, {"kept": False, "reason": f"origin file {fname} not in worktree"})
+                continue
+            target = hits[0]
+            original = target.read_bytes()
+            for c in group:
+                member, sig = c["meta"]["member"], c["meta"].get("signature")
+                rng = _find_member_range(original, member, sig)
+                if rng is None:
+                    _CACHE_WRITE(c, {"kept": False, "reason": f"member {member} not found"})
+                    continue
+                target.write_bytes(original[:rng[0]] + c["rejected_al"].encode() + original[rng[1]:])
+                try:
+                    r = compile_app(work, version, analyzers=False)
+                finally:
+                    target.write_bytes(original)
+                codes = sorted({x for s, x, _ in r.diagnostics if s == "error"})
+                v = {"kept": not r.clean, "reason": f"bad_clean={r.clean}", "via": "inapp-batch",
+                     "symbol_version": version, "error_codes": codes}
+                _CACHE_WRITE(c, v)
+                if v["kept"]:
+                    out.append({**c, "verify": v})
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+    return out
+
+
+def _CACHE_WRITE(cand: dict, verdict: dict) -> None:
+    verdict.setdefault("via", "inapp")
+    (CACHE / f"{_key(cand)}.json").write_text(json.dumps(verdict))
 
 
 _FRESH_APP_JSON = {

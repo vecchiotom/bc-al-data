@@ -43,7 +43,7 @@ def g1_fim(rec: dict) -> Iterator[dict]:
            "target_al": target,
            "meta": {"repo": rec["repo"], "path": rec["path"],
                     "object": f"{rec['object_kind']} {rec['object_name']}",
-                    "member": rec["member_name"]}}
+                    "member": rec["member_name"], "signature": rec["signature"]}}
 
 
 # ---------------- G2: intent (doc-comment) -> implementation ----------------
@@ -62,7 +62,8 @@ def g2_sig2body(rec: dict) -> Iterator[dict]:
            "messages": [{"role": "user", "content": prompt},
                         {"role": "assistant", "content": _FENCE.format(target)}],
            "target_al": target,
-           "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"]}}
+           "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"],
+                    "signature": rec["signature"]}}
 
 
 # ---------------- G3: explain / review (deterministic template) ----------------
@@ -125,7 +126,7 @@ def g5_error_fix(rec: dict) -> Iterator[dict]:
                             {"role": "assistant", "content": _FENCE.format(good)}],
                "target_al": good, "rejected_al": bad,
                "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"],
-                        "mutation_desc": desc,
+                        "signature": rec["signature"], "mutation_desc": desc,
                         "expected_diagnostic": _MUT_EXPECTED.get(mid, codes)}}
 
 
@@ -187,27 +188,170 @@ def g3_paraphrase(cand: dict, llm_chat) -> dict:
 
 
 # ---------------- G4: doc-QA from the devitpro markdown ----------------
-import re as _re
+_G4_REPO = "MicrosoftDocs/dynamics365smb-devitpro-pb"
+
+# Only the AL language surface teaches syntax; ITpro/admin trees are dropped wholesale.
+_G4_KEEP_SECTION = "developer"
+_G4_DROP_PATH = re.compile(
+    r'(?:^|/)(?:administration|deployment|upgrade|analyzers|avs-diagnostics|diagnostics'
+    r'|readiness|includes)/|telemetry|monitor', re.I)
+
+# Navigational / generic headings that carry no concept on their own.
+_G4_DENY_HEADINGS = frozenset({
+    "see also", "see", "related information", "related links", "related content",
+    "next steps", "prerequisites", "in this article", "overview", "introduction",
+    "feedback", "remarks", "example", "examples", "syntax", "tip", "note", "caution",
+    "important", "references", "additional resources", "more information", "requirements",
+    "description", "applies to", "further information", "reason for the rule",
+    "bad code example", "good code example", "how to fix it", "how to fix this diagnostic",
+})
+
+_G4_REF_KIND = {
+    "method": "How do I use the `{name}` method in Business Central AL? What does it do?",
+    "property": "What does the `{name}` property do in Business Central AL, and how do I set it?",
+    "trigger": "What is the `{name}` trigger in Business Central AL and when does it run?",
+    "attribute": "What does the `{name}` attribute do in Business Central AL?",
+    "data type": "What is the `{name}` data type in Business Central AL and how do I use it?",
+    "keyword": "What does the `{name}` keyword do in Business Central AL?",
+}
+_G4_H1_REF = re.compile(
+    r'^(?P<name>.+?)\s*(?:\([^)]*\))?\s+(?P<kind>Method|Property|Trigger|Attribute|Data Type|Keyword)\s*$',
+    re.I)
+_G4_FENCE = re.compile(r'^```')
+_G4_AL_FENCE = re.compile(r'^```\s*(al|c#|csharp|pascal)\b', re.I)
+_G4_LINK_LINE = re.compile(r'^[-*>\s]*\[[^\]]+\]\([^)]+\)[.\s]*$')
+_G4_NOISE_LINE = re.compile(r'^(\||!\[|\[//\]|\[!INCLUDE|\[!NOTE|\[!TIP|\[!IMPORTANT|&emsp;|<)')
+
+
+def _g4_front_title(md_text: str) -> str | None:
+    """`title:` from a leading YAML front-matter block, if present."""
+    m = re.match(r'^---\s*\n(.*?)\n---\s*\n', md_text, re.S)
+    if not m:
+        return None
+    t = re.search(r'^title:\s*(.+?)\s*$', m.group(1), re.M)
+    return t.group(1).strip().strip('"\'') if t else None
+
+
+def _g4_clean_heading(h: str) -> str:
+    return re.sub(r'\s*[\[(](?:AL|NAV|Windows|On-Prem[^)\]]*)[\])]\s*$', '', h).strip()
+
+
+def _g4_strip_code(body: str) -> str:
+    return re.sub(r'```.*?```', ' ', body, flags=re.S)
+
+
+def _g4_sentences(prose: str) -> int:
+    return len(re.findall(r'[.!?](?:\s|$)', prose))
+
+
+def _g4_prose_ratio(body: str) -> float:
+    """Fraction of non-code lines that read as prose rather than link lists,
+    table rows, image tags, or doc-generator comment markers."""
+    prose = total = 0
+    in_fence = False
+    for raw in body.splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if _G4_FENCE.match(line):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        total += 1
+        if _G4_LINK_LINE.match(line) or _G4_NOISE_LINE.match(line):
+            continue
+        prose += 1
+    return prose / total if total else 0.0
+
+
+def _g4_body_ok(body: str) -> bool:
+    """A section body worth keeping: enough real prose, and either two sentences
+    of it or a fenced AL/C#/Pascal code block."""
+    if not (150 <= len(body) <= 6000):
+        return False
+    prose = _g4_strip_code(body)
+    prose_chars = len(re.sub(r'\[[^\]]+\]\([^)]+\)|[|>*#`_-]', '', prose).strip())
+    if prose_chars < 150:
+        return False
+    has_al = any(_G4_AL_FENCE.match(l.strip()) for l in body.splitlines())
+    if _g4_prose_ratio(body) < 0.60 and not has_al:
+        return False
+    return has_al or _g4_sentences(prose) >= 2
+
+
+def _g4_reference(md_text: str, front_title: str | None) -> tuple[str, str] | None:
+    """`(name, kind)` when the page documents one AL method/property/trigger/type,
+    detected from the H1 or the front-matter title plus a `## Syntax` section."""
+    h1 = re.search(r'^#\s+(.+?)\s*$', md_text, re.M)
+    for text in (h1.group(1) if h1 else None, front_title):
+        if not text:
+            continue
+        m = _G4_H1_REF.match(text.strip())
+        if m:
+            kind = m.group("kind").lower()
+            name = re.sub(r'\s*\([^)]*\)\s*$', '', m.group("name")).strip()
+            if name and re.fullmatch(r'[\w.:\[\], ]+', name):
+                return name, kind
+    return None
+
+
+def _g4_reference_body(md_text: str) -> str:
+    """The teaching part of a reference page: everything after the H1 up to the
+    first navigational section, with doc-generator markers removed."""
+    after = re.split(r'^#\s+.+?\s*$', md_text, maxsplit=1, flags=re.M)[-1]
+    after = re.split(r'^##\s+(?:Related information|See also)\s*$', after, maxsplit=1, flags=re.M)[0]
+    after = re.sub(r'^\[//\]: #.*$\n?', '', after, flags=re.M)
+    after = re.sub(r'^>\s*\*\*Version\*\*:.*$\n?', '', after, flags=re.M)
+    return after.strip()
 
 
 def g4_docqa(md_path, md_text: str) -> Iterator[dict]:
-    # split on H2/H3 headings; a section becomes (question=heading, answer=body)
-    for m in _re.finditer(r'^(#{2,3})\s+(.+?)\s*$', md_text, _re.M):
+    """Turn one devitpro markdown page into doc-QA pairs.
+
+    Only pages under `dev-itpro/developer/` are used; ITpro, admin, upgrade, and
+    telemetry trees carry no AL syntax. Reference pages (method/property/trigger/
+    type) yield one pair keyed by the member name; other pages yield one pair per
+    concept H2/H3 section that survives the prose and heading filters.
+    """
+    parts = str(md_path).replace("\\", "/").split("/")
+    section = parts[1] if len(parts) > 1 else parts[0]
+    if section != _G4_KEEP_SECTION or _G4_DROP_PATH.search(str(md_path)):
+        return
+    meta = {"repo": _G4_REPO, "path": str(md_path), "doc_section": section}
+    front_title = _g4_front_title(md_text)
+
+    ref = _g4_reference(md_text, front_title)
+    if ref:
+        name, kind = ref
+        body = _g4_reference_body(md_text)
+        if _g4_body_ok(body) and not re.search(r'\b(deprecated|obsolete|removed)\b', body[:400], re.I):
+            q = _G4_REF_KIND.get(kind, _G4_REF_KIND["method"]).format(name=name)
+            yield {"gen": "g4_docqa",
+                   "messages": [{"role": "user", "content": q},
+                                {"role": "assistant", "content": body}],
+                   "target_al": None,
+                   "meta": {**meta, "heading": f"{name} {kind.title()}"}}
+        return
+
+    for m in re.finditer(r'^(#{2,3})\s+(.+?)\s*$', md_text, re.M):
         start = m.end()
-        nxt = _re.search(r'^#{1,3}\s', md_text[start:], _re.M)
+        nxt = re.search(r'^#{1,3}\s', md_text[start:], re.M)
         body = md_text[start: start + (nxt.start() if nxt else len(md_text))].strip()
-        heading = m.group(2).strip()
-        if len(body) < 120 or len(body) > 4000 or "```" not in body and len(body) < 200:
+        heading = _g4_clean_heading(m.group(2))
+        norm = re.sub(r'[?:.\s]+$', '', heading).lower()
+        if not norm or norm in _G4_DENY_HEADINGS:
             continue
-        if _re.search(r'\b(deprecated|removed|obsolete)\b', heading, _re.I):
+        if re.search(r'\b(deprecated|removed|obsolete)\b', heading, re.I):
             continue
-        q = heading if heading.endswith("?") else f"In Business Central AL, {heading[0].lower()}{heading[1:]} — explain."
+        if not _g4_body_ok(body):
+            continue
+        q = heading if heading.endswith("?") else f"In Business Central AL, explain {heading}."
         yield {"gen": "g4_docqa",
                "messages": [{"role": "user", "content": q},
                             {"role": "assistant", "content": body}],
                "target_al": None,
-               "meta": {"repo": "MicrosoftDocs/dynamics365smb-devitpro-pb",
-                        "path": str(md_path), "heading": heading}}
+               "meta": {**meta, "heading": heading}}
 
 
 # ---------------- G7: hard negatives from the current model ----------------

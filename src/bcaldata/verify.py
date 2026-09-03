@@ -160,6 +160,42 @@ def verify_batch_via_lsp(candidates: list[dict], workers: int | None = None) -> 
     return kept
 
 
+def _verify_file_inapp(cands: list[dict], in_jsonl: Path, out_jsonl: Path, workers: int) -> dict:
+    """In-app verify. g5/g7 candidates are grouped by origin app so each app's
+    worktree is copied + symbol-seeded once and reused across its mutations;
+    g1/g2/g6/text targets go one-by-one (mostly the instant baseline fast path)."""
+    from .verify_inapp import _resolve_origin, verify_g5_group, verify_one_inapp
+
+    batched, singles = {}, []
+    for c in cands:
+        if c["gen"] in ("g5_error_fix", "g7_hard_negative"):
+            origin = _resolve_origin(c)
+            if origin is not None:
+                app_dir, _, _, version = origin
+                batched.setdefault((str(app_dir), version), []).append(c)
+                continue
+        singles.append(c)
+
+    kept: list[dict] = []
+    with ProcessPoolExecutor(max_workers=workers) as ex:
+        group_futs = [ex.submit(verify_g5_group, app, ver, group)
+                      for (app, ver), group in batched.items()]
+        for res in ex.map(verify_one_inapp, singles, chunksize=8):
+            if res is not None:
+                kept.append(res)
+        for f in group_futs:
+            kept.extend(f.result())
+
+    with out_jsonl.open("w") as fh:
+        for r in kept:
+            fh.write(json.dumps(r) + "\n")
+    stats = {"in": len(cands), "kept": len(kept),
+             "pass_rate": round(len(kept) / max(1, len(cands)), 3), "mode": "inapp",
+             "batched_apps": len(batched)}
+    print(f"verify {in_jsonl.name}: {stats}")
+    return stats
+
+
 def verify_file(in_jsonl: Path, out_jsonl: Path, workers: int = max(1, os.cpu_count() // 2),
                 mode: str = "compile") -> dict:
     """Compile-gate `in_jsonl` into `out_jsonl`.
@@ -170,9 +206,8 @@ def verify_file(in_jsonl: Path, out_jsonl: Path, workers: int = max(1, os.cpu_co
     """
     cands = [json.loads(l) for l in in_jsonl.read_text().splitlines() if l.strip()]
     if mode == "inapp":
-        from .verify_inapp import verify_one_inapp
-        runner = verify_one_inapp
-    elif mode == "lsp":
+        return _verify_file_inapp(cands, in_jsonl, out_jsonl, workers)
+    if mode == "lsp":
         runner = _verify_one_lsp
     else:
         runner = verify_one
