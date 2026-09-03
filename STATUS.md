@@ -18,7 +18,7 @@ Python env via `uv` (3.13). `source env.sh` before any tool.
 | ALCops-MCP | ❌ not on nuget.org; `vendor/mcp-server` fails to build (missing Roslyn `Microsoft.CodeAnalysis.*` refs, 93 CS0246). Client `ALCopsMcp` written + tested-when-available; G8 `apply_fix` still blocked | — |
 | pwsh + BCContainerHelper | ✅ pwsh 7.6.5 (needs `DOTNET_ROOT`), BcContainerHelper 6.1.16 | `DOTNET_ROOT=~/.dotnet pwsh` |
 | GPU training stack | ❌ not installed (local training deferred to cloud — see plan) | — |
-| **Corpus pipeline** | ✅ scripts complete (`./run_pipeline.sh`, `uv run bcaldata <stage>`) — see PIPELINE.md | not yet run end-to-end |
+| **Corpus pipeline** | ✅ run end-to-end (non-LLM): 75 clean apps → 5 793 members → g1 4 302 / g2 723 / g4 4 054 / g5 2 217 / g6 89 / g8-review 3 301 candidates → in-app compile-gate → filter → `data/dataset/`. G3/G7 pending the GPU. See PIPELINE.md + `datacard.json`. | |
 | tree-sitter-al parser | ✅ `src/bcaldata/alparse.py` — 0 parse errors over 19k BCApps members | |
 | compile gate | ✅ `src/bcaldata/compile_gate.py` (port of BC-Bench compile-proxy) — real BCApps app compiles clean; G5 mutation → `AL0132`/`AL0111` confirmed | slow per-candidate (see PIPELINE gaps) |
 | vLLM G3 paraphrase | ✅ grounded explanation via local Qwen3.8-27B (`reasoning=low`), ~3-6s/call, quality high | |

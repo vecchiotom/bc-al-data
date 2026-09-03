@@ -192,7 +192,8 @@ def verify_one_inapp(cand: dict) -> dict | None:
         return {**cand, "verify": verdict}
 
     root = _repo_root(repo)
-    if root is None or not rel or not member:
+    need_member = gen != "g6_spec2object"   # g6 is object-level; meta carries `object`, no member
+    if root is None or not rel or (need_member and not member):
         verdict["reason"] = f"unresolvable origin (repo={repo} path={bool(rel)} member={bool(member)})"
         _write_verdict(kf, verdict)
         return None
