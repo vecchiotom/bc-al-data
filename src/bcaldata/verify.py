@@ -169,7 +169,13 @@ def verify_file(in_jsonl: Path, out_jsonl: Path, workers: int = max(1, os.cpu_co
     error-clean check); g5/g7 and text targets stay on the cold `al compile`.
     """
     cands = [json.loads(l) for l in in_jsonl.read_text().splitlines() if l.strip()]
-    runner = _verify_one_lsp if mode == "lsp" else verify_one
+    if mode == "inapp":
+        from .verify_inapp import verify_one_inapp
+        runner = verify_one_inapp
+    elif mode == "lsp":
+        runner = _verify_one_lsp
+    else:
+        runner = verify_one
     kept = 0
     with ProcessPoolExecutor(max_workers=workers) as ex, out_jsonl.open("w") as fh:
         for res in ex.map(runner, cands, chunksize=8):

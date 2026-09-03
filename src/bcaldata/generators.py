@@ -36,7 +36,7 @@ def g1_fim(rec: dict) -> Iterator[dict]:
         f"{_FENCE.format(_ctx(rec))}\n\n"
         f"Procedure to implement:\n{_FENCE.format(rec['signature'])}"
     )
-    target = f"{rec['signature']}\n{rec['body']}"
+    target = rec["member_text"]
     yield {"gen": "g1_fim",
            "messages": [{"role": "user", "content": prompt},
                         {"role": "assistant", "content": _FENCE.format(target)}],
@@ -57,7 +57,7 @@ def g2_sig2body(rec: dict) -> Iterator[dict]:
         f"\"{rec['object_name']}\".\n\nIntent:\n{doc_clean}\n\n"
         f"Signature:\n{_FENCE.format(rec['signature'])}"
     )
-    target = f"{rec['signature']}\n{rec['body']}"
+    target = rec["member_text"]
     yield {"gen": "g2_sig2body",
            "messages": [{"role": "user", "content": prompt},
                         {"role": "assistant", "content": _FENCE.format(target)}],

@@ -20,3 +20,7 @@ data/*.run.log
 data/candidates/
 data/corpus.jsonl
 data/*.run.log
+data/app_baseline.json
+data/candidates_full/
+data/dryrun_*.log
+data/autofix_eval.json
