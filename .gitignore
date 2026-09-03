@@ -16,3 +16,7 @@ vendor/Microsoft.Dynamics.BusinessCentral.Development.Tools/
 
 # calibration run logs
 data/*.run.log
+
+data/candidates/
+data/corpus.jsonl
+data/*.run.log

@@ -111,6 +111,7 @@ def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
     """Sample the current model on real prompts; keep non-compiling completions as hard negatives."""
     from .llm import chat
     from .verify import _compile_snippet
+    from .autofix import autofix
     out = CAND / "g7_hard_negative.jsonl"
     n = probes = 0
     with out.open("w") as fh:
@@ -131,6 +132,7 @@ def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
                     r = _compile_snippet(al)
                     pair = G.g7_from_rollout(probe, al, r)
                     if pair:
+                        _apply_autofix(pair, al, r, autofix)
                         fh.write(json.dumps(pair) + "\n")
                         n += 1
                         break  # one hard negative per probe is enough
@@ -138,6 +140,30 @@ def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
                 break
     print(f"g7 hard negatives: {n} from {probes} probes")
     return n
+
+
+def _apply_autofix(pair: dict, broken_al: str, compile_result, autofix_fn) -> None:
+    """Replace the G7 `chosen` side with a real repair of the model's own output.
+
+    On success the pair carries `chosen = fixed`, `rejected = broken`, and
+    `meta.fix_method`; on failure it keeps the gold correction and records why.
+    """
+    diags = [{"severity": s, "code": c, "message": m}
+             for s, c, m in compile_result.diagnostics]
+    try:
+        fixed, method = autofix_fn(broken_al, diags)
+    except Exception as e:  # noqa: BLE001 - a repair failure must not drop the pair
+        fixed, method = None, f"error:{e}"
+    if fixed and method not in ("already-clean",):
+        pair["messages"] = [pair["messages"][0],
+                            {"role": "assistant", "content": "```al\n" + fixed + "\n```"}]
+        pair["chosen"] = fixed
+        pair["rejected"] = broken_al
+        pair["meta"] = {**pair["meta"], "fix_method": method, "autofixed": True}
+    else:
+        pair["chosen"] = pair["target_al"]
+        pair["rejected"] = broken_al
+        pair["meta"] = {**pair["meta"], "fix_method": method, "autofixed": False}
 
 
 def _extract_al(text: str) -> str | None:

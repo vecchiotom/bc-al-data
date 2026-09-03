@@ -111,8 +111,9 @@ def _apply_fixes_to_file(mcp, project: str, file_path: str,
     return sorted(set(applied))
 
 
-def run_g8(limit: int | None = None) -> dict:
-    CAND.mkdir(parents=True, exist_ok=True)
+def run_g8(limit: int | None = None, out_dir: Path | None = None) -> dict:
+    cand = Path(out_dir) if out_dir else CAND
+    cand.mkdir(parents=True, exist_ok=True)
     templates = _message_templates()
     rows = _corpus_rows(limit)
     by_app: dict[str, list[dict]] = defaultdict(list)
@@ -165,8 +166,8 @@ def run_g8(limit: int | None = None) -> dict:
                 if work is not None:
                     shutil.rmtree(work, ignore_errors=True)
 
-    fix_out = CAND / "g8_warning_clean.jsonl"
-    review_out = CAND / "g8_review.jsonl"
+    fix_out = cand / "g8_warning_clean.jsonl"
+    review_out = cand / "g8_review.jsonl"
     with fix_out.open("w") as ff, review_out.open("w") as rf:
         for r in rows:
             key = (r.get("app_dir", ""), r["path"] + "::" + r["member_name"])

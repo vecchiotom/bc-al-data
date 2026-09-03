@@ -118,13 +118,13 @@ def test_member_text_roundtrips_a_procedure():
 
 @pytest.mark.slow
 @pytest.mark.skipif(not _HAS_ALCOPS, reason="alcops-mcp not built")
-def test_run_g8_produces_candidates():
+def test_run_g8_produces_candidates(tmp_path):
     if not CORPUS.exists():
         pytest.skip("data/corpus.jsonl not built")
     rows = [json.loads(l) for l in CORPUS.read_text().splitlines() if l.strip()]
     attributed = [r for r in rows if r.get("analyzer_hits") and r.get("app_dir")]
     if not attributed:
         pytest.skip("no attributed corpus rows with app_dir (run build_baseline_and_corpus_mini)")
-    stats = run_g8(limit=8)
+    stats = run_g8(limit=8, out_dir=tmp_path)  # tmp_path: never clobber data/candidates/
     assert stats["g8_review"] >= 1
     assert stats["members"] >= 1

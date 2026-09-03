@@ -401,36 +401,47 @@ class ALCopsMcp:
 
     def analyze(self, *, project: str | Path | None = None,
                 file: str | Path | None = None,
-                analyzers: list[str] | None = None) -> object:
+                cop_filter: str | None = None) -> object:
+        """Real schema: projectPath (required), filePath (optional), copFilter (csv, optional)."""
         args: dict = {}
         if project:
             args["projectPath"] = str(Path(project).resolve())
         if file:
             args["filePath"] = str(Path(file).resolve())
-        if analyzers:
-            args["analyzers"] = analyzers
+        if cop_filter:
+            args["copFilter"] = cop_filter
         return self.mcp.call_tool_json("analyze", args)
 
-    def get_fixes(self, diagnostic: dict) -> object:
-        return self.mcp.call_tool_json("get_fixes", {"diagnostic": diagnostic})
+    @staticmethod
+    def _fix_args(project: str | Path, diagnostic: dict) -> dict:
+        """apply_fix / get_fixes want projectPath + filePath + diagnosticId + line (1-based)."""
+        return {
+            "projectPath": str(Path(project).resolve()),
+            "filePath": str(Path(diagnostic["filePath"]).resolve()),
+            "diagnosticId": diagnostic.get("id") or diagnostic.get("diagnosticId"),
+            "line": diagnostic.get("startLine") or diagnostic.get("line"),
+        }
 
-    def apply_fix(self, file_path: str | Path, diagnostic: dict, *,
-                  fix_id: str | None = None) -> str:
-        """Apply a fix for `diagnostic` in `file_path`; return the file text after the write."""
-        path = Path(file_path).resolve()
-        args: dict = {"filePath": str(path), "diagnostic": diagnostic}
-        if fix_id:
-            args["fixId"] = fix_id
+    def get_fixes(self, project: str | Path, diagnostic: dict) -> object:
+        return self.mcp.call_tool_json("get_fixes", self._fix_args(project, diagnostic))
+
+    def apply_fix(self, project: str | Path, diagnostic: dict, *,
+                  equivalence_key: str | None = None) -> str:
+        """Apply a code fix for `diagnostic`; return the file text after the write."""
+        args = self._fix_args(project, diagnostic)
+        if equivalence_key:
+            args["equivalenceKey"] = equivalence_key
         out = self.mcp.call_tool_text("apply_fix", args)
         try:
-            return path.read_text()
+            return Path(diagnostic["filePath"]).read_text()
         except OSError:
             return out
 
     def apply_fix_all(self, *, project: str | Path | None = None,
                       file: str | Path | None = None, rule_id: str,
                       dry_run: bool = False) -> object:
-        args: dict = {"ruleId": rule_id, "dryRun": dry_run}
+        args: dict = {"diagnosticId": rule_id, "dryRun": dry_run,
+                      "scope": "document" if file else "project"}
         if project:
             args["projectPath"] = str(Path(project).resolve())
         if file:
