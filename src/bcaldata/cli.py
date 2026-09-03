@@ -53,9 +53,9 @@ def calibrate_g5(n: int = 80, workers: int = 0):
 
 
 @app.command()
-def generate(limit_per_gen: int = 0, g5_per_mutation: int = 600):
+def generate(limit_per_gen: int = 0, g5_per_mutation: int = 600, g5_per_file: int = 6, g5_per_app: int = 150):
     from .generate import run_deterministic
-    run_deterministic(limit_per_gen or None, g5_per_mutation or None)
+    run_deterministic(limit_per_gen or None, g5_per_mutation or None, g5_per_file or None, g5_per_app or None)
 
 
 @app.command("generate-g3")

@@ -7,12 +7,12 @@ from __future__ import annotations
 import hashlib, json, os
 from pathlib import Path
 
+from .build_corpus import CORPUS, BASELINE
+from . import generators as G
+
 
 def _stable_hash(s: str) -> str:
     return hashlib.sha1(s.encode("utf8", "replace")).hexdigest()
-
-from .build_corpus import CORPUS, BASELINE
-from . import generators as G
 
 DATA = Path.home() / "bc-al-data" / "data"
 CAND = DATA / "candidates"
@@ -33,29 +33,43 @@ def _corpus_rows():
 
 
 def run_deterministic(limit_per_gen: int | None = None,
-                      g5_per_mutation: int | None = 600) -> dict:
+                      g5_per_mutation: int | None = 600,
+                      g5_per_file: int | None = 6,
+                      g5_per_app: int | None = 150) -> dict:
     """Deterministic generators over the corpus.
 
-    `g5_per_mutation` caps G5 candidates per mutation class (deterministic —
-    keeps the members whose id hashes lowest) so the verify compile budget stays
-    bounded; None emits every applicable mutation.
+    G5 is capped three ways so the verify compile budget stays bounded and no
+    single app dominates: `g5_per_mutation` per mutation class, `g5_per_file` per
+    origin `.al` file, `g5_per_app` per app dir (Subscription Billing and
+    PowerBIReports are large and slow to compile, and held ~55% of G5 uncapped).
+    Members are taken in ascending text-hash order; None on any disables it.
     """
     counts = {}
     for name, fn in DETERMINISTIC.items():
         out = CAND / f"{name}.jsonl"
         n = 0
         per_mut: dict[str, int] = {}
+        per_file: dict[str, int] = {}
+        per_app: dict[str, int] = {}
         rows = list(_corpus_rows())
-        if name == "g5_error_fix" and g5_per_mutation:
+        if name == "g5_error_fix" and (g5_per_mutation or g5_per_file):
             rows.sort(key=lambda r: _stable_hash(r.get("member_text", "")))
         with out.open("w") as fh:
             for rec in rows:
                 for cand in fn(rec):
-                    if name == "g5_error_fix" and g5_per_mutation:
+                    if name == "g5_error_fix":
                         mid = cand.get("mutation", "")
-                        if per_mut.get(mid, 0) >= g5_per_mutation:
+                        path = cand["meta"].get("path", "")
+                        app = "/".join(path.split("/")[:5])   # .../<Area>/<App>/<sub>
+                        if g5_per_mutation and per_mut.get(mid, 0) >= g5_per_mutation:
+                            continue
+                        if g5_per_file and per_file.get(path, 0) >= g5_per_file:
+                            continue
+                        if g5_per_app and per_app.get(app, 0) >= g5_per_app:
                             continue
                         per_mut[mid] = per_mut.get(mid, 0) + 1
+                        per_file[path] = per_file.get(path, 0) + 1
+                        per_app[app] = per_app.get(app, 0) + 1
                     fh.write(json.dumps(cand) + "\n")
                     n += 1
                     if limit_per_gen and n >= limit_per_gen:

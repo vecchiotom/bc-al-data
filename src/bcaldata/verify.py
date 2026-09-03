@@ -179,10 +179,18 @@ def _verify_file_inapp(cands: list[dict], in_jsonl: Path, out_jsonl: Path, worke
                 continue
         singles.append(c)
 
+    # One worktree copy is reused across a chunk; chunks of the same app still run
+    # in parallel. Without this a single big app (Subscription Billing holds ~40%
+    # of G5) pins one worker for hours while the rest idle.
+    chunk = 40
+    jobs = []
+    for (app, ver), group in batched.items():
+        for i in range(0, len(group), chunk):
+            jobs.append((app, ver, group[i:i + chunk]))
+
     kept: list[dict] = []
     with ProcessPoolExecutor(max_workers=workers) as ex:
-        group_futs = [ex.submit(verify_g5_group, app, ver, group)
-                      for (app, ver), group in batched.items()]
+        group_futs = [ex.submit(verify_g5_group, app, ver, g) for app, ver, g in jobs]
         for res in ex.map(verify_one_inapp, singles, chunksize=8):
             if res is not None:
                 kept.append(res)

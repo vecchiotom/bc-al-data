@@ -17,6 +17,7 @@ the member's exact byte range and compile the whole app.
 from __future__ import annotations
 import hashlib
 import json
+import os
 import re
 import shutil
 import tempfile
@@ -25,6 +26,18 @@ from pathlib import Path
 from .alparse import objects
 from .compile_gate import compile_app, pin_runtime, seed_alpackages, symbol_version
 from .sources import VENDOR
+from .verify import _shared_alpackages
+
+
+def _seed_shared(work: Path) -> None:
+    """Point `.alpackages` at the process-wide shared symbol set (one seeded dir,
+    every worktree symlinks it) so 350 symbol packages stay in the page cache
+    instead of being re-read from the 9 GB artifact per compile."""
+    alp = work / ".alpackages"
+    if alp.is_symlink() or alp.exists():
+        return
+    alp.symlink_to(_shared_alpackages())
+
 
 DATA = Path.home() / "bc-al-data" / "data"
 CACHE = Path.home() / "bc-al-data" / ".cache" / "verify"
@@ -34,6 +47,26 @@ _WS = re.compile(r"\s+")
 
 def _norm(s: str) -> str:
     return _WS.sub(" ", s or "").strip()
+
+
+def _link_tree(src: Path, dst: Path) -> None:
+    """Populate `dst` with hardlinks to every file under `src` (dirs recreated),
+    skipping `.alpackages`, build outputs, and VCS dirs. Near-instant vs copytree;
+    the caller must `unlink()` a file before rewriting it so the real source is
+    never touched. Falls back to copy across filesystem boundaries."""
+    skip = {".alpackages", ".git", ".vscode", "_compile_out.app"}
+    for root, dirs, files in os.walk(src):
+        dirs[:] = [d for d in dirs if d not in skip]
+        rel = Path(root).relative_to(src)
+        (dst / rel).mkdir(parents=True, exist_ok=True)
+        for f in files:
+            if f in skip or f.endswith(".app"):
+                continue
+            s, d = Path(root) / f, dst / rel / f
+            try:
+                os.link(s, d)
+            except OSError:
+                shutil.copy2(s, d)
 
 
 def _write_verdict(kf: Path, verdict: dict) -> None:
@@ -118,21 +151,18 @@ def _compile_with(app_dir: Path, file_rel: str, member_name: str, new_text: str,
     """Worktree copy of `app_dir`, replace `member_name` in `file_rel` with `new_text`, compile."""
     work = Path(tempfile.mkdtemp(prefix="bcaldata-inapp-"))
     try:
-        shutil.copytree(app_dir, work, dirs_exist_ok=True, symlinks=False,
-                        ignore=shutil.ignore_patterns(".alpackages", "*.app", "_compile_out.app"))
-        target = work / Path(file_rel).name if (work / Path(file_rel).name).is_file() else work / file_rel
-        if not target.is_file():
-            # locate by basename anywhere in the worktree
-            cands = list(work.rglob(Path(file_rel).name))
-            if not cands:
-                raise FileNotFoundError(file_rel)
-            target = cands[0]
+        _link_tree(app_dir, work)
+        cands = list(work.rglob(Path(file_rel).name))   # file_rel is repo-relative
+        if not cands:
+            raise FileNotFoundError(file_rel)
+        target = cands[0]
         src = target.read_bytes()
         rng = _find_member_range(src, member_name, signature)
         if rng is None:
             raise LookupError(f"member {member_name} not in {target.name}")
+        target.unlink()                         # break the hardlink before rewriting
         target.write_bytes(src[:rng[0]] + new_text.encode() + src[rng[1]:])
-        seed_alpackages(work, version)
+        _seed_shared(work)
         pin_runtime(work)
         return compile_app(work, version, analyzers=False)
     finally:
@@ -273,9 +303,8 @@ def verify_g5_group(app_dir_str: str, version: str, cands: list[dict]) -> list[d
 
     work = Path(tempfile.mkdtemp(prefix="bcaldata-g5grp-"))
     try:
-        shutil.copytree(app_dir, work, dirs_exist_ok=True, symlinks=False,
-                        ignore=shutil.ignore_patterns(".alpackages", "*.app", "_compile_out.app"))
-        seed_alpackages(work, version)
+        _link_tree(app_dir, work)
+        _seed_shared(work)
         pin_runtime(work)
         by_file: dict[str, list[dict]] = {}
         for c in pending:
@@ -288,6 +317,7 @@ def verify_g5_group(app_dir_str: str, version: str, cands: list[dict]) -> list[d
                 continue
             target = hits[0]
             original = target.read_bytes()
+            target.unlink()                     # break the hardlink to the real source
             for c in group:
                 member, sig = c["meta"]["member"], c["meta"].get("signature")
                 rng = _find_member_range(original, member, sig)
@@ -295,10 +325,7 @@ def verify_g5_group(app_dir_str: str, version: str, cands: list[dict]) -> list[d
                     _CACHE_WRITE(c, {"kept": False, "reason": f"member {member} not found"})
                     continue
                 target.write_bytes(original[:rng[0]] + c["rejected_al"].encode() + original[rng[1]:])
-                try:
-                    r = compile_app(work, version, analyzers=False)
-                finally:
-                    target.write_bytes(original)
+                r = compile_app(work, version, analyzers=False)
                 codes = sorted({x for s, x, _ in r.diagnostics if s == "error"})
                 v = {"kept": not r.clean, "reason": f"bad_clean={r.clean}", "via": "inapp-batch",
                      "symbol_version": version, "error_codes": codes}
