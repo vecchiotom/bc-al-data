@@ -1,0 +1,26 @@
+{
+  "total_rows": 8912,
+  "train": 5628,
+  "val": 297,
+  "preference": 1272,
+  "heldout": 493,
+  "dropped_to_kind_cap": 1222,
+  "by_generator": {
+    "g1_fim": 2368,
+    "g4_docqa": 2501,
+    "g8_review": 320,
+    "g2_sig2body": 692,
+    "g6_spec2object": 44,
+    "g5_error_fix": 1272
+  },
+  "heldout_by_generator": {
+    "g1_fim": 229,
+    "g2_sig2body": 24,
+    "g4_docqa": 74,
+    "g5_error_fix": 133,
+    "g6_spec2object": 6,
+    "g8_review": 27
+  },
+  "kind_cap": 0.35,
+  "heldout_app_rate": 12
+}

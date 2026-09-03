@@ -35,6 +35,7 @@ vendor/alcops-dist/
 data/verified/
 data/filtered/
 data/dataset/*.jsonl
+!data/dataset/datacard.json
 data/verify*.log
 data/baselines.run.log
 data/sources.run.log
