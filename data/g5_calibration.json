@@ -1,0 +1,460 @@
+{
+  "m_delete_semicolon": {
+    "sample": 110,
+    "applicable": 100,
+    "applicability_rate": 0.909,
+    "any_new_error": 75,
+    "any_new_error_rate": 0.75,
+    "modal_new_code": "AL0111",
+    "expected": [
+      "AL0111"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0111": 75
+    },
+    "new_code_combo_hist": {
+      "AL0111": 75
+    },
+    "raw_code_hist": {
+      "AL0111|AL0118": 37,
+      "AL0111|AL0118|AL0185": 19,
+      "AL0118": 9,
+      "<none>": 7,
+      "AL0111": 5,
+      "AL0118|AL0185": 4
+    }
+  },
+  "m_rename_call": {
+    "sample": 110,
+    "applicable": 100,
+    "applicability_rate": 0.909,
+    "any_new_error": 55,
+    "any_new_error_rate": 0.55,
+    "modal_new_code": "AL0132",
+    "expected": [
+      "AL0132",
+      "AL0118"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0132": 45,
+      "AL0118": 13
+    },
+    "new_code_combo_hist": {
+      "AL0132": 42,
+      "AL0118": 10,
+      "AL0118|AL0132": 3
+    },
+    "raw_code_hist": {
+      "AL0118|AL0132": 32,
+      "AL0118|AL0185": 25,
+      "AL0118": 19,
+      "AL0132": 6,
+      "AL0118|AL0162": 5,
+      "AL0118|AL0132|AL0185": 4
+    }
+  },
+  "m_rename_member": {
+    "sample": 110,
+    "applicable": 93,
+    "applicability_rate": 0.845,
+    "any_new_error": 57,
+    "any_new_error_rate": 0.613,
+    "modal_new_code": "AL0132",
+    "expected": [
+      "AL0132"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0132": 57,
+      "AL0118": 3
+    },
+    "new_code_combo_hist": {
+      "AL0132": 54,
+      "AL0118|AL0132": 3
+    },
+    "raw_code_hist": {
+      "AL0118|AL0132": 37,
+      "AL0118|AL0185": 21,
+      "AL0118": 11,
+      "AL0118|AL0132|AL0185": 7,
+      "AL0132": 7,
+      "AL0118|AL0132|AL0296": 4
+    }
+  },
+  "m_rename_identifier": {
+    "sample": 110,
+    "applicable": 55,
+    "applicability_rate": 0.5,
+    "any_new_error": 55,
+    "any_new_error_rate": 1.0,
+    "modal_new_code": "AL0118",
+    "expected": [
+      "AL0118"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0118": 55
+    },
+    "new_code_combo_hist": {
+      "AL0118": 50,
+      "AL0118|AL0118": 4,
+      "AL0118|AL0118|AL0118": 1
+    },
+    "raw_code_hist": {
+      "AL0118|AL0185": 23,
+      "AL0118": 19,
+      "AL0118|AL0132|AL0185": 3,
+      "AL0118|AL0296": 3,
+      "AL0118|AL0132": 2,
+      "AL0118|AL0162|AL0185": 1
+    }
+  },
+  "m_remove_var_decl": {
+    "sample": 110,
+    "applicable": 55,
+    "applicability_rate": 0.5,
+    "any_new_error": 55,
+    "any_new_error_rate": 1.0,
+    "modal_new_code": "AL0118",
+    "expected": [
+      "AL0118"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0118": 55
+    },
+    "new_code_combo_hist": {
+      "AL0118|AL0118": 24,
+      "AL0118|AL0118|AL0118": 14,
+      "AL0118": 5,
+      "AL0118|AL0118|AL0118|AL0118|AL0118": 4,
+      "AL0118|AL0118|AL0118|AL0118": 3,
+      "AL0118|AL0118|AL0118|AL0118|AL0118|AL0118": 2,
+      "AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118": 1,
+      "AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118": 1
+    },
+    "raw_code_hist": {
+      "AL0118": 30,
+      "AL0118|AL0185": 19,
+      "AL0118|AL0132|AL0185": 3,
+      "AL0118|AL0162": 1,
+      "AL0118|AL0161|AL0162": 1,
+      "AL0118|AL0161": 1
+    }
+  },
+  "m_rename_type": {
+    "sample": 110,
+    "applicable": 48,
+    "applicability_rate": 0.436,
+    "any_new_error": 33,
+    "any_new_error_rate": 0.688,
+    "modal_new_code": "AL0185",
+    "expected": [
+      "AL0134",
+      "AL0185",
+      "AL0118"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0185": 22,
+      "AL0134": 11,
+      "AL0118": 6
+    },
+    "new_code_combo_hist": {
+      "AL0185": 16,
+      "AL0134": 11,
+      "AL0118|AL0185": 3,
+      "AL0118|AL0118|AL0185": 2,
+      "AL0118|AL0118|AL0118|AL0118|AL0185": 1
+    },
+    "raw_code_hist": {
+      "AL0118|AL0185": 31,
+      "AL0118|AL0134|AL0185": 4,
+      "AL0118|AL0134": 4,
+      "AL0185": 4,
+      "AL0118|AL0132|AL0185": 2,
+      "AL0118|AL0132|AL0134|AL0185": 1
+    }
+  },
+  "m_rename_trigger": {
+    "sample": 110,
+    "applicable": 7,
+    "applicability_rate": 0.064,
+    "any_new_error": 0,
+    "any_new_error_rate": 0.0,
+    "modal_new_code": null,
+    "expected": [
+      "AL0162"
+    ],
+    "matches_expected": false,
+    "new_code_hist": {},
+    "new_code_combo_hist": {},
+    "raw_code_hist": {
+      "AL0118|AL0162": 5,
+      "AL0118|AL0162|AL0185": 1,
+      "AL0118|AL0161|AL0162|AL0296": 1
+    }
+  },
+  "m_swap_argument_count": {
+    "sample": 110,
+    "applicable": 94,
+    "applicability_rate": 0.855,
+    "any_new_error": 28,
+    "any_new_error_rate": 0.298,
+    "modal_new_code": "AL0118",
+    "expected": [
+      "AL0126"
+    ],
+    "matches_expected": false,
+    "new_code_hist": {
+      "AL0118": 20,
+      "AL0126": 8
+    },
+    "new_code_combo_hist": {
+      "AL0118": 20,
+      "AL0126": 8
+    },
+    "raw_code_hist": {
+      "AL0118": 46,
+      "AL0118|AL0185": 21,
+      "AL0126": 5,
+      "AL0118|AL0296": 4,
+      "AL0118|AL0126|AL0185": 3,
+      "AL0118|AL0132|AL0185": 3
+    }
+  },
+  "m_add_parens_to_property": {
+    "sample": 110,
+    "applicable": 93,
+    "applicability_rate": 0.845,
+    "any_new_error": 54,
+    "any_new_error_rate": 0.581,
+    "modal_new_code": "AL0125",
+    "expected": [
+      "AL0127",
+      "AL0125"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0125": 36,
+      "AL0127": 10,
+      "AL0135": 6,
+      "AL0118": 3,
+      "AL0126": 2
+    },
+    "new_code_combo_hist": {
+      "AL0125": 36,
+      "AL0127": 10,
+      "AL0135": 3,
+      "AL0118|AL0135": 3,
+      "AL0126": 2
+    },
+    "raw_code_hist": {
+      "AL0118|AL0125": 27,
+      "AL0118|AL0185": 22,
+      "AL0118": 11,
+      "AL0118|AL0127": 4,
+      "AL0135": 3,
+      "AL0118|AL0135": 3
+    }
+  },
+  "m_semicolon_before_else": {
+    "sample": 110,
+    "applicable": 12,
+    "applicability_rate": 0.109,
+    "any_new_error": 11,
+    "any_new_error_rate": 0.917,
+    "modal_new_code": "AL0110",
+    "expected": [
+      "AL0110"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0110": 11
+    },
+    "new_code_combo_hist": {
+      "AL0110": 11
+    },
+    "raw_code_hist": {
+      "AL0110|AL0118|AL0185": 4,
+      "AL0110|AL0118": 3,
+      "AL0110": 2,
+      "AL0110|AL0118|AL0132|AL0185": 1,
+      "AL0118": 1,
+      "AL0110|AL0161": 1
+    }
+  },
+  "m_delete_begin": {
+    "sample": 110,
+    "applicable": 110,
+    "applicability_rate": 1.0,
+    "any_new_error": 110,
+    "any_new_error_rate": 1.0,
+    "modal_new_code": "AL0104",
+    "expected": [
+      "AL0104",
+      "AL0109"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0104": 106,
+      "AL0414": 74,
+      "AL0198": 60,
+      "AL0107": 50,
+      "AL0134": 43,
+      "AL0121": 29,
+      "AL0224": 7,
+      "AL0855": 5,
+      "AL0114": 4,
+      "AL0297": 4,
+      "AL0519": 4,
+      "AL0111": 4,
+      "AL0105": 3,
+      "AL0197": 2,
+      "AL0264": 2,
+      "AL0123": 2,
+      "AL0118": 1,
+      "AL0110": 1,
+      "AL0185": 1
+    },
+    "new_code_combo_hist": {
+      "AL0104|AL0104|AL0134|AL0198|AL0414": 27,
+      "AL0104|AL0198|AL0414": 12,
+      "AL0104|AL0198": 9,
+      "AL0519": 4,
+      "AL0104|AL0104|AL0107|AL0198|AL0414": 4,
+      "AL0104|AL0111|AL0224|AL0224": 3,
+      "AL0104|AL0104|AL0104|AL0107|AL0224": 3,
+      "AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107|AL0107": 2
+    },
+    "raw_code_hist": {
+      "AL0104|AL0134|AL0198|AL0414": 26,
+      "AL0104|AL0198|AL0414": 11,
+      "AL0104|AL0107|AL0121|AL0134|AL0414": 6,
+      "AL0104|AL0107": 5,
+      "AL0104|AL0118|AL0198": 5,
+      "AL0104|AL0107|AL0121|AL0185|AL0414": 4
+    }
+  },
+  "m_delete_then": {
+    "sample": 110,
+    "applicable": 76,
+    "applicability_rate": 0.691,
+    "any_new_error": 76,
+    "any_new_error_rate": 1.0,
+    "modal_new_code": "AL0104",
+    "expected": [
+      "AL0104"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0104": 76
+    },
+    "new_code_combo_hist": {
+      "AL0104": 76
+    },
+    "raw_code_hist": {
+      "AL0104|AL0118": 39,
+      "AL0104|AL0118|AL0185": 18,
+      "AL0104": 6,
+      "AL0104|AL0118|AL0132|AL0185": 3,
+      "AL0104|AL0118|AL0132": 3,
+      "AL0104|AL0118|AL0296": 2
+    }
+  },
+  "m_keyword_as_identifier": {
+    "sample": 110,
+    "applicable": 55,
+    "applicability_rate": 0.5,
+    "any_new_error": 55,
+    "any_new_error_rate": 1.0,
+    "modal_new_code": "AL0104",
+    "expected": [
+      "AL0105",
+      "AL0104"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0104": 52,
+      "AL0224": 29,
+      "AL0414": 28,
+      "AL0118": 27,
+      "AL0111": 22,
+      "AL0107": 20,
+      "AL0198": 18,
+      "AL0301": 16,
+      "AL0738": 15,
+      "AL0134": 13,
+      "AL0519": 9,
+      "AL0162": 7,
+      "AL0164": 6,
+      "AL0114": 5,
+      "AL0197": 5,
+      "AL0297": 5,
+      "AL0264": 3,
+      "AL0124": 2,
+      "AL0139": 2,
+      "AL0440": 2,
+      "AL0112": 2,
+      "AL0117": 2,
+      "AL0105": 2,
+      "AL0110": 1,
+      "AL0126": 1,
+      "AL0405": 1,
+      "AL0192": 1,
+      "AL0402": 1,
+      "AL0119": 1,
+      "AL0158": 1
+    },
+    "new_code_combo_hist": {
+      "AL0104|AL0198|AL0414|AL0519": 7,
+      "AL0104|AL0118|AL0224": 2,
+      "AL0104|AL0104|AL0104|AL0111|AL0224|AL0224": 1,
+      "AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0111|AL0111|AL0118|AL0118|AL0118|AL0224": 1,
+      "AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0107|AL0107|AL0107|AL0107|AL0107|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0134|AL0162|AL0162|AL0164|AL0224|AL0224|AL0301|AL0414|AL0738|AL0738": 1,
+      "AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0111|AL0111|AL0111|AL0111|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118": 1,
+      "AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0110|AL0110|AL0111|AL0111|AL0111|AL0111|AL0111|AL0111|AL0301|AL0301|AL0301|AL0301": 1,
+      "AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0104|AL0111|AL0111|AL0111|AL0111|AL0111|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0118|AL0126|AL0405": 1
+    },
+    "raw_code_hist": {
+      "AL0104|AL0111|AL0118|AL0185|AL0224": 5,
+      "AL0104|AL0118|AL0185|AL0224": 4,
+      "AL0104|AL0198|AL0414|AL0519": 4,
+      "AL0104|AL0185|AL0198|AL0414|AL0519": 3,
+      "AL0104|AL0111|AL0118|AL0224": 3,
+      "AL0104|AL0107|AL0111|AL0118|AL0134|AL0139|AL0224|AL0301|AL0414|AL0738": 2
+    }
+  },
+  "m_change_var_type": {
+    "sample": 110,
+    "applicable": 7,
+    "applicability_rate": 0.064,
+    "any_new_error": 4,
+    "any_new_error_rate": 0.571,
+    "modal_new_code": "AL0122",
+    "expected": [
+      "AL0122"
+    ],
+    "matches_expected": true,
+    "new_code_hist": {
+      "AL0122": 4,
+      "AL0175": 3,
+      "AL0133": 1
+    },
+    "new_code_combo_hist": {
+      "AL0122|AL0175": 2,
+      "AL0122|AL0122|AL0175|AL0175": 1,
+      "AL0122|AL0133": 1
+    },
+    "raw_code_hist": {
+      "AL0118": 2,
+      "AL0118|AL0122|AL0175|AL0185": 1,
+      "AL0118|AL0122|AL0132|AL0175|AL0185": 1,
+      "AL0118|AL0161|AL0162|AL0296": 1,
+      "AL0122|AL0175": 1,
+      "AL0122|AL0133|AL0161": 1
+    }
+  }
+}

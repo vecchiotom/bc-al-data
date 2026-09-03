@@ -47,9 +47,9 @@ def corpus(all_apps: bool = False):
 
 
 @app.command("calibrate-g5")
-def calibrate_g5(n: int = 120):
+def calibrate_g5(n: int = 80, workers: int = 0):
     from .calibrate_g5 import calibrate
-    calibrate(n)
+    calibrate(n, workers)
 
 
 @app.command()

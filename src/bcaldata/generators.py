@@ -95,48 +95,38 @@ def g3_explain(rec: dict) -> Iterator[dict]:
 
 
 # ---------------- G5: error -> fix (preference pairs, deterministic mutation) ----------------
-def _mut_rename_call(body: str):
-    for m in _CALL.finditer(body):
-        name = m.group(1)
-        if name in ("if", "for", "while", "case", "Message", "Error"):
-            continue
-        bad = name + "X"
-        return body[:m.start(1)] + bad + body[m.end(1):], f"renamed call {name}() -> {bad}() (non-existent)"
-    return None
+from .mutations import CATALOG as _MUTATIONS, EXPECTED as _MUT_EXPECTED, apply_mutation as _apply_mutation
 
 
-def _mut_drop_semicolon(body: str):
-    lines = body.split("\n")
-    for i, ln in enumerate(lines):
-        s = ln.rstrip()
-        if s.endswith(";") and not s.strip().startswith("//") and len(s.strip()) > 6:
-            lines[i] = s[:-1]
-            return "\n".join(lines), f"dropped ';' at line {i+1} (structural)"
-    return None
-
-
-_MUTATIONS = [("m_rename_call", _mut_rename_call), ("m_drop_semicolon", _mut_drop_semicolon)]
+def _g5_usable(rec: dict) -> bool:
+    return (rec["has_body"] and not rec["is_test"]
+            and 2 <= rec["body_loc"] <= 40
+            and rec["member_kind"] in ("procedure", "trigger")
+            and "begin" in rec["body"])
 
 
 def g5_error_fix(rec: dict) -> Iterator[dict]:
-    if not _usable_body(rec) or rec["body_loc"] > 30:
+    if not _g5_usable(rec):
         return
-    good = f"{rec['signature']}\n{rec['body']}"
+    good = rec["member_text"]
+    obj_ctx = {"object_kind": rec["object_kind"], "object_name": rec["object_name"],
+               "object_head": rec["object_head"]}
     for mid, fn in _MUTATIONS:
-        res = fn(rec["body"])
+        try:
+            res = _apply_mutation(mid, fn, rec, obj_ctx)
+        except Exception:  # noqa: BLE001 - a mutation that trips on odd source is simply skipped
+            continue
         if res is None:
             continue
-        bad_body, desc = res
-        bad = f"{rec['signature']}\n{bad_body}"
-        if bad == good:
-            continue
+        bad, desc, codes = res
         yield {"gen": "g5_error_fix", "mutation": mid,
                "messages": [{"role": "user",
                              "content": f"This AL does not compile. Fix it.\n\n{_FENCE.format(bad)}"},
                             {"role": "assistant", "content": _FENCE.format(good)}],
                "target_al": good, "rejected_al": bad,
                "meta": {"repo": rec["repo"], "path": rec["path"], "member": rec["member_name"],
-                        "mutation_desc": desc, "expected_diagnostic": "TBD-calibrate"}}
+                        "mutation_desc": desc,
+                        "expected_diagnostic": _MUT_EXPECTED.get(mid, codes)}}
 
 
 # ---------------- G6: spec -> object (small self-contained objects) ----------------

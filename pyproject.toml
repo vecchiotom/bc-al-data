@@ -41,3 +41,4 @@ package = true
 testpaths = ["tests"]
 pythonpath = ["tests"]
 addopts = "-ra"
+markers = ["slow: exercises the cold `al compile` toolchain"]

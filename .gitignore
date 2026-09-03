@@ -13,3 +13,6 @@ vendor/mcp-server/
 vendor/npm-package/
 
 vendor/Microsoft.Dynamics.BusinessCentral.Development.Tools/
+
+# calibration run logs
+data/*.run.log
