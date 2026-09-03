@@ -36,6 +36,13 @@ def _norm(s: str) -> str:
     return _WS.sub(" ", s or "").strip()
 
 
+def _write_verdict(kf: Path, verdict: dict) -> None:
+    """Atomic cache write — workers read these concurrently; a torn file breaks json."""
+    tmp = kf.with_suffix(f".{id(verdict):x}.tmp")
+    tmp.write_text(json.dumps(verdict))
+    tmp.replace(kf)
+
+
 def _repo_root(repo: str) -> Path | None:
     # meta.repo is like "microsoft/BCApps"; sources key is the lowercased last segment
     for cand in (repo.split("/")[-1].lower(), repo.split("/")[-1]):
@@ -62,7 +69,16 @@ def _baseline() -> dict[str, dict]:
     if _BASELINE is None:
         f = DATA / "app_baseline.json"
         rows = json.loads(f.read_text()) if f.is_file() else []
-        _BASELINE = {r["app_dir"]: r for r in rows}
+        _BASELINE = {}
+        for r in rows:
+            # index under both the recorded path and its symlink-resolved form —
+            # `build_baselines` keys on `vendor/bcapps/...`, verify resolves to
+            # `vendor/BCApps/...`.
+            _BASELINE[r["app_dir"]] = r
+            try:
+                _BASELINE[str(Path(r["app_dir"]).resolve())] = r
+            except OSError:
+                pass
     return _BASELINE
 
 
@@ -89,9 +105,11 @@ def _find_member_range(src: bytes, member_name: str,
 
 
 def _key(cand: dict) -> str:
+    prompt = (cand.get("messages") or [{}])[0].get("content", "")
     return "inapp-" + hashlib.sha256(
         (cand["gen"] + "\0" + (cand.get("target_al") or "") + "\0"
-         + (cand.get("rejected_al") or "") + "\0" + (cand["meta"].get("path") or "")).encode()
+         + (cand.get("rejected_al") or "") + "\0" + (cand["meta"].get("path") or "")
+         + "\0" + prompt).encode()
     ).hexdigest()
 
 
@@ -124,8 +142,12 @@ def _compile_with(app_dir: Path, file_rel: str, member_name: str, new_text: str,
 def verify_one_inapp(cand: dict) -> dict | None:
     kf = CACHE / f"{_key(cand)}.json"
     if kf.is_file():
-        v = json.loads(kf.read_text())
-        return {**cand, "verify": v} if v["kept"] else None
+        try:
+            v = json.loads(kf.read_text())
+        except (json.JSONDecodeError, OSError):
+            v = None
+        if v is not None:
+            return {**cand, "verify": v} if v["kept"] else None
 
     meta = cand["meta"]
     repo, rel, member = meta.get("repo", ""), meta.get("path", ""), meta.get("member", "")
@@ -136,18 +158,18 @@ def verify_one_inapp(cand: dict) -> dict | None:
     # text-only targets never compile
     if gen in ("g3_explain", "g4_docqa", "g8_review") or cand.get("target_al") is None:
         verdict = {"kept": True, "reason": "text target", "via": "none"}
-        kf.write_text(json.dumps(verdict))
+        _write_verdict(kf, verdict)
         return {**cand, "verify": verdict}
 
     root = _repo_root(repo)
     if root is None or not rel or not member:
         verdict["reason"] = f"unresolvable origin (repo={repo} path={bool(rel)} member={bool(member)})"
-        kf.write_text(json.dumps(verdict))
+        _write_verdict(kf, verdict)
         return None
     app_dir = _app_dir(root / rel)
     if app_dir is None:
         verdict["reason"] = "no app.json above origin file"
-        kf.write_text(json.dumps(verdict))
+        _write_verdict(kf, verdict)
         return None
 
     base = _baseline().get(str(app_dir))
@@ -201,7 +223,7 @@ def verify_one_inapp(cand: dict) -> dict | None:
                        "reason": f"bad_clean={r_bad.clean} good_clean={good_clean}",
                        "via": "inapp", "symbol_version": version, "error_codes": codes}
 
-    kf.write_text(json.dumps(verdict))
+    _write_verdict(kf, verdict)
     return {**cand, "verify": verdict} if verdict["kept"] else None
 
 
@@ -236,12 +258,16 @@ def verify_g5_group(app_dir_str: str, version: str, cands: list[dict]) -> list[d
     out: list[dict] = []
     for c in cands:
         kf = CACHE / f"{_key(c)}.json"
+        v = None
         if kf.is_file():
-            v = json.loads(kf.read_text())
-            if v["kept"]:
-                out.append({**c, "verify": v})
-        else:
+            try:
+                v = json.loads(kf.read_text())
+            except (json.JSONDecodeError, OSError):
+                v = None
+        if v is None:
             pending.append(c)
+        elif v["kept"]:
+            out.append({**c, "verify": v})
     if not pending:
         return out
 
@@ -286,7 +312,7 @@ def verify_g5_group(app_dir_str: str, version: str, cands: list[dict]) -> list[d
 
 def _CACHE_WRITE(cand: dict, verdict: dict) -> None:
     verdict.setdefault("via", "inapp")
-    (CACHE / f"{_key(cand)}.json").write_text(json.dumps(verdict))
+    _write_verdict(CACHE / f"{_key(cand)}.json", verdict)
 
 
 _FRESH_APP_JSON = {
