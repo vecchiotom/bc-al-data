@@ -39,3 +39,5 @@ data/dataset/*.jsonl
 data/verify*.log
 data/baselines.run.log
 data/sources.run.log
+.g3_bg.sh
+.g7_bg.sh
