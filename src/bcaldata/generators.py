@@ -169,7 +169,25 @@ MEMBER_GENERATORS = [g1_fim, g2_sig2body, g3_explain, g5_error_fix]
 _G3_SYS = ("You are an expert Microsoft Dynamics 365 Business Central AL developer. "
            "Explain the AL procedure for another developer: what it does, inputs/outputs, "
            "notable BC-specific behavior (events, IsHandled, temporary records, SetRange/SetFilter). "
-           "2-4 sentences, precise, no markdown headers, do not restate the code line by line.")
+           "Write 2-4 complete sentences as a single paragraph, then stop. Do not repeat yourself, "
+           "do not add markdown headers, do not restate the code line by line. "
+           "Use only method and type names that appear in the code or the verified facts.")
+
+
+def _dedupe_para(text: str) -> str:
+    """Keep the first paragraph and drop any later paragraph that repeats it.
+
+    The local model occasionally emits the same explanation twice; a verbatim or
+    prefix-duplicate trailing block is noise, not content."""
+    blocks = [b.strip() for b in re.split(r"\n\s*\n", text) if b.strip()]
+    if not blocks:
+        return text
+    kept = [blocks[0]]
+    for b in blocks[1:]:
+        if any(b.startswith(k[:40]) or k.startswith(b[:40]) for k in kept):
+            break
+        kept.append(b)
+    return "\n\n".join(kept)
 
 
 def g3_paraphrase(cand: dict, llm_chat) -> dict:
@@ -180,9 +198,10 @@ def g3_paraphrase(cand: dict, llm_chat) -> dict:
     prompt = f"Verified facts: {facts}\n\n(these facts are correct — expand them into prose)"
     user_msg = cand["messages"][0]["content"]
     out = llm_chat([{"role": "system", "content": _G3_SYS},
-                    {"role": "user", "content": user_msg + "\n\n" + prompt}], reasoning="low", max_tokens=350)
+                    {"role": "user", "content": user_msg + "\n\n" + prompt}],
+                   reasoning="low", temperature=0.3, max_tokens=512)
     new = dict(cand)
-    new["messages"] = [cand["messages"][0], {"role": "assistant", "content": out.strip()}]
+    new["messages"] = [cand["messages"][0], {"role": "assistant", "content": _dedupe_para(out.strip())}]
     new["meta"] = {**cand["meta"], "template": False, "grounded_facts": facts}
     return new
 

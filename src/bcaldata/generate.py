@@ -120,21 +120,38 @@ def run_deterministic(limit_per_gen: int | None = None,
     return counts
 
 
-def run_g3(limit: int | None = None) -> int:
+def run_g3(limit: int | None = None, max_workers: int = 3) -> int:
+    """Grounded G3 paraphrase over the corpus, `max_workers` model calls in flight.
+
+    Deterministic bases are collected first (cheap), then paraphrased concurrently
+    in fixed-size chunks and flushed per chunk so a crash keeps finished rows.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
     from .llm import chat
     out = CAND / "g3_explain.jsonl"
+    bases: list[dict] = []
+    for rec in _corpus_rows():
+        bases.extend(G.g3_explain(rec))
+        if limit and len(bases) >= limit:
+            break
+    if limit:
+        bases = bases[:limit]
+
+    def _one(base: dict) -> dict:
+        try:
+            return G.g3_paraphrase(base, chat)
+        except Exception as e:  # noqa: BLE001 - a failed row keeps the deterministic answer
+            return {**base, "meta": {**base["meta"], "paraphrase_error": str(e)}}
+
     n = 0
-    with out.open("w") as fh:
-        for rec in _corpus_rows():
-            for base in G.g3_explain(rec):
-                try:
-                    cand = G.g3_paraphrase(base, chat)
-                except Exception as e:  # noqa: BLE001
-                    cand = {**base, "meta": {**base["meta"], "paraphrase_error": str(e)}}
+    with out.open("w") as fh, ThreadPoolExecutor(max_workers=max_workers) as ex:
+        for i in range(0, len(bases), max_workers * 4):
+            chunk = bases[i:i + max_workers * 4]
+            for cand in ex.map(_one, chunk):
                 fh.write(json.dumps(cand) + "\n")
                 n += 1
-            if limit and n >= limit:
-                break
+            fh.flush()
     print(f"g3 candidates (model-paraphrased): {n}")
     return n
 
@@ -171,19 +188,26 @@ def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
     """Sample the current model on real prompts; keep non-compiling completions as hard negatives."""
     from .llm import chat
     from .autofix import autofix
-    from .verify_inapp import _compile_with, _resolve_origin
+    from .verify_inapp import _baseline, _compile_with, _resolve_origin
     out = CAND / "g7_hard_negative.jsonl"
-    n = probes = 0
+    n = probes = skipped_slow = skipped_dirty = 0
     with out.open("w") as fh:
         for rec in _corpus_rows():
             pp = G.g7_probe_prompts(rec)
             if not pp:
                 continue
             for probe in pp:
+                if any(s in probe["meta"].get("path", "") for s in _G5_SLOW_APPS):
+                    skipped_slow += 1
+                    continue
                 origin = _resolve_origin({"meta": probe["meta"], "gen": "g7_hard_negative"})
                 if origin is None:
                     continue
                 app_dir, _, rel, version = origin
+                base = _baseline().get(str(app_dir))
+                if not (base and base.get("error_clean")):
+                    skipped_dirty += 1
+                    continue
                 member, sig = probe["meta"].get("member", ""), probe["meta"].get("signature")
                 probes += 1
                 for _ in range(k):
@@ -203,7 +227,8 @@ def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
                         break  # one hard negative per probe is enough
             if limit_probes and probes >= limit_probes:
                 break
-    print(f"g7 hard negatives: {n} from {probes} probes")
+    print(f"g7 hard negatives: {n} from {probes} probes "
+          f"(skipped {skipped_slow} slow-app, {skipped_dirty} baseline-dirty)")
     return n
 
 
