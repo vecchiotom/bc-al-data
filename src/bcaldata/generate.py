@@ -120,23 +120,37 @@ def run_deterministic(limit_per_gen: int | None = None,
     return counts
 
 
+def _row_key(meta: dict) -> str:
+    return f"{meta.get('path', '')}::{meta.get('member', '')}"
+
+
 def run_g3(limit: int | None = None, max_workers: int = 3) -> int:
     """Grounded G3 paraphrase over the corpus, `max_workers` model calls in flight.
 
     Deterministic bases are collected first (cheap), then paraphrased concurrently
     in fixed-size chunks and flushed per chunk so a crash keeps finished rows.
+    Resumable: existing rows in the output file (keyed by path+member) are kept
+    and skipped — a restarted run tops up instead of starting over.
     """
     from concurrent.futures import ThreadPoolExecutor
 
     from .llm import chat
     out = CAND / "g3_explain.jsonl"
+    done: set[str] = set()
+    if out.is_file():
+        for line in out.read_text().splitlines():
+            if line.strip():
+                done.add(_row_key(json.loads(line)["meta"]))
+
     bases: list[dict] = []
     for rec in _corpus_rows():
-        bases.extend(G.g3_explain(rec))
-        if limit and len(bases) >= limit:
+        for base in G.g3_explain(rec):
+            if _row_key(base["meta"]) not in done:
+                bases.append(base)
+        if limit and len(done) + len(bases) >= limit:
             break
     if limit:
-        bases = bases[:limit]
+        bases = bases[:max(0, limit - len(done))]
 
     def _one(base: dict) -> dict:
         try:
@@ -144,15 +158,15 @@ def run_g3(limit: int | None = None, max_workers: int = 3) -> int:
         except Exception as e:  # noqa: BLE001 - a failed row keeps the deterministic answer
             return {**base, "meta": {**base["meta"], "paraphrase_error": str(e)}}
 
-    n = 0
-    with out.open("w") as fh, ThreadPoolExecutor(max_workers=max_workers) as ex:
+    n = len(done)
+    with out.open("a") as fh, ThreadPoolExecutor(max_workers=max_workers) as ex:
         for i in range(0, len(bases), max_workers * 4):
             chunk = bases[i:i + max_workers * 4]
             for cand in ex.map(_one, chunk):
                 fh.write(json.dumps(cand) + "\n")
                 n += 1
             fh.flush()
-    print(f"g3 candidates (model-paraphrased): {n}")
+    print(f"g3 candidates (model-paraphrased): {n} ({len(done)} resumed)")
     return n
 
 
@@ -185,18 +199,29 @@ def run_g4() -> int:
 
 
 def run_g7(k: int = 8, limit_probes: int | None = 400) -> int:
-    """Sample the current model on real prompts; keep non-compiling completions as hard negatives."""
+    """Sample the current model on real prompts; keep non-compiling completions as hard negatives.
+
+    Resumable: a probe (by path+member) already answered in the output file is
+    skipped, so a restarted run tops up `limit_probes` instead of starting over."""
     from .llm import chat
     from .autofix import autofix
     from .verify_inapp import _baseline, _compile_with, _resolve_origin
     out = CAND / "g7_hard_negative.jsonl"
-    n = probes = skipped_slow = skipped_dirty = 0
-    with out.open("w") as fh:
+    done: set[str] = set()
+    if out.is_file():
+        for line in out.read_text().splitlines():
+            if line.strip():
+                done.add(_row_key(json.loads(line)["meta"]))
+    n = len(done)
+    probes = skipped_slow = skipped_dirty = 0
+    with out.open("a") as fh:
         for rec in _corpus_rows():
             pp = G.g7_probe_prompts(rec)
             if not pp:
                 continue
             for probe in pp:
+                if _row_key(probe["meta"]) in done:
+                    continue
                 if any(s in probe["meta"].get("path", "") for s in _G5_SLOW_APPS):
                     skipped_slow += 1
                     continue
